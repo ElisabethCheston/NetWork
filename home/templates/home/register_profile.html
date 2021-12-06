@@ -1,0 +1,241 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+<style>
+  #justify-center {
+    margin: auto;
+    width: 80%;
+    padding: 10px;
+    border: none !important;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  option {
+    margin-top: 20px;
+  }
+
+  #id_last_name,
+  #id_industry,
+  #id_description,
+  #id_profession,
+  #id_industry,
+  #id_skill,
+  #id_phone,
+  #id_city,
+  #id_country {
+    width: 85%;
+    text-align: center;
+    font-size: large;
+    height: 45px;
+    margin-top: 2%;
+    border-color: black;
+    border-style: double;
+  }
+
+  option,
+  a,
+  p,
+  .link,
+  h2 {
+    text-align: center;
+    font-size: medium;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  }
+
+  .form-control {
+    height: 45px;
+    margin-top: 1%;
+    text-align: center;
+  }
+
+  .form_container {
+    margin-top: 8px;
+    width: 100%;
+    align-items: center;
+  }
+
+  /* BUTTONS */
+
+  .btn,
+  .register-button {
+    color: white;
+    border-color: rgba(148, 149, 150, 0.2);
+    background-color: rgba(131, 133, 134, 0.8) !important;
+    width: 90%;
+    height: 45px;
+    margin-top: 2%;
+    font-weight: bold;
+    text-align: center;
+    font-size: medium !important;
+    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .btn:hover,
+  .btn:active,
+  .btn:focus {
+    background-color: rgba(94, 95, 95, 0.792) !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  #link {
+    color: deeppink;
+  }
+
+  input {
+    width: 84%;
+    text-align: center;
+    font-size: large !important;
+    height: 45px;
+    margin-top: 2%;
+    background-color: rgba(238, 236, 236, 0.292) !important;
+  }
+
+  input:hover,
+  input:active,
+  input:focus {
+    background-color: rgba(94, 95, 95, 0.192) !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  #terms-box {
+    width: 5mm;
+    height: 5mm;
+  }
+
+  #terms-box>input:checked {
+    border: 1px solid #3db2f5;
+    background-color: #e2e3e4;
+  }
+
+  .link-terms {
+    color: #0896e7;
+  }
+</style>
+
+<div class="container-fluid" id="justify-center">
+
+  <div class="d-flex">
+    <div class="d-flex" id="justify-center">
+      <h2 id="form-title">PROFILE INFORMATION</h2>
+    </div>
+    <h1>erase this page</h1>
+    <div class="d-flex justify-content-center form_container" id="justify-center">
+
+      <form method="POST" action="#">
+        {% csrf_token %}
+
+        <!-- Title -->
+        <div class="input-group mb-2">
+          <div class="input-group-append">
+            {{profile_form.title}}
+          </div>
+        </div>
+        <!-- Company -->
+        <div class="input-group mb-2">
+          <div class="input-group-append">
+            {{profile_form.company_name}}
+          </div>
+        </div>
+        <!-- Company no -->
+        <div class="input-group mb-2">
+          <div class="input-group-append">
+            {{profile_form.company_number_vat}}
+          </div>
+        </div>
+        <!-- Industry -->
+        <div class="input-group mb-2">
+          <div class="input-group-append">
+            <option value="">Industry:</option>
+            {{profile_form.industry}}
+          </div>
+        </div>
+        <!--  Profession -->
+        <div class="input-group mb-2">
+          <div class="input-group-append">
+            <option value="">Profession:</option>
+            {{ profile_form.profession }}
+          </div>
+        </div>
+        <br>
+
+        <!-- Skill -->
+        <div class="input-group mb-2">
+          <div class="input-group-append">
+            {{profile_form.skill}}
+          </div>
+        </div>
+        <!--  Description -->
+        <div class="input-group mb-2">
+          <div class="input-group-append">
+            {% render_field profile_form.description placeholder="Short description.." %}
+          </div>
+        </div>
+        <!-- Phone -->
+        <div class="input-group mb-2">
+          <div class="input-group-append">
+            {{profile_form.phone}}
+          </div>
+        </div>
+        <!--  City -->
+        <div class="input-group mb-2">
+          <div class="input-group-append">
+            {{profile_form.city}}
+          </div>
+        </div>
+        <!-- Country -->
+        <div class="input-group mb-2">
+          <div class="input-group-append">
+            {{profile_form.country}}
+          </div>
+        </div>
+        <br>
+
+        <!-- Submit button -->
+        <div class="d-flex justify-content-center mt-3" id="justify-center">
+          <input class="btn register-button" type="submit" value="REGISTER ACCOUNT">
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Already got an account? -->
+    <div class="mt-4">
+      <div class="d-flex link justify-content-center links">
+        Already got an account?
+        <a href="{% url 'login' %}" class="ml-2">
+          Sign In
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+
+  <script>
+
+    // Query All input fields
+    var form_fields = document.getElementsByTagName('input')
+    form_fields[1].placeholder = 'Title..';
+    form_fields[2].placeholder = 'Company Name..';
+    form_fields[3].placeholder = 'Company VAT..';
+
+    form_fields[4].placeholder = 'Skill...';
+    form_fields[5].placeholder = 'Phone..';
+    form_fields[6].placeholder = 'City...';
+    form_fields[7].placeholder = 'Country...';
+
+    for (var field in form_fields) {
+      form_fields[field].className += 'form-control'
+    }
+
+  </script>
+
+  {% endblock %}

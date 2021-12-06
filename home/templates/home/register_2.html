@@ -1,0 +1,227 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<style>
+    #justify-center {
+        margin: auto;
+        width: 80%;
+        padding: 10px;
+        border: none !important;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    option {
+        margin-top: 20px;
+    }
+
+    label {
+        display: none;
+    }
+
+
+    #id_profession,
+    #id_employment,
+    #id_status,    
+    #id_industry {
+        width: 85%;
+        text-align: center;
+        margin-left: 1%;
+        font-size: medium;
+        height: 45px;
+        margin-top: 2%;
+        border-color: black;
+        border-width: 2px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    #id_description {
+        width: 84.8%;
+        text-align: center;
+        margin-left: 1%;
+        font-size: medium;
+        height: 90px;
+        margin-top: 2%;
+        border-color: black;
+        border-width: 2px;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    p,
+    .link,
+    h3 {
+        text-align: center;
+        font-size: medium;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    .form-control {
+        height: 45px;
+        margin-top: 1%;
+        text-align: center;
+    }
+
+    .form_container {
+        margin-top: 8px;
+        width: 100%;
+        align-items: center;
+    }
+
+
+    /* FONT */
+
+    .profile-name {
+        font-size: x-large;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-weight: bold;
+    }
+
+    .profile-email {
+        font-size: large;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    /* BUTTONS */
+
+    .save-button {
+        color: white;
+        border-color: rgba(161, 207, 253, 0.2);
+        background-color: #406daf;
+        width: 40%;
+        height: 40px;
+        margin-top: 2%;
+        font-weight: bold;
+        text-align: center;
+        font-size: medium !important;
+        box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .save-button:hover,
+    .save-button:active,
+    .save-button:focus {
+        background-color:#5378af;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .back-button,
+    .next-button {
+        width: 140px;
+        margin: 0 20px;
+        display: inline-block;
+        line-height: 40px;
+    }
+
+    .row {
+        text-align: center;
+        /*the same margin which is every button have, it is for small screen, and if you have many buttons.*/
+        margin-left: -20px;
+        margin-right: -20px;
+    }
+
+    .btn {
+        color: white;
+        border-color: rgba(148, 149, 150, 0.2);
+        background-color: rgba(115, 118, 119, 0.8) !important;
+        width: 38%;
+        height: 40px;
+        margin-top: 2%;
+        font-weight: bold;
+        text-align: center;
+        font-size: small !important;
+        box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .btn:hover,
+    .btn:active,
+    .btn:focus {
+        background-color: rgba(76, 78, 78, 0.792) !important;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    #link {
+        color: deeppink;
+    }
+</style>
+
+<div class="container-fluid" id="justify-center">
+
+    <div class="d-flex">
+        <div class="d-flex" id="justify-center">
+            <h3 id="form-title">WORK INFORMATION</h3>
+        </div>
+
+        <!-- Form -->
+        <form method="POST" enctype="multipart/form-data" action="{% url 'register_2' %}">
+            {% csrf_token %}
+
+            <!-- Industry -->
+            <div class="input-group mb-2">
+                <div class="input-group-append">
+                    {{profile_form2.industry}}
+                </div>
+            </div>
+            <!--  Profession -->
+            <div class="input-group mb-2">
+                <div class="input-group-append">
+                    {{profile_form2.profession}}
+                </div>
+            </div>
+            <!--  Description -->
+            <div class="input-group mb-2">
+                <div class="input-group-append">
+                    {{profile_form2.description}}
+                </div>
+            </div>
+            <!-- Employment -->
+            <div class="input-group mb-2">
+                <div class="input-group-append">
+                    {{profile_form2.employment}}
+                </div>
+            </div>
+            <!-- Status -->
+            <div class="input-group mb-2">
+                <div class="input-group-append">
+                    {{profile_form2.status}}
+                </div>
+            </div>
+            <br>
+
+            <!-- Submit button -->
+            <div class="d-flex justify-content-center mt-3" id="justify-center">
+                <input class="save-button " type="submit" value="SAVE">
+            </div>
+
+            <!-- Back/Next buttons -->
+            <div class="row button-row">
+                <a href="{% url 'register_1' %}"><input type="button" name="backButton" class="btn back-button"
+                        value="BACK"></a>
+                <a href="{% url 'register_3' %}"><input type="button" name="nextButton" id="nextButton"
+                        class="btn next-button" value="NEXT"></a>
+            </div>
+            <br>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+
+        // Query All input fields
+        var form_fields = document.getElementsByTagName('input')
+
+        form_fields[1].placeholder = ' Short presentation..(You can edit this later.)';
+
+        for (var field in form_fields) {
+            form_fields[field].className += 'form-control'
+        }
+        
+    </script>
+{% endblock %}

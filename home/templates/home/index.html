@@ -1,0 +1,136 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% load i18n %}
+{% load account socialaccount %}
+{% get_providers as socialaccount_providers %}
+
+{% block content %}
+<style>
+  #justify-center {
+    margin: auto;
+    width: 80%;
+    padding: 10px;
+    border: none !important;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .index_container {
+    padding: 0 1rem;
+  }
+
+  .btn {
+    color: white !important;
+    background-color: #406daf;
+    font-size: medium;
+    border-radius: 1px;
+  }
+
+  
+  .btn-primary {
+    border-width: 2px;
+    color: white;
+    border-color: rgba(148, 149, 150, 0.2);
+    background-color: rgba(131, 133, 134, 0.8) !important;
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    font-size: large !important;
+    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .btn:hover,
+  .btn:active,
+  .btn:focus {
+    background-color: rgba(94, 95, 95, 0.75) !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  h1,
+  h3,
+  h4,
+  p {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  }
+
+  li::marker {
+        color: transparent;
+        display: none;
+    }
+
+    div.message-text {
+        color: red !important;
+        font-family: Verdana, Geneva, Tahoma, sans-serif !important;
+        font-weight: bolder !important;
+        text-align: center;
+    }
+
+  .bizbtn {
+    color: white;
+    border-color: rgba(148, 149, 150, 0.2);
+    background-color: #406daf !important;
+    width: 38%;
+    height: 40px;
+    margin-top: 2%;
+    font-weight: bold;
+    text-align: center;
+    font-size: small !important;
+    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .bizbtn:hover,
+  .bizbtn:active,
+  .bizbtn:focus {
+    background-color: #4a78becb !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+  }
+  
+</style>
+
+<div class="container-fluid" id="justify-center">
+  <h3>
+    A smart platform for companies who want to grow their business and network.
+  </h3>
+  <p>
+    BizNet combines smart matching, social network and a marketplace to grow your business, be social and share
+    experiences in a professional context.
+  </p>
+
+  <div class="row button-row">
+    <a href="https://www.biznet.app/"><input type=" button" class="btn bizbtn text-center" value="BIZNET"></a>
+  </div>
+  <br>
+  <br>
+  <br>
+
+  <!-- Sign In-->
+  <form method="POST" action="{% url 'login_page' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class=" btn btn-primary col-12" type="submit">Sign In</button>
+  </form>
+
+  <!-- Signup with social accounts -->
+  <!--<form action="#" id="justify-center">
+    <button class="btn btn-primary col-12" type="button">Connect with LinkedIn</button>
+  </form>
+  <form action="#" id="justify-center">
+    <button class="btn btn-primary col-12" type="button">Connect with Google</button>
+  </form>-->
+
+  <!-- Register Account -->
+  <form class="signup" method="POST" action="{% url 'register' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-primary col-12" type="submit">Create Account</button>
+  </form>
+</div>
+<br>
+<br>
+
+{% endblock %}
