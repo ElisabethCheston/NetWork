@@ -17,7 +17,7 @@ class TermUser(models.Model):
 # DROPDOWN LISTS
 
 class Industry(models.Model):
-    industry_name = models.CharField(max_length=100, null=True, blank=False)
+    industry_name = models.CharField(max_length=100, blank=False)
 
     class Meta:
         verbose_name_plural = 'Industries'
@@ -27,7 +27,7 @@ class Industry(models.Model):
 
 
 class Profession(models.Model):
-    profession_name = models.CharField(max_length=100, null=True, blank=False)
+    profession_name = models.CharField(max_length=100, blank=False)
 
     class Meta:
         verbose_name_plural = 'Profession'
@@ -37,7 +37,7 @@ class Profession(models.Model):
 
 
 class Business(models.Model):
-    business_name = models.CharField(max_length=200, null=True, blank=False)
+    business_name = models.CharField(max_length=200, blank=False)
 
     class Meta:
         verbose_name_plural = 'Businesses'
@@ -47,7 +47,7 @@ class Business(models.Model):
 
 
 class Employment(models.Model):
-    employment_name = models.CharField(max_length=200, null=True, blank=False)
+    employment_name = models.CharField(max_length=200rue, blank=False)
 
     class Meta:
         verbose_name_plural = 'Employment'
@@ -56,8 +56,18 @@ class Employment(models.Model):
         return str(self.employment_name)
 
 
+class Skills(models.Model):
+    skills_name = models.CharField(max_length=200, blank=False)
+
+    class Meta:
+        verbose_name_plural = 'Skills'
+
+    def __str__(self):
+        return str(self.skills_name)
+
+
 class Status(models.Model):
-    status_name = models.CharField(max_length=200, null=True, blank=False)
+    status_name = models.CharField(max_length=200, blank=False)
 
     class Meta:
         verbose_name_plural = 'Status'
