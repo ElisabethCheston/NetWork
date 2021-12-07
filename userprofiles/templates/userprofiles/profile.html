@@ -1,0 +1,171 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% load i18n %}
+
+
+{% block content %}
+<style>
+    #justify-center {
+        margin: auto;
+        width: 80%;
+        padding: 10px;
+        border: none !important;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+
+    /* FONT */
+
+    .profile-name {
+        font-size: x-large;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        font-weight: bold;
+    }
+
+    .profile-email {
+        font-size: large;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    option,
+    a,
+    p,
+    .link,
+    h2 {
+        text-align: center;
+        font-size: medium;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+
+    .form-control {
+        height: 45px;
+        margin-top: 1%;
+        text-align: center;
+    }
+
+    .form_container {
+        margin-top: 8px;
+        width: 100%;
+        align-items: center;
+    }
+
+    /* BUTTONS */
+
+    .back-button,
+    .next-button {
+        width: 150px;
+        margin: 0 20px;
+        display: inline-block;
+        line-height: 60px;
+    }
+/*
+.btn {
+    color: white;
+    border-color: rgba(148, 149, 150, 0.2);
+    background-color:#406daf !important;
+    width: 90%;
+    height: 45px;
+    margin-top: 2%;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    font-size: medium !important;
+    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.btn:hover,
+.btn:active,
+.btn:focus {
+    background-color: rgba(94, 95, 95, 0.792) !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+}
+*/
+
+.bizbtn {
+    color: white;
+    border-color: rgba(148, 149, 150, 0.2);
+    background-color: #406daf !important;
+    width: 38%;
+    height: 40px;
+    margin-top: 2%;
+    font-weight: bold;
+    text-align: center;
+    font-size: small !important;
+    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .bizbtn:hover,
+  .bizbtn:active,
+  .bizbtn:focus {
+    background-color: #4a78becb !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+  }
+    #link {
+        color: deeppink;
+    }
+</style>
+
+<div class="container-fluid" id="justify-center">
+
+    <div class="d-flex">
+        <div class="d-flex" id="justify-center">
+            <h2 id="form-title">LET'S CREATE YOUR PROFILE</h2>
+
+
+            <form method="POST" enctype="multipart/form-data" action="{% url 'profile_edit' %}">
+                {% csrf_token %}
+
+
+                <!-- User Name -->
+                <div class="input-group mb-2">
+                    {{user.first_name}} {{user.last_name}}
+                </div>
+
+                <br>
+                <!-- Username: Placeholder name Email -->
+                <div class="input-group mb-2">
+                    {{user.email}}
+                </div>
+                <br>
+
+                <!-- Submit button -->
+                <!--<div class="d-flex justify-content-center mt-3" id="justify-center">
+                    <input class="btn register-button" type="submit" value="START">
+                </div>-->
+
+                <div class="d-flex justify-content-center mt-3" id="justify-center">
+                    <a class="bizbtn justify-co" role="button" href="{% url 'profile_edit' %}">
+                        <input type=" button" class="btn bizbtn text-center" value="START">
+                    </a>
+                </div>
+
+                <br>
+                <br>
+
+            </form>
+
+        </div>
+    </div>
+
+
+
+    <script>
+
+        // Query All input fields
+        var form_fields = document.getElementsByTagName('input')
+
+        form_fields[1].placeholder = 'Phone..';
+        form_fields[2].placeholder = 'City...';
+
+        for (var field in form_fields) {
+            form_fields[field].className += 'form-control'
+        }
+
+    </script>
+
+    {% endblock %}

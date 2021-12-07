@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'userprofiles/css/profile.css' %}">
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'userprofiles/js/my_profile.js' %}" defer></script>
+{% endblock scripts %}
+
+{% block page_header %}
+<!-- Profile tab links -->
+<div class="tab-container">
+    <ul class="nav nav-tab justify-content-evenly" id="profileTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'profile_details' %}">
+                <input type="submit" value="MY PROFILE" class="nav-link gig-tab active" id="my_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_gigs' %}">
+                <input type="submit" value="MY GIGS" class="nav-link gig-tab" id="my_gig_tab" data-bs-toggle="tab"
+                    data-bs-target="#my_gig" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_contacts' %}">
+                <input type="submit" value="MY CONTACTS" class="nav-link gig-tab" id="my_contacts_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_contacts" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'membership_profile' %}">
+                <input type="submit" value="MEMBERSHIP" class="nav-link gig-tab" id="membership_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#membership_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane show active" id="my_profile" role="tabpanel" aria-labelledby="my_profile_tab"></div>
+        <div class="tab-pane" id="my_gig" role="tabpanel" aria-labelledby="my_gig_tab"></div>
+        <div class="tab-pane" id="my_contacts" role="tabpanel" aria-labelledby="my_contacts_tab"></div>
+        <div class="tab-pane" id="membership_profile" role="tabpanel" aria-labelledby="membership_profile_tab"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+
+<style>
+    .textinput,
+    .form-control,
+    .form-control-file {
+        margin-top: 3px;
+    }
+</style>
+
+<div class="container-fluid" id="justify-center">
+    <br>
+
+    <div class="row">
+        <div class="col-sm-10 col-sx-12 mx-auto">
+
+            <!-- Edit Profile -->
+            <div class="card" id="justify-center" style="max-width: 740px;">
+                <div class="card-body">
+                    <div class="col-12">
+
+                        <form method="POST" enctype="multipart/form-data" action="{% url 'profile_edit' %}">
+                            {% csrf_token %}
+
+                            <fieldset class="form-group">
+                                <legend class="border-bottom mb-4">Profile Information</legend>
+
+                                <!--<h5 class="card-title">Name: &nbsp;{{regform.first_name}} {{regform.last_name}}</h5>
+                        <h6 class="card-title">Password: &nbsp; {{regform.password1}}</h6>
+                        {{ profileform|crispy }}-->
+
+                                <div class="card-body">
+                                    <h4 class="card-title">{{user.first_name}} {{user.last_name}}</h4>
+                                    <br>
+                                    <h6 class="card-title">{{profileform.picture}}</h6>
+                                    <br>
+                                    <h6 class="card-title">Title: &nbsp; {{profileform.title}}</h6>
+                                    <h6 class="card-title">Company: &nbsp; {{profileform.company_name}}</h6>
+                                    <h6 class="card-title">City: &nbsp; {{profileform.city}}</h6>
+                                    <h6 class="card-title">Country: &nbsp; {{profileform.country}}</h6>
+                                    <br>
+                                    <h6 class="card-title">Industry: &nbsp; {{profileform.industry}}</h6>
+                                    <!--<h6 class="card-title">Profession: &nbsp; {{profileform.profession}}</h6>-->
+                                    <h6 class="card-title">Description: &nbsp; {{profileform.description}}</h6>
+                                    <h6 class="card-title">Employment Status: &nbsp; {{profileform.employment}}</h6>
+                                    <h6 class="card-title">Purpose: &nbsp; {{profileform.status}}</h6>
+                                    <br>
+                                    <h5 class="card-title">Matching Preferences</h5>
+                                    <h6 class="card-title">Business: &nbsp; {{profileform.business}}</h6>
+                                    <h6 class="card-title">Location: &nbsp; {{profileform.locations}}</h6>
+
+                                    <br>
+                                </div>
+                                <!--{{ form|crispy }}-->
+                            </fieldset>
+                            <br>
+                            <!--<div class="row justify-content-center">
+                        <div class="col-3 text-center">
+                            <button class="btn btn-edit" type="submit">UPDATE</button>
+                            <a href="{% url 'profile_delete' pk=user.pk %}" class="btn btn-outline-primay">Delete</a>
+                        </div>
+                    </div>-->
+
+                            <div class="text-center form-group">
+                                <!--<button class="btn" type="submit">UPDATE</button>-->
+                                <button type="submit" class="btn"
+                                    style="font-weight: bold; border-radius: 1px; background-color: #1f53fc; color: rgb(246,246,247); font-family: Verdana; font-size: medium">SAVE</button>
+                                <a href="{% url 'profile_delete' pk=user.pk %}" style="font-weight: bold;"
+                                    class="btn btn-danger">DELETE</a>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock %}

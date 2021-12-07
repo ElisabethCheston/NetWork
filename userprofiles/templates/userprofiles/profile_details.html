@@ -1,0 +1,322 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+
+{% block scripts %}
+<script src="{% static 'userprofiles/js/my_profile.js' %}" defer></script>
+{% endblock scripts %}
+
+
+{% block page_header %}
+<!-- Profile tab links -->
+<div class="tab-container">
+    <ul class="nav nav-tab justify-content-evenly" id="profileTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'profile_details' %}">
+                <input type="submit" value="MY PROFILE" class="nav-link gig-tab active" id="my_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_gigs' %}">
+                <input type="submit" value="MY GIGS" class="nav-link gig-tab" id="my_gig_tab" data-bs-toggle="tab"
+                    data-bs-target="#my_gig" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_contacts' %}">
+                <input type="submit" value="MY CONTACTS" class="nav-link gig-tab" id="my_contacts_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_contacts" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'membership_profile' %}">
+                <input type="submit" value="MEMBERSHIP" class="nav-link gig-tab" id="membership_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#membership_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane show active" id="my_profile" role="tabpanel" aria-labelledby="my_profile_tab"></div>
+        <div class="tab-pane" id="my_gig" role="tabpanel" aria-labelledby="my_gig_tab"></div>
+        <div class="tab-pane" id="my_contacts" role="tabpanel" aria-labelledby="my_contacts_tab"></div>
+        <div class="tab-pane" id="membership_profile" role="tabpanel" aria-labelledby="membership_profile_tab"></div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block content %}
+
+<!-- Modal -->
+<div class="modal follow_modal fade" id="follow-btn" style="font-size: large;" data-bs-backdrop="static"
+    data-bs-keyboard="false" tabindex="-1" aria-labelledby="follow-btnLabel" aria-hidden="true">
+    <!-- -->
+    <div class="modal-dialog">
+        <div class="modal-content" style="background-color: rgba(239, 241, 241, 0.85);">
+            <div class="modal-header">
+                <!--<h5 class="modal-title" id="follow-btnLabel">Follow:</h5>-->
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <br>
+            <br>
+            <div class="modal-body">
+                <div class="row text-center">
+                    <i class="fas fa-user-plus"></i>
+                    <br>
+                    <br>
+                    <div class="col">
+                        Are you sure you want to follow {{ object }}?
+                    </div>
+
+                    <div class="actions">
+                        <form action="{% url 'follow_unfollow_profile' %}" method="POST">
+                            {% csrf_token %}
+                            <br>
+                            <div class="col">
+                                <input type="hidden" name="profile_pk" value={{object.pk}}>
+                                <button type="submit" id="follow-btn" class="btn">YES</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                            <br>
+                            <br>
+                            <br>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <br>
+    <div class="row">
+
+        <!-- Proofile cards -->
+        <div class="col-sm-10 col-sx-12 mx-auto">
+
+            <!--{{object}}
+            {{follow}}-->
+            {% if userprofile == current_user %}
+
+            <!-- userprofile card Signed in User -->
+            <div class="card">
+                <div class="card-body mx-2 my-4">
+
+                    <!-- userprofile information -->
+
+                    <!-- Row One -->
+                    <div class="row">
+                        <div class="col-sm-6 col-12 media"> <!--style="max-width: 400px;">-->
+                            <!-- Profile pic -->
+                            <div class="mt-3 card-body">
+
+                                {% if userprofiles.picture %}
+
+                                <img src="{{ profile.picture.url }}" class="img-fluid profile-img rounded-start"
+                                    alt="{{ profile.username}}">
+
+                                {% else %}
+
+                                <img src="{{ profile.picture.url }}" class="img-fluid profile-img rounded-start"
+                                    alt="{{ user.profile.image.url }}">
+
+                                {% endif %}
+                            </div>
+
+                            <!-- Matching Preferences -->
+                            <div class="card-body">
+                                <h6><strong>Matching Preferences:</strong></h6>
+                                <p><strong>Industry:</strong> &nbsp;
+                                    {{profile.business}}</p>
+                                <p><strong>Location:</strong> &nbsp;
+                                    {{profile.locations.name}}</p>
+                            </div>
+                        </div>
+
+                        <!-- userprofile fact colum-->
+                        <div class="col-sm-6 col-12"> <!--style="max-width: 480px;">-->
+                            <div class="card-body">
+                                <h4 class="card-title g-0"><strong>{{user.first_name}}
+                                        {{user.last_name}}</strong></h4>
+                                <p class="card-text"><strong>Title:</strong> &nbsp; {{profile.title}}
+                                </p>
+                                <p class="card-text"><strong>Company:</strong> &nbsp;
+                                    {{profile.company_name}}</p>
+                                <p class="card-text "><strong>Email:</strong> &nbsp; {{user.email}}</p>
+                                <p class="card-text"><strong>City:</strong> &nbsp; {{profile.city}}</p>
+                                <p class="card-text"><strong>Country:</strong> &nbsp;
+                                    {{profile.country.name}}</p>
+                                <p class="card-text"><strong>Business:</strong> &nbsp;
+                                    {{profile.industry}}</p>
+                                <!--<p class="card-text"><strong>Profession:</strong> &nbsp;
+                                    {{profile.profession}}</p>-->
+                                <p class="card-text"><strong>Employment Status:</strong> &nbsp
+                                    {{profile.employment}}</p>
+                                <p class="card-text"><strong>Purpose:</strong> &nbsp {{profile.status}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row Two -->
+
+                    <!-- userprofile bio -->
+                    <div class="card-body col-12">
+                        <h6><strong>Presentation:</strong></h6>
+                        <p>{{profile.description}}</p>
+                    </div>
+
+                    <!-- Edit Buttons -->
+
+                    <div class="row text-center">
+                        <form class="col" action="{% url 'profile_edit' %}">
+                            <button type="submit" class="btn">EDIT</button>
+                        </form>
+                    </div>
+                    <br>
+
+                </div>
+            </div>
+
+            {% else %}
+
+            <!-- userprofile card -->
+            <div class="card">
+                <div class="card-body mx-2 my-4">
+
+
+                    <!-- userprofile information -->
+
+                    <!-- Row One -->
+                    <div class="row">
+                        <div class="col-sm-6 col-12" style="max-width: 400px;">
+                            <!-- Profile pic -->
+                            <div class="mt-3 card-body justify-center">
+
+                                {% if userprofiles.picture %}
+
+                                <img src="{{ object.picture.url }}" class="img-fluid profile-img rounded-start"
+                                    alt="{{ profile.username}}">
+
+                                {% else %}
+
+                                <img src="{{ object.picture.url }}" class="img-fluid profile-img rounded-start"
+                                    alt="{{ user.profile.image.url }}">
+
+                                {% endif %}
+                            </div>
+
+                            <!-- Matching Preferences -->
+                            <div class="card-body">
+                                <h6><strong>Matching Preferences:</strong></h6>
+                                <p><strong>Industry:</strong> &nbsp;
+                                    {{object.business}}</p>
+                                <p><strong>Location:</strong> &nbsp;
+                                    {{object.locations.name}}</p>
+                            </div>
+                        </div>
+
+                        <!-- userprofile fact colum-->
+                        <div class="col-sm-6 col-12" style="max-width: 480px;">
+                            <div class="card-body">
+                                <h4 class="card-title g-0"><strong>{{object.username.first_name}}
+                                        {{object.username.last_name}}</strong></h4>
+                                <p class="card-text"><strong>Title:</strong> &nbsp; {{object.title}}
+                                </p>
+                                <p class="card-text"><strong>Company:</strong> &nbsp;
+                                    {{object.company_name}}</p>
+                                <p class="card-text "><strong>Email:</strong> &nbsp; {{object.username}}</p>
+                                <p class="card-text"><strong>City:</strong> &nbsp; {{object.city}}</p>
+                                <p class="card-text"><strong>Country:</strong> &nbsp;
+                                    {{object.country.name}}</p>
+                                <p class="card-text"><strong>Business:</strong> &nbsp;
+                                    {{object.industry}}</p>
+                                <!--<p class="card-text"><strong>Profession:</strong> &nbsp;
+                                    {{object.profession}}</p>-->
+                                <p class="card-text"><strong>Employment Status:</strong> &nbsp
+                                    {{object.employment}}</p>
+                                <p class="card-text"><strong>Purpose:</strong> &nbsp {{object.status}}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row Two -->
+
+                    <!-- userprofile bio -->
+                    <div class="card-body col-12">
+                        <h6><strong>Presentation:</strong></h6>
+                        <p>{{object.description}}</p>
+                    </div>
+
+                    <!-- Save Buttons -->
+
+                    {% if follow %}
+                    <div class="row text-center">
+
+                    <form action="{% url 'follow_unfollow_profile' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="profile_pk" value={{userprofile.pk}}>
+                        <button type="submit" class="btn follow-button">Unfollow</button>
+                    </form>
+                    </div>
+                    {% else %}
+                    <div class="row text-center">
+                        <div class="col">
+                            <button type="submit" id="follow-btn" data-bs-toggle="modal" data-bs-target="#follow-btn"
+                                class="btn unfollow-button">FOLLOW</button> <!-- -->
+                        </div>
+                    </div>
+                    <br>
+                    {% endif %}
+
+                    <div class="card-body my-2">
+                        <h5>Have posted:</h5>
+ 
+                        {% for gig in userprofile.my_gigs %}
+
+                        <div class="link">
+                            <a href="{{ gig.get_absolute_url }}">{{ gig.title }}</a>
+
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <br>
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+
+    </div>
+    <br>
+    <br>
+    <br>
+</div>
+
+<script>
+
+    var exampleModal = document.getElementById('follow-btn')
+    exampleModal.addEventListener('show.bs.modal', function (event) {
+        // Button that triggered the modal
+        var button = event.relatedTarget
+        // Extract info from data-bs-* attributes
+        var recipient = button.getAttribute('data-bs-whatever')
+        // If necessary, you could initiate an AJAX request here
+        // and then do the updating in a callback.
+        //
+        // Update the modal's content.
+        var modalTitle = exampleModal.querySelector('.modal-title')
+        var modalBodyInput = exampleModal.querySelector('.modal-body input')
+
+        modalTitle.textContent = 'New message to ' + recipient
+        modalBodyInput.value = recipient
+    })
+
+</script>
+{% endblock %}

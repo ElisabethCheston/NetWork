@@ -20,7 +20,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('', include('home.urls')),
-    # path('profileusers/', include('profileusers.urls')),
+    path('userprofiles/', include('userprofiles.urls')),
     # path('network/', include('network.urls')),
     # path('gigs/', include('gigs.urls')),
     # path('membership/', include('membership.urls')),

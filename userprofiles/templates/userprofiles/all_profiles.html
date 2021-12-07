@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'userprofiles/css/profile.css' %}">
+{% endblock %}
+
+
+{% block page_header %}
+<!-- Profile tab links -->
+<div class="tab-container">
+    <ul class="nav nav-tab justify-content-evenly" id="profileTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'profile_details' %}">
+                <input type="submit" value="MY PROFILE" class="nav-link gig-tab active" id="my_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_gigs' %}">
+                <input type="submit" value="MY GIGS" class="nav-link gig-tab" id="my_gig_tab" data-bs-toggle="tab"
+                    data-bs-target="#my_gig" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_contacts' %}">
+                <input type="submit" value="MY CONTACTS" class="nav-link gig-tab" id="my_contacts_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_contacts" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'membership_profile' %}">
+                <input type="submit" value="MEMBERSHIP" class="nav-link gig-tab" id="membership_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#membership_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane show active" id="my_profile" role="tabpanel" aria-labelledby="my_profile_tab"></div>
+        <div class="tab-pane" id="my_gig" role="tabpanel" aria-labelledby="my_gig_tab"></div>
+        <div class="tab-pane" id="my_contacts" role="tabpanel" aria-labelledby="my_contacts_tab"></div>
+        <div class="tab-pane" id="membership_profile" role="tabpanel" aria-labelledby="membership_profile_tab"></div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+    .profile-card {
+        width: 180px;
+        border-radius: 1px;
+        padding-top: 5px;
+    }
+
+    .profile-pic {
+        border-radius: 1px;
+        padding: 1px;
+        width: 150px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 80%;
+    }
+
+</style>
+
+
+<div class="container-fluid" id="justify-center">
+    <br>
+
+    <!-- Userprofile cards -->
+    <div class="row">
+        <div class="d-flex justify-content-evenly flex-wrap">
+
+            {% for userprofiles in userprofiles %}
+            {% csrf_token %}
+            <div class="card profile-card text-center border-secondary mx-1 my-2">
+                <img class="card-img-top img-fluid profile-pic" src="{{userprofiles.picture.url }}" alt="Card image cap">
+
+                <!-- Card Body -->
+                <div class="card-body text-center">
+                    <!-- User Name -->
+                    <div class="col-12 text-center">
+                        {% if object.membership_type != 'Premium' %}
+                        {% if object.membership_type != current_membership %}
+                        <a class=" card-title text-center" href="{% url 'profile_details' userprofiles.pk %}">
+                            <p class="text-center card-title"><strong>{{userprofiles.username.first_name}}
+                                    {{userprofiles.username.last_name}}</strong>
+                            </p>
+                        </a>
+                        {% else %}
+                        <a class=" card-title text-center" href="#">
+                            <p class="text-center card-title"><strong>{{userprofiles.username.first_name}}
+                                    {{userprofiles.username.last_name}}</strong>
+                            </p>
+                        </a>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                    <p class="card-subtitle mb-3 text-center text-muted small">
+                        <strong>{{ userprofiles.profession }} at {{ userprofiles.company_name}}</strong>
+                    </p>
+                    <p class=" card-subtitle mb-0 text-center text-muted small">
+                        {{ userprofiles.city }}, {{ userprofiles.country.name }}
+                    </p>
+
+                </div>
+
+                {% if object.membership_type != 'Premium' %}
+                {% if object.membership_type != current_membership %}
+
+                <!-- Card Footer Button-->
+                <div class="text-center card-footer">
+                    <a class="btn" type="button" href="{% url 'profile_details' userprofiles.pk %}" class="">View</a>
+                </div>
+                {% else %}
+                <!-- Card Footer Button-->
+                <div class="text-center card-footer">
+                    <a class="btn" type="button" href="#" class="">View</a>
+                </div>
+
+                {% endif %}
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        <br>
+        <br>
+    </div>
+    <br>
+    <br>
+
+    <!-- Paginations-->
+    <div id="justify-center">
+        {% if is_paginated %}
+
+        {% if page_obj.has_previous %}
+        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{num}}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} <a class="btn btn-outline-info mb-4"
+            href="?page={{ num }}">{{num}}</a>
+            {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginato.num_pages }}">Last</a>
+            {% endif %}
+
+            {% endif %}
+    </div>
+    <br>
+    <br>
+</div>
+{% endblock %}
