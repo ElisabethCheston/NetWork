@@ -1,10 +1,11 @@
+"""
 from userprofiles.models import (
     Userprofile,
     Industry,
     Profession,
     Employment,
     Status,
-    Skills,
+    Purpose,
     Business,
     TermUser
   )  # noqa: E501
@@ -79,3 +80,4 @@ class ProfileForm(forms.ModelForm):
             'business',
             'status',
         ]
+"""

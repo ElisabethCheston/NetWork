@@ -47,7 +47,7 @@ class Business(models.Model):
 
 
 class Employment(models.Model):
-    employment_name = models.CharField(max_length=200rue, blank=False)
+    employment_name = models.CharField(max_length=200, blank=False)
 
     class Meta:
         verbose_name_plural = 'Employment'
@@ -56,14 +56,14 @@ class Employment(models.Model):
         return str(self.employment_name)
 
 
-class Skills(models.Model):
-    skills_name = models.CharField(max_length=200, blank=False)
+class Purpose(models.Model):
+    purpose_name = models.CharField(max_length=200, blank=False)
 
     class Meta:
-        verbose_name_plural = 'Skills'
+        verbose_name_plural = 'Purpose'
 
     def __str__(self):
-        return str(self.skills_name)
+        return str(self.purpose_name)
 
 
 class Status(models.Model):
@@ -83,7 +83,7 @@ MEMBERSHIP_CHOICES = (
 
 
 class Membership(models.Model):
-    slug = models.SlugField(null=True, blank=True)
+    slug = models.SlugField(blank=True)
     membership_type = models.CharField(
         choices=MEMBERSHIP_CHOICES, default='Free',
         max_length=30
@@ -112,51 +112,56 @@ class Userprofile(models.Model):
     picture = models.ImageField(
         upload_to='images', default='profileavatar.png')
     first_name = models.CharField(
-        max_length=254, blank=False, null=True)
+        max_length=254, blank=False)
     last_name = models.CharField(
-        max_length=254, blank=False, null=True)
+        max_length=254, blank=False)
     membership = models.ForeignKey(
-        Membership, related_name='usermembership', on_delete=models.SET_NULL, null=True)  # noqa: E501
+        Membership, related_name='', on_delete=models.SET_NULL)  # noqa: E501
     stripe_customer_id = models.CharField(max_length=50, default='')
     email = models.EmailField(
         max_length=100, null=False, blank=True)
-    phone = models.CharField(max_length=40, null=True, blank=True)
-    city = models.CharField(max_length=50, null=True, blank=False)
-    country = CountryField(blank_label='Country', null=True, blank=False)
+    phone = models.CharField(max_length=40, blank=True)
+    city = models.CharField(max_length=50, blank=False)
+    country = CountryField(blank_label='Country', blank=False)
 
     # Work Information
     title = models.CharField(
-        max_length=254, blank=True, default=None, null=True)
+        max_length=254, blank=True, default=None)
     company_name = models.CharField(
-        max_length=254, blank=True, null=True)
+        max_length=254, blank=True)
     company_number_vat = models.CharField(
-        max_length=254, blank=True, default=None, null=True)
+        max_length=254, blank=True, default=None)
     industry = models.ForeignKey(
-        Industry, null=True, on_delete=models.SET_NULL, blank=True, default=None)  # noqa: E501
+        Industry, on_delete=models.SET_NULL, blank=True, default=None)  # noqa: E501
     profession = models.ForeignKey(
-        Profession, null=True, on_delete=models.SET_NULL, blank=True, default=None)  # noqa: E501
-    description = models.TextField(max_length=250, null=True, verbose_name="Description")  # noqa: E501
+        Profession, on_delete=models.SET_NULL, blank=True, default=None)  # noqa: E501
+    description = models.TextField(
+        max_length=250, verbose_name="Description")  # noqa: E501
     status = models.ForeignKey(
-        Status, null=True, on_delete=models.SET_NULL, blank=True, default=None)
+        Status, on_delete=models.SET_NULL, blank=True, default=None)
+    purpose = models.ForeignKey(
+        Purpose, on_delete=models.SET_NULL, blank=True, default=None)
 
     # Matching Preference
     business = models.ForeignKey(
-        Business, null=True, on_delete=models.SET_NULL, blank=True, default=None)  # noqa: E501
+        Business, on_delete=models.SET_NULL, blank=True, default=None)  # noqa: E501
     employment = models.ForeignKey(
-        Employment, null=True, on_delete=models.SET_NULL, blank=True, default=None)  # noqa: E501
-    locations = CountryField(blank_label='Locations', null=True, blank=False)
+        Employment, on_delete=models.SET_NULL, blank=True, default=None)  # noqa: E501
+    locations = CountryField(blank_label='Locations', blank=False)
 
     # Other
     following = models.ManyToManyField(
         User, related_name='following', blank=True)
     updated = models.DateTimeField(auto_now=True, blank=False)
-    created = models.DateTimeField(auto_now_add=True, blank=False, null=True)
+    created = models.DateTimeField(auto_now_add=True, blank=False)
 
     def __str__(self):
         # pylint: disable=maybe-no-member
         return str(self.username)
 
+    """
     @property
     def get_full_name(self):
         first_name = self.user.first_name
         last_name = self.user.last_name
+    """

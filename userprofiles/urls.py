@@ -1,12 +1,16 @@
+"""
 from django.urls import path
 from . import views
-from .views import ProfilesListView
+from .views import (
+    ProfilesListView,
+)
 
 
 urlpatterns = [
     # REGISTRATION
     path('register/', views.Register, name='register'),
     path('terms/', views.terms, name='terms'),
+    path('login_register_page/', views.loginRegisterPage, name='login_register_page'),  # noqa: E501
 
     # PROFILE REGISTER SETUP
     path('profile/', views.Profile, name='profile'),
@@ -27,3 +31,4 @@ urlpatterns = [
     path('profile_edit/', views.profile_edit, name='profile_edit'),
     path('switch-follow/', views.follow_unfollow_profile, name='follow_unfollow_profile'),  # noqa: E501
 ]
+"""

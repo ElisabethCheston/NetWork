@@ -1,46 +1,194 @@
 {% extends "account/base.html" %}
-
+{% load static %}
 {% load i18n %}
 {% load account socialaccount %}
 
-{% block head_title %}{% trans "Sign In" %}{% endblock %}
+{% block head_title %}
+{% trans "Sign In" %}
+{% endblock %}
 
 {% block content %}
+<style>
+  #justify-center {
+    margin: auto;
+    width: 80%;
+    padding: 10px;
+    border: none !important;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: large !important;
+  }
 
-<h1>{% trans "Sign In" %}</h1>
+  .errorlist {
+    display: none !important;
+  }
 
-{% get_providers as socialaccount_providers %}
+  label {
+    display: none;
+  }
 
-{% if socialaccount_providers %}
-<p>{% blocktrans with site.name as site_name %}Please sign in with one
-of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
-for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
+  a,
+  p,
+  h1 {
+    text-align: center;
+    font-size: medium;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  }
+/*
+  #id_login,
+  #id_password,
+  .primaryAction {
+    width: 70%;
+    height: 30px;
+    margin: 2%;
+    text-align: center;
+  }
+*/
+  #id_remember {
+    display: none;
+  }
 
-<div class="socialaccount_ballot">
+  .btn,
+  .login-btn {
+    color: white;
+    border-color: rgba(148, 149, 150, 0.2);
+    background-color: rgba(131, 133, 134, 0.8) !important;
+    width: 95%;
+    height: 45px;
+    margin-top: 2%;
+    font-weight: bold;
+    text-align: center;
+    font-size: medium !important;
+    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
 
-  <ul class="socialaccount_providers">
-    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
-  </ul>
+  .btn:hover,
+  .btn:active,
+  .btn:focus {
+    background-color: rgba(94, 95, 95, 0.792) !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+  }
 
-  <div class="login-or">{% trans 'or' %}</div>
+  /*
+.primaryAction {
+  width: 70%;
+  height: 30px;
+  margin: 2%;
+  text-transform: uppercase;
+  text-align: center;
+}
+.user_card {
+  width: 70%;
+  margin-top: auto;
+  margin-bottom: auto;
+  background: #ffffff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 5px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+*/
+  .form-control {
+    height: 45px;
+    margin-top: 1%;
+    text-align: center;
+  }
 
+  .form_container {
+    margin-top: 10px;
+    width: 70%;
+    border-color: black;
+    align-items: center;
+  }
+
+  .login_btn {
+    width: 100%;
+    background: rgba(141, 133, 133, 0.7) !important;
+    color: white !important;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: medium;
+    font-weight: bold;
+  }
+
+  .login_btn:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
+  }
+
+  .login_container {
+    padding: 0 2rem;
+  }
+
+  .input-group-text {
+    background: #f7ba5b !important;
+    color: white !important;
+    border: 0 !important;
+    border-radius: 0.25rem 0 0 0.25rem !important;
+  }
+
+  input {
+    width: 84%;
+    text-align: center;
+    font-size: large !important;
+    height: 45px;
+    margin-top: 2%;
+    background-color: rgba(238, 236, 236, 0.292) !important;
+  }
+
+  input:hover,
+  input:active,
+  input:focus {
+    background-color: rgba(94, 95, 95, 0.192) !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  #messages {
+    background-color: grey;
+    color: #fff;
+    padding: 10px;
+    margin-top: 10px;
+  }
+</style>
+
+<div class="container-fluid" id="justify-center">
+
+
+  <div class="d-flex justify-content-center form_container" id="justify-center">
+
+    <h1 id="form-title">WE NEED TO VERTIFY YOUR ACCOUNT</h1>
+
+    <!-- Login Form -->
+    <form class="login" method="POST" action="{% url 'account_login' %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      {% if redirect_field_value %}
+      <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+      {% endif %}
+
+      <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+
+      <div class="d-flex justify-content-center mt-3" id="justify-center">
+        <input class="btn login-btn" type="submit" value="VERTIFY ACCOUNT">
+      </div>
+    </form>
+
+    <!-- Account Register and Signin links-->
+    <div class="mt-4 row justify-content-center">
+      <div class="d-flex links">
+        <p>Back to&nbsp;<a href="{% url 'register' %}" class="ml-2">Registration form</a></p>
+      </div>
+    </div>
+
+  </div>
+  <br>
 </div>
-
-{% include "socialaccount/snippets/login_extra.html" %}
-
-{% else %}
-<p>{% blocktrans %}If you have not created an account yet, then please
-<a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
-{% endif %}
-
-<form class="login" method="POST" action="{% url 'account_login' %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  {% endif %}
-  <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
-  <button class="primaryAction" type="submit">{% trans "Sign In" %}</button>
-</form>
 
 {% endblock %}

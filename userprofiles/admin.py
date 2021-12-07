@@ -5,16 +5,27 @@ from .models import (
     Status,
     Industry,
     Profession,
-    Skills,
-    Business
+    Purpose,
+    Business,
+    Membership,
 )
 
 
-# Register your models here.
+class MembershipAdmin(admin.ModelAdmin):
+    list_display = (
+        'membership_type',
+        'price',
+        'stripe_price_id',
+    )
+
+    ordering = ('membership_type',)
+
+
+admin.site.register(Membership, MembershipAdmin)
 admin.site.register(Userprofile)
 admin.site.register(Industry)
 admin.site.register(Profession)
-admin.site.register(Skills)
+admin.site.register(Purpose)
 admin.site.register(Business)
 admin.site.register(Employment)
 admin.site.register(Status)

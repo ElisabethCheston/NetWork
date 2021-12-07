@@ -1,3 +1,4 @@
+"""
 from .models import Userprofile
 from django import forms
 from django.contrib import messages
@@ -7,9 +8,9 @@ from django.core.mail import EmailMessage, send_mail, BadHeaderError
 # from django.core.paginator import Paginator
 # from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+# from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User, Permission
+# from django.contrib.auth.models import User, Permission
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import PasswordResetDoneView, PasswordChangeView
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
@@ -42,36 +43,38 @@ class PasswordResetDone(PasswordResetDoneView):
 
 
 def password_reset_request(request):
-	if request.method == "POST":
-		password_reset_form = PasswordResetForm(request.POST)
-		if password_reset_form.is_valid():
-			data = password_reset_form.cleaned_data['email']
-			associated_users = User.objects.filter(Q(email=data))
-			if associated_users.exists():
-				for user in associated_users:
-					subject = "Password Reset Requested"
-					email_template_name = "userprofiles/password_reset_email.txt"
-					c = {
-					'email': user.email,
-					'domain': 'https://network.herokuapp.com',
-					'site_name': 'NetWork',
-					'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-					'user': user,
-					'token': default_token_generator.make_token(user),
-					'protocol': 'http',
-					}
-					email = render_to_string(email_template_name, c)
-					try:
-						send_mail(subject, email, [user.email], fail_silently=True)
-					except BadHeaderError:
-
-						return HttpResponse('Invalid header found.')
-						
-					messages.success(request, 'A message with reset password instructions has been sent to your inbox.')
-					# return redirect ('main:userprofilespage")
-			messages.error(request, 'An invalid email has been entered.')
-	password_reset_form = PasswordResetForm()
-	return render(request=request, template_name="userprofiles/password_reset.html", context={"password_reset_form":password_reset_form})
+    if request.method == "POST":
+        password_reset_form = PasswordResetForm(request.POST)
+        if password_reset_form.is_valid():
+            data = password_reset_form.cleaned_data['email']
+            associated_users = User.objects.filter(Q(email=data))
+            if associated_users.exists():
+                for user in associated_users:
+                    subject = "Password Reset Requested"
+                    email_template_name = "userprofiles/password_reset_email.txt"  # noqa: E501
+                    c = {
+                        'email': user.email,
+                        'domain': 'https://network.herokuapp.com',
+                        'site_name': 'NetWork',
+                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                        'user': user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+                    }
+                    email = render_to_string(email_template_name, c)
+                    try:
+                        send_mail(
+                            subject, email, [user.email], fail_silently=True)
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    messages.success(
+                        request, 'A message with reset password instructions has been sent to your inbox.')  # noqa: E501
+                    return redirect("profile_details")
+                messages.error(request, 'An invalid email has been entered.'
+        password_reset_form = PasswordResetForm()
+        return render(
+            request=request, template_name="userprofiles/password_reset.html",
+            context={"password_reset_form":password_reset_form})
 
 
 # REGISTER AN ACCOUNT
@@ -155,12 +158,13 @@ class ProfilesListView(ListView):
         return Userprofile.objects.order_by('-created').exclude(username=self.request.user)  # noqa: E501
 
 """
+"""
 class NetworkProfileView(DetailView):
     model = Userprofile
     template_name = 'userprofiles/profile_details.html'
 
     def get_user_profile(self, **kwargs):
-        pk = self. kwargs.get('pk') 
+        pk = self. kwargs.get('pk')
         view_profile = Userprofile.objects.get(pk=pk)
         return view_profile
 
@@ -177,10 +181,11 @@ class NetworkProfileView(DetailView):
         return context
 
     def get_success_url(self):
-        return reverse('events:profile_details', kwargs={'pk': self.object.profile_id})
+        return reverse(
+            'events:profile_details', kwargs={'pk': self.object.profile_id})
+"""
 """
 
-@login_required
 def profile_details(request):
     # pylint: disable=maybe-no-member
     profile = Userprofile.objects.get(username=request.user)
@@ -194,15 +199,15 @@ def profile_details(request):
 @login_required
 def profile_edit(request):
     if request.method == 'POST':
-        profileform = ProfileForm(request.POST, 
-                                request.FILES, 
+        profileform = ProfileForm(request.POST,
+                                request.FILES,
                                 instance=request.user.userprofile)
         if profileform.is_valid():
             profileform.save()
             messages.success(request, 'Your Profile has been updated!')
             return redirect('profile_details')
         else:
-            messages.error(request, 'Update failed. Please check if your inputs are valid.')
+            messages.error(request, 'Update failed. Please check if your inputs are valid.')  # noqa: E501
     else:
         profileform = ProfileForm(instance=request.user.userprofile)
     context = {
@@ -210,7 +215,7 @@ def profile_edit(request):
     }
     return render(request, 'userprofiles/profile_edit.html', context)
 
-@login_required
+
 def profile_delete(request, pk):
     userprofile = User.objects.get(pk=pk)
 
@@ -218,9 +223,9 @@ def profile_delete(request, pk):
         userprofile.delete()
         messages.success(request, "Account has been successfully deleted!")
         return HttpResponseRedirect(reverse('userprofiles'))
-    
-    context= {
+
+    context = {
         'userprofile': userprofile,
         }
     return render(request, 'userprofiles/user_confirm_delete.html', context)
-
+"""

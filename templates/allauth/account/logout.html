@@ -1,21 +1,106 @@
 {% extends "account/base.html" %}
-
+{% load static %}
 {% load i18n %}
 
 {% block head_title %}{% trans "Sign Out" %}{% endblock %}
 
 {% block content %}
-<h1>{% trans "Sign Out" %}</h1>
 
-<p>{% trans 'Are you sure you want to sign out?' %}</p>
+<style>
+  /* LAYOUT */
 
-<form method="post" action="{% url 'account_logout' %}">
-  {% csrf_token %}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
-  {% endif %}
-  <button type="submit">{% trans 'Sign Out' %}</button>
-</form>
+  #justify-center {
+    margin: auto;
+    width: 80%;
+    padding: 10px;
+    border: none !important;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  a,
+  p,
+  h2 {
+    text-align: center;
+    font-size: medium;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  /* FORM */
+
+  .form_container {
+    margin-top: 10px;
+    width: 100%;
+    border-color: black;
+    align-items: center;
+  }
+
+  .form-control {
+    width: 90%;
+    height: 60px;
+    margin-top: 2%;
+    text-align: center;
+    font-size: large !important;
+  }
+
+  /* BUTTONS */
+
+  .logout_btn {
+    border-width: 2px;
+    color: white;
+    border-color: rgba(148, 149, 150, 0.2);
+    background-color: rgba(131, 133, 134, 0.8) !important;
+    width: 80%;
+    height: 40px;
+    margin-top: 2%;
+    font-weight: bold;
+    text-align: center;
+    font-size: medium !important;
+    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .logout_btn:hover,
+  .logout_btn:active,
+  .logout_btn:focus {
+    background-color: rgba(94, 95, 95, 0.792) !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+
+  }
+
+  /* INFO MESSAGES */
+
+  #messages {
+    background-color: rgba(128, 186, 240, 0.792);
+    color: #fff;
+    padding: 10px;
+    margin-top: 10px;
+  }
+</style>
+
+<div class="container-fluid" id="justify-center">
+
+    <div class="d-flex form_container" id="justify-center">
+      <div class="text-center">
+        <h2>{% trans "SIGN OUT" %}</h2>
+        <br>
+        <p>{% trans 'Are you sure you want to sign out?' %}</p>
+      </div>
+
+      <form id="justify-center" method="post" action="{% url 'account_logout' %}">
+        {% csrf_token %}
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+        <button class="text-center logout_btn" id="justify-center" type="submit">{% trans 'SIGN OUT' %}</button>
+      </form>
+      <br>
+      <br>
+
+    </div>
+</div>
 
 
 {% endblock %}

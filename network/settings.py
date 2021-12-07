@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'django-insecure-3e43u$y*d$vtu8e=00ncc()x+_ellu!h3svf$i^uk(nrjwe2@%' # noqa E501
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'DEVELOPMENT' in os.environ
 
 ALLOWED_HOSTS = []
 
@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    # 'users.app.UsersConfig',
+    'storages',
+    # 'widget_tweakes',
 
     'allauth',
     'allauth.account',
@@ -47,6 +50,11 @@ INSTALLED_APPS = [
 
     'home',
     'userprofiles',
+    # 'settings',
+    # 'gig',
+    # 'membership',
+    # 'bag',
+    # 'checkout',
 ]
 
 MIDDLEWARE = [
@@ -60,6 +68,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'network.urls'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 TEMPLATES = [
     {
@@ -76,6 +86,8 @@ TEMPLATES = [
         },
     },
 ]
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 AUTHENTICATION_BACKENDS = [
 

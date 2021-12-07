@@ -1,21 +1,145 @@
 {% extends "account/base.html" %}
-
 {% load i18n %}
 
 {% block head_title %}{% trans "Signup" %}{% endblock %}
 
 {% block content %}
-<h1>{% trans "Sign Up" %}</h1>
+<style>
+  #justify-center {
+    margin: auto;
+    width: 70%;
+    padding: 15px;
+    border: none !important;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
 
-<p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+  .errorlist {
+    display: none !important;
+  }
 
-<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  {% endif %}
-  <button type="submit">{% trans "Sign Up" %} &raquo;</button>
-</form>
+  label {
+    display: none;
+  }
 
+  p {
+    height: 20px;
+    margin: 3%;
+    padding: 2%;
+  }
+
+  .form-check {
+    padding: 25px;
+  }
+
+  #id_email,
+  #id_email2,
+  #id_username,
+  #id_password1,
+  #id_password2 {
+    width: 70%;
+    height: 30px;
+    margin: 2%;
+    text-align: center;
+    font-size: medium;
+  }
+
+  .primaryAction {
+    width: 70%;
+    height: 30px;
+    margin: -2%;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .user_card {
+    width: 70%;
+    margin-top: auto;
+    margin-bottom: auto;
+    background: #ffffff;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 5px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  }
+
+  .form_container {
+    margin-top: 30px;
+    width: 100%;
+    align-items: center;
+  }
+
+  /*
+  .login_btn {
+    width: 100%;
+    background: rgba(141, 133, 133, 0.7) !important;
+    color: white !important;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: medium;
+    font-weight: bold;
+  }
+
+  .login_btn:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
+  }
+
+  .login_container {
+    padding: 0 2rem;
+  }
+*/
+  .input-group-text {
+    background: #f7ba5b !important;
+    color: white !important;
+    border: 0 !important;
+    border-radius: 0.25rem 0 0 0.25rem !important;
+  }
+
+  .input_user,
+  .input_pass:focus {
+    box-shadow: none !important;
+    outline: 0px !important;
+  }
+
+  #messages {
+    background-color: grey;
+    color: #fff;
+    padding: 10px;
+    margin-top: 10px;
+  }
+</style>
+
+
+<div class="container-fluid" id="justify-center">
+
+
+
+  <div class="user_card" id="justify-center">
+    <div class="d-flex form_container">
+
+      <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+
+        <div class="form-check">
+          <button class="primaryAction" type="submit">{% trans "Sign Up" %}</button>
+      </form>
+      <br>
+      <br>
+      <p>{% blocktrans %}Already have an account? <a href="{{ login_url }}">Sign In</a>{% endblocktrans %}
+      </p>
+
+    </div>
+  </div>
+
+</div>
 {% endblock %}

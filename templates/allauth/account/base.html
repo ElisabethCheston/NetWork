@@ -1,1 +1,67 @@
-{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block meta %}
+
+<!-- Required meta tags -->
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{% endblock %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  {% block extra_head %}
+
+  <style>
+    img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+}
+  </style>
+
+  <div class="container" id="justify-center">
+
+    <!-- Logo -->
+    <div id="justify-center">
+        <div class="col-10">
+            <!--<a href="{% url 'home' %}" class="nav-link main-logo-link">-->
+              <img src="{% static 'images/biznetlight.png' %}"class="img-fluid">
+
+                <!--<img class="img-fluid" src="https://static.wixstatic.com/media/e64c63_b290d859fd03448bad1976ef606f894e~mv2.png/v1/fill/w_378,h_88,al_c,lg_1,q_85/Ska%CC%88rmavbild%202021-05-23%20kl_%2020_40_47.webp">-->
+            <!--</a>-->
+        </div>
+    </div>
+  </div>
+  {% endblock %}
+
+</head>
+
+<body>
+  {% block body %}
+  <div class="container-fluid" id="justify-center">
+  {% if messages %}
+  <div class="message-text">
+    <strong>Messages:</strong>
+    <ul>
+      {% for message in messages %}
+      <li>{{message}}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+  </div>
+
+  {% block content %}
+  {% endblock %}
+  {% endblock %}
+
+
+</body>
+
+</html>
