@@ -68,7 +68,8 @@ def password_reset_request(request):
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
                     messages.success(
-                        request, 'A message with reset password instructions has been sent to your inbox.')  # noqa: E501
+                        request, 'A message with reset password instructions \
+                            has been sent to your inbox.')  # noqa: E501
                     return redirect("profile_details")
                 messages.error(request, 'An invalid email has been entered.'
         password_reset_form = PasswordResetForm()
@@ -112,7 +113,6 @@ def terms(request):
 
 
 # VERTIFY USER ACCOUNT
-@login_required
 def loginRegisterPage(request):
     if request.method == 'POST':
         # Connected to the name field in the login_register_page.
@@ -155,36 +155,9 @@ class ProfilesListView(ListView):
     # override the queryset method
     def get_queryset(self):
         queryset = Userprofile.objects.order_by('-created')
-        return Userprofile.objects.order_by('-created').exclude(username=self.request.user)  # noqa: E501
+        return Userprofile.objects.order_by('-created').exclude(
+            username=self.request.user)  # noqa: E501
 
-"""
-"""
-class NetworkProfileView(DetailView):
-    model = Userprofile
-    template_name = 'userprofiles/profile_details.html'
-
-    def get_user_profile(self, **kwargs):
-        pk = self. kwargs.get('pk')
-        view_profile = Userprofile.objects.get(pk=pk)
-        return view_profile
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        view_profile = self.get_object()
-        user_profile = Userprofile.objects.get(username=self.request.user)
-        if view_profile.username in user_profile.following.all():
-            follow = True
-        else:
-            follow = False
-
-        context['follow'] = follow
-        return context
-
-    def get_success_url(self):
-        return reverse(
-            'events:profile_details', kwargs={'pk': self.object.profile_id})
-"""
-"""
 
 def profile_details(request):
     # pylint: disable=maybe-no-member
@@ -196,7 +169,6 @@ def profile_details(request):
     return render(request, template, context)
 
 
-@login_required
 def profile_edit(request):
     if request.method == 'POST':
         profileform = ProfileForm(request.POST,
@@ -207,7 +179,8 @@ def profile_edit(request):
             messages.success(request, 'Your Profile has been updated!')
             return redirect('profile_details')
         else:
-            messages.error(request, 'Update failed. Please check if your inputs are valid.')  # noqa: E501
+            messages.error(
+                request, 'Update failed. Please check if your inputs are valid.')  # noqa: E501
     else:
         profileform = ProfileForm(instance=request.user.userprofile)
     context = {

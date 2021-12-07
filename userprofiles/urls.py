@@ -16,9 +16,13 @@ urlpatterns = [
     path('profile/', views.Profile, name='profile'),
 
     # PASSWORD
-    path('password_change/', views.PasswordsChangeView.as_view(template_name='userprofiles/password_change.html'), name='password_change'),  # noqa: E501
-    path('password_success/', views.PasswordSuccess, name='password_success'),  # noqa: E501
-    path('password_change_done/', views.PasswordSuccess, name='password_change_done'),  # noqa: E501
+    path(
+        'password_change/', views.PasswordsChangeView.as_view(
+            template_name='userprofiles/password_change.html'), name='password_change'),
+    path(
+        'password_success/', views.PasswordSuccess, name='password_success'),
+    path(
+        'password_change_done/', views.PasswordSuccess, name='password_change_done'),
 
     # USERPROFILES
     path('', views.ProfilesListView.as_view(), name='all_profiles'),
@@ -29,6 +33,6 @@ urlpatterns = [
     path('profile_delete/<pk>/', views.profile_delete, name='profile_delete'),
     path('profile_details/', views.profile_details, name='profile_details'),
     path('profile_edit/', views.profile_edit, name='profile_edit'),
-    path('switch-follow/', views.follow_unfollow_profile, name='follow_unfollow_profile'),  # noqa: E501
+    path('switch-follow/', views.follow_unfollow_profile, name='follow_unfollow_profile'),
 ]
 """

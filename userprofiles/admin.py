@@ -12,6 +12,7 @@ from .models import (
 
 
 class MembershipAdmin(admin.ModelAdmin):
+    """ Membership Information """
     list_display = (
         'membership_type',
         'price',
