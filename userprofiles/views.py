@@ -1,4 +1,3 @@
-"""
 from .models import Userprofile
 from django import forms
 from django.contrib import messages
@@ -7,7 +6,7 @@ from django.core import serializers
 from django.core.mail import EmailMessage, send_mail, BadHeaderError
 # from django.core.paginator import Paginator
 # from django.conf import settings
-from django.contrib import messages
+# from django.contrib import messages
 # from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 # from django.contrib.auth.models import User, Permission
@@ -22,7 +21,7 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.urls import reverse_lazy
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 
 # PASSWORD USAGE
@@ -51,31 +50,28 @@ def password_reset_request(request):
             if associated_users.exists():
                 for user in associated_users:
                     subject = "Password Reset Requested"
-                    email_template_name = "userprofiles/password_reset_email.txt"  # noqa: E501
+                    email_template_name = "profileusers/password_reset_email.txt"  # noqa: E501
                     c = {
-                        'email': user.email,
-                        'domain': 'https://network.herokuapp.com',
+                        "email": user.email,
+                        'domain': 'https://biz-net.herokuapp.com',
                         'site_name': 'NetWork',
-                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                        'user': user,
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                        "user": user,
                         'token': default_token_generator.make_token(user),
                         'protocol': 'http',
-                    }
+                        }
                     email = render_to_string(email_template_name, c)
                     try:
-                        send_mail(
-                            subject, email, [user.email], fail_silently=True)
+                        send_mail(subject, email, [user.email], fail_silently=True)  # noqa: E501
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
-                    messages.success(
-                        request, 'A message with reset password instructions \
-                            has been sent to your inbox.')  # noqa: E501
-                    return redirect("profile_details")
-                messages.error(request, 'An invalid email has been entered.'
-        password_reset_form = PasswordResetForm()
-        return render(
-            request=request, template_name="userprofiles/password_reset.html",
-            context={"password_reset_form":password_reset_form})
+                    messages.success(request, 'A message with reset password instructions has been sent to your inbox.')  # noqa: E501
+                    return redirect("main:homepage")
+            messages.error(request, 'An invalid email has been entered.')
+    password_reset_form = PasswordResetForm()
+    return render(
+        request=request, template_name="profileusers/password_reset.html", context={  # noqa: E501
+            "password_reset_form": password_reset_form})  # noqa: E501
 
 
 # REGISTER AN ACCOUNT
@@ -130,20 +126,8 @@ def loginRegisterPage(request):
     return render(request, template, context)
 
 
-@login_required
-def follow_unfollow_profile(request):
-    if request.method == 'POST':
-        user_profile = Userprofile.objects.get(username=request.user)
-        pk = request.POST.get('profile_pk')
-        userprofile = Userprofile.objects.get(pk=pk)
 
-        if userprofile.username in user_profile.following.all():
-            user_profile.following.remove(userprofile.username)
-        else:
-            user_profile.following.add(userprofile.username)
-        return redirect(request.META.get('HTTP_REFERER'))
-
-    return redirect('all_profiles')
+# USERPROFILES
 
 
 class ProfilesListView(ListView):
@@ -157,6 +141,30 @@ class ProfilesListView(ListView):
         queryset = Userprofile.objects.order_by('-created')
         return Userprofile.objects.order_by('-created').exclude(
             username=self.request.user)  # noqa: E501
+
+
+class NetworkProfileView(DetailView):
+    model = Userprofile()
+    template_name = 'userprofiles/profile_details.html'
+    def get_user_profile(self, **kwargs):
+        pk = self. kwargs.get('pk') 
+        view_profile = Userprofile().objects.get(pk=pk)
+        return view_profile
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        view_profile = self.get_object()
+        user_profile = Userprofile().objects.get(username=self.request.user)
+        if view_profile.username in user_profile.following.all():
+            follow = True
+        else:
+            follow = False
+
+        context['follow'] = follow
+        return context
+
+    def get_success_url(self):
+        return reverse('events:profile_details', kwargs={'pk': self.object.profile_id})
 
 
 def profile_details(request):
@@ -201,4 +209,19 @@ def profile_delete(request, pk):
         'userprofile': userprofile,
         }
     return render(request, 'userprofiles/user_confirm_delete.html', context)
-"""
+
+
+@login_required
+def follow_unfollow_profile(request):
+    if request.method == 'POST':
+        user_profile = Userprofile.objects.get(username=request.user)
+        pk = request.POST.get('profile_pk')
+        userprofile = Userprofile.objects.get(pk=pk)
+
+        if userprofile.username in user_profile.following.all():
+            user_profile.following.remove(userprofile.username)
+        else:
+            user_profile.following.add(userprofile.username)
+        return redirect(request.META.get('HTTP_REFERER'))
+
+    return redirect('all_profiles')

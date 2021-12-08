@@ -129,7 +129,7 @@ class Userprofile(models.Model):
     last_name = models.CharField(
         max_length=254, blank=False)
     membership = models.ForeignKey(
-        Membership, related_name='', on_delete=models.SET_NULL)
+        Membership, null=True, on_delete=models.SET_NULL)
     stripe_customer_id = models.CharField(max_length=50, default='')
     email = models.EmailField(
         max_length=100, null=False, blank=True)
@@ -145,21 +145,21 @@ class Userprofile(models.Model):
     company_number_vat = models.CharField(
         max_length=254, blank=True, default=None)
     industry = models.ForeignKey(
-        Industry, on_delete=models.SET_NULL, blank=True, default=None)  # noqa: E501
+        Industry, on_delete=models.SET_NULL, null=True, blank=True, default=None)  # noqa: E501
     profession = models.ForeignKey(
-        Profession, on_delete=models.SET_NULL, blank=True, default=None)  # noqa: E501
+        Profession, on_delete=models.SET_NULL, blank=True, null=True, default=None)  # noqa: E501
     description = models.TextField(
         max_length=250, verbose_name="Description")
     status = models.ForeignKey(
-        Status, on_delete=models.SET_NULL, blank=True, default=None)
+        Status, on_delete=models.SET_NULL, null=True, blank=True, default=None)
     purpose = models.ForeignKey(
-        Purpose, on_delete=models.SET_NULL, blank=True, default=None)
+        Purpose, on_delete=models.SET_NULL, blank=True, null=True, default=None)
 
     # Matching Preference
     business = models.ForeignKey(
-        Business, on_delete=models.SET_NULL, blank=True, default=None)  # noqa: E501
+        Business, on_delete=models.SET_NULL, null=True, blank=True, default=None)  # noqa: E501
     employment = models.ForeignKey(
-        Employment, on_delete=models.SET_NULL, blank=True, default=None)  # noqa: E501
+        Employment, on_delete=models.SET_NULL, null=True, blank=True, default=None)  # noqa: E501
     locations = CountryField(blank_label='Locations', blank=False)
 
     # Other

@@ -1,5 +1,4 @@
-"""
-from userprofiles.models import (
+from .models import (
     Userprofile,
     Industry,
     Profession,
@@ -80,4 +79,3 @@ class ProfileForm(forms.ModelForm):
             'business',
             'status',
         ]
-"""
