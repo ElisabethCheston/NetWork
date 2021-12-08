@@ -129,7 +129,6 @@ def loginRegisterPage(request):
 
 # USERPROFILES
 
-
 class ProfilesListView(ListView):
     model = Userprofile
     template_name = 'userprofiles/all_profiles.html'
@@ -146,6 +145,7 @@ class ProfilesListView(ListView):
 class NetworkProfileView(DetailView):
     model = Userprofile()
     template_name = 'userprofiles/profile_details.html'
+
     def get_user_profile(self, **kwargs):
         pk = self. kwargs.get('pk') 
         view_profile = Userprofile().objects.get(pk=pk)
@@ -164,7 +164,8 @@ class NetworkProfileView(DetailView):
         return context
 
     def get_success_url(self):
-        return reverse('events:profile_details', kwargs={'pk': self.object.profile_id})
+        return reverse(
+            'events:profile_details', kwargs={'pk': self.object.profile_id})
 
 
 def profile_details(request):
@@ -192,7 +193,7 @@ def profile_edit(request):
     else:
         profileform = ProfileForm(instance=request.user.userprofile)
     context = {
-        'profileform':profileform,
+        'profileform': profileform,
     }
     return render(request, 'userprofiles/profile_edit.html', context)
 

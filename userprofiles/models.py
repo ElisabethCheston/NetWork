@@ -153,7 +153,7 @@ class Userprofile(models.Model):
     status = models.ForeignKey(
         Status, on_delete=models.SET_NULL, null=True, blank=True, default=None)
     purpose = models.ForeignKey(
-        Purpose, on_delete=models.SET_NULL, blank=True, null=True, default=None)
+        Purpose, on_delete=models.SET_NULL, blank=True, null=True, default=None)  # noqa: E501
 
     # Matching Preference
     business = models.ForeignKey(
