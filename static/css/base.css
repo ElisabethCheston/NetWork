@@ -1,0 +1,558 @@
+
+/* LAYOUT */
+
+body { 
+	background: url('/static/images/partners.jpg') no-repeat center center fixed;
+	background-size: cover;
+  height: calc(100vh - 164px);
+  color: #555;
+  font-family: "Lato";
+}
+
+.card-layout {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 80px !important;
+}
+
+.center {
+  margin: auto;
+  width: 70%;
+  padding: 15px;
+  border: none !important;
+}
+.logo {
+  display: url('/media/biznetname.png.jpg');
+}
+.modal,
+.follow_modal {
+  background-color: rgba(247, 245, 245, 0.01) !important;
+}
+
+/* NAVBAR */
+
+#topnav,
+#bottom-nav {
+  background-color: rgba(252, 249, 249, 0.7);
+  height: 55px;
+}
+
+/* ICONS */
+
+.card-title,
+.fa-cog,
+.fa-user,
+.fa-suitcase,
+.fa-user-plus,
+.fa-universal-access,
+.fa-users,
+#profileTab {
+  color:#406daf;
+}
+
+.card-title:hover,
+.fa-cog:hover,
+.fa-user:hover,
+.fa-user-plus:hover,
+.fa-suitcase:hover,
+.fa-universal-access:hover,
+.fa-users:hover,
+#profileTab {
+  color:#7e90b6;
+}
+
+.fa-user-plus {
+  font-size: xx-large;
+}
+/*
+#settings,
+#subscription {
+  text-decoration: none;
+  background: transparent;
+  margin-top: 1px;  
+}
+*/
+
+#profile {
+  text-transform: uppercase;
+  color:#406daf;
+  font-weight: bolder;
+}
+/*TABS */
+
+.tab-container {
+  padding-top: 2%;
+}
+/* @import url('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css'); */
+
+.nav-tab {
+  margin-top: 39px;
+  position: sticky;
+  padding-top: 0px;
+  color: rgba(2, 2, 2, 0.733);
+  background-color: rgba(247, 245, 245, 0.01);
+  font-stretch: 150%;
+  font-family: "Lato";
+  text-align: center;
+}
+
+li.nav-item {
+  font-stretch: 150%;
+  height: 35px;
+}
+
+.gig-tab {
+  border: none;
+  background-color: transparent !important;
+  height: 30px;
+  align-items: center;
+  font-weight: bolder;
+  font-size: medium;
+  justify-content: center;
+  color: #303031 !important;
+  background-color: transparent;
+  margin-bottom: 10px;
+}
+
+.gig-tab:hover {
+color: rgba(170, 173, 175, 0.99) !important;
+}
+
+/* FONT */
+
+h1, h2, h3, h4, h5 {
+  color:#406daf;
+}
+h6, p {
+  color: rgba(2, 2, 2, 0.8);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+/*
+.message-text {
+  color: red !important;
+  font-family: Verdana, Geneva, Tahoma, sans-serif !important;
+  font-weight: bolder !important;
+}
+*/
+
+/* LAYOUT */
+
+/* Container */
+
+.container {
+  padding-top: 0% !important;
+  margin-bottom: 70px !important;
+  padding-bottom: 3%;
+  display: flex;
+  justify-content: center;
+  border-radius: 0;
+  box-shadow: 0 15px 15px rgba(240, 239, 239, 0.6);
+}
+
+/* Start modal */
+
+.modal-btn {
+  color: ivory;
+  width: 15%;
+}
+
+/* CARDS */
+
+.card {
+  text-align: left;
+  border-radius: none;
+  background-color: rgba(253, 251, 251, 0.85) !important;
+  border-color: rgba(255, 250, 250, 0.2);
+}
+
+.card-body {
+  background-color: rgba(255, 255, 255, 0.05);
+  margin: 15px;
+}
+
+.card:hover,
+.profile-card:hover {
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* IMAGES & PICTURES */
+
+/* js modal */
+.not-visible {
+  display: none;
+}
+.avatar {
+  width: 50px;
+  height: 55px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: top center;
+}
+.profile-pic {
+  width: 200px;
+}
+
+/* BUTTONS & LINKS */
+
+label {
+  display: none;
+}
+a.btn, button {
+  border-color: none !important;
+}
+.btn {
+  color: white !important;
+  border-color: rgba(210, 233, 247, 0.103) !important;
+  background-color:#406daf !important;
+  font-size: medium !important;
+  border-radius: 1px !important;
+  font-weight: bold;
+  box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.btn:hover {
+  color: white;
+  border-color: rgba(96, 185, 236, 0.068);
+  background-color:#768cb8d0;
+  font-size: medium !important;
+  border-radius: 1px !important;
+  font-weight: bold;
+  box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.button-sub {
+  width: 130px;
+  height: 30px;
+  background: none;
+  background-color: none;
+  font-family: Poppins;
+  font-size: 14px;
+  color: #406daf;
+}
+@media screen and (max-width: 600px) {
+  .button-sub {
+      display: none;
+  }
+}
+
+/* Wrappers */
+
+.wrapper {
+  display: inline-flex;
+}
+
+.wrapper .icon {
+  position: relative;
+  font-size: 24px;
+  color: #406daf;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  flex-direction: column;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.wrapper.tooltip {
+  position: absolute;
+  top: 0;
+  font-size: 14px;
+  background-color: transparent;
+  color: transparent;
+  padding: 5px 10px;
+  align-items: center;
+  border-radius: 70%;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+.wrapper .tooltip::before {
+  position: absolute;
+  content: "";
+  height: 6px;
+  width: 6px;
+  background-color: transparent;
+  bottom: -3px;
+  left: 50%;
+  transform: translate(-50%) rotate(45deg);
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.wrapper .icon:hover .tooltip {
+  top: -45px;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.wrapper .user-circle:hover .tooltip,
+.wrapper .user-circle:hover .tooltip::before,
+.wrapper .search:hover .tooltip,
+.wrapper .search:hover .tooltip::before,
+.wrapper .suitcase:hover .tooltip,
+.wrapper .suitcase:hover .tooltip::before,
+.wrapper .users:hover .tooltip,
+.wrapper .users:hover .tooltip::before,
+.wrapper .fa-universal-access:hover .tooltip,
+.wrapper .fa-universal-access:hover .tooltip::before,
+.wrapper .envelope:hover .tooltip,
+.wrapper .envelope:hover .tooltip::before {
+  color: #406daf;
+  font-weight: bolder;
+  font-size: medium;
+  border-radius: 60%;
+  background-color: rgba(243, 242, 242, 0.55);
+  padding: 5px 10px;
+}
+
+/* SCREEN LAYOUTS */
+
+/* Slightly larger container on xl screens */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 80%;
+  }
+}
+/* fixed top navbar only on medium and up */
+@media (min-width: 992px) {
+    .fixed-top-desktop-only {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 1030;
+    }
+}
+
+/* BAG */
+
+.icon {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.logo-font {
+  text-transform: uppercase;
+}
+
+.main-logo-link {
+  width: fit-content;
+}
+
+.shop-now-button {
+  background: black;
+  color: white;
+  min-width: 260px;
+}
+
+.btn-black {
+  background: black;
+  color: white;
+}
+
+.btn-outline-black {
+  background: white;
+  color: black !important; /* use important to override link colors for <a> elements */
+  border: 1px solid black;
+}
+
+.btn-outline-black:hover,
+.btn-outline-black:active,
+.btn-outline-black:focus {
+  background: black;
+  color: white !important;
+}
+
+.shop-now-button:hover,
+.shop-now-button:active,
+.shop-now-button:focus,
+.btn-black:hover,
+.btn-black:active,
+.btn-black:focus {
+  background: #222;
+  color: white;
+}
+
+.text-black {
+  color: #000 !important;
+}
+
+.border-black {
+  border: 1px solid black !important;
+}
+
+.bg-black {
+  background: #000 !important;
+}
+
+.overlay {
+height: 100%;
+width: 100%;
+top: 0;
+left: 0;
+position: fixed;
+background: white;
+z-index: -1;
+}
+
+a.category-badge > span.badge:hover {
+  background: #212529 !important;
+  color: #fff !important;
+}
+
+.btt-button {
+  height: 42px;
+  width: 42px;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+}
+
+.btt-link,
+.update-link,
+.remove-item {
+  cursor: pointer;
+}
+
+input[name='q']::placeholder {
+  color: #406daf;
+}
+
+
+/* TOAST BOOTSTRAP */
+
+.message-container {
+  position: fixed;
+  top: 72px;
+  right: 15px;
+  z-index: 99999999999;
+}
+
+.custom-toast {
+  overflow: visible;
+}
+
+.toast-capper {
+  height: 2px;
+}
+
+/* from CSS-tricks.com: https://css-tricks.com/snippets/css/css-triangle/ */
+.arrow-up {
+  width: 0; 
+  height: 0; 
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent; 
+  border-bottom: 10px solid black;
+  position: absolute;
+  top: -10px;
+  right: 36px;
+}
+
+/* Convenience classes - colors copied from Bootstrap */
+.arrow-primary {
+  border-bottom-color: #007bff !important;
+}
+
+.arrow-secondary {
+  border-bottom-color: #6c757d !important;
+}
+
+.arrow-success {
+  border-bottom-color: #28a745 !important;
+}
+
+.arrow-danger {
+  border-bottom-color: #dc3545 !important;
+}
+
+.arrow-warning {
+  border-bottom-color: #ffc107 !important;
+}
+
+.arrow-info {
+  border-bottom-color: #17a2b8 !important;
+}
+
+.arrow-light {
+  border-bottom-color: #f8f9fa !important;
+}
+
+.arrow-dark {
+  border-bottom-color: #343a40 !important;
+}
+
+.bag-notification-wrapper {
+  height: 100px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+
+/* fixed top navbar only on medium and up */
+@media (min-width: 992px) {
+  .fixed-top-desktop-only {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      z-index: 1030;
+  }
+
+  .header-container {
+      padding-top: 164px;
+  }
+}
+
+/* pad the top a bit when navbar is collapsed on mobile */
+
+@media (max-width: 991px) {
+  .header-container {
+      padding-top: 116px;
+  }
+
+  body {
+      height: calc(100vh - 116px);
+  }
+
+  .display-4.logo-font.text-black {
+      font-size: 2rem;
+  }
+
+  .nav-link {
+      padding: 0.15rem;
+  }
+
+  .nav-link i.fa-lg {
+      font-size: 1rem;
+  }
+
+  .navbar-toggler {
+      padding: .6rem .6rem;
+      font-size: 1rem;
+  }
+
+  #delivery-banner h4 {
+      font-size: .9rem;
+  }
+
+  .btn.btn-outline-black.rounded-0,
+  .btn.btn-black.rounded-0 {
+      padding: .375rem .375rem;
+  }
+
+  .btn.btn-outline-black.rounded-0.btn-lg,
+  .btn.btn-black.rounded-0.btn-lg {
+      padding: .375rem .375rem;
+      font-size: .75rem;
+  }
+
+  .increment-qty, .decrement-qty {
+      padding: .25rem .5rem !important;
+  }
+}
