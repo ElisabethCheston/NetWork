@@ -1,81 +1,19 @@
 from .models import Userprofile
 from django import forms
 from django.contrib import messages
-from .forms import ProfileForm, RegisterUserForm, TermsForm
 from django.core import serializers
 from django.core.mail import EmailMessage, send_mail, BadHeaderError
-# from django.core.paginator import Paginator
-# from django.conf import settings
-# from django.contrib import messages
-# from django.contrib.auth import authenticate, login, logout
+
 from django.contrib.auth.decorators import login_required
-# from django.contrib.auth.models import User, Permission
-from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.views import PasswordResetDoneView, PasswordChangeView
-from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
-# from django.db.models.functions import Lower
 from django.db.models.query_utils import Q
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from django.template.loader import render_to_string
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
-from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView
 
 
-# PASSWORD USAGE
-
-class PasswordsChangeView(PasswordChangeView):
-    form_class = PasswordChangeForm
-    # template_name = 'userprofiles/password_change.html'
-    success_url = reverse_lazy('password_success')
-    # success_url = reverse_lazy('profile_details')
-
-
-def PasswordSuccess(request):
-    return render(request, 'userprofiles/password_success.html', {})
-
-
-class PasswordResetDone(PasswordResetDoneView):
-    template_name = 'userprofiles/password_reset_done.html'
-
-
-def password_reset_request(request):
-    if request.method == "POST":
-        password_reset_form = PasswordResetForm(request.POST)
-        if password_reset_form.is_valid():
-            data = password_reset_form.cleaned_data['email']
-            associated_users = User.objects.filter(Q(email=data))
-            if associated_users.exists():
-                for user in associated_users:
-                    subject = "Password Reset Requested"
-                    email_template_name = "profileusers/password_reset_email.txt"  # noqa: E501
-                    c = {
-                        "email": user.email,
-                        'domain': 'https://biz-net.herokuapp.com',
-                        'site_name': 'NetWork',
-                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
-                        "user": user,
-                        'token': default_token_generator.make_token(user),
-                        'protocol': 'http',
-                        }
-                    email = render_to_string(email_template_name, c)
-                    try:
-                        send_mail(subject, email, [user.email], fail_silently=True)  # noqa: E501
-                    except BadHeaderError:
-                        return HttpResponse('Invalid header found.')
-                    messages.success(request, 'A message with reset password instructions has been sent to your inbox.')  # noqa: E501
-                    return redirect("main:homepage")
-            messages.error(request, 'An invalid email has been entered.')
-    password_reset_form = PasswordResetForm()
-    return render(
-        request=request, template_name="profileusers/password_reset.html", context={  # noqa: E501
-            "password_reset_form": password_reset_form})  # noqa: E501
-
 
 # REGISTER AN ACCOUNT
-
+"""
 def Register(request):
     # pylint: disable=maybe-no-member
     form = RegisterUserForm()
@@ -100,31 +38,7 @@ def Register(request):
     }
     return render(request, 'userprofiles/register.html', context)
 
-
-def terms(request):
-    # pylint: disable=maybe-no-member
-    template = 'userprofiles/terms.html'
-
-    return render(request, template)
-
-
-# VERTIFY USER ACCOUNT
-def loginRegisterPage(request):
-    if request.method == 'POST':
-        # Connected to the name field in the login_register_page.
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('profile')
-        else:
-            messages.info(request, 'Username or Password is incorrect!')
-    template = 'userprofiles/login_register_page.html'
-    context = {}
-    return render(request, template, context)
-
+"""
 
 
 # USERPROFILES
