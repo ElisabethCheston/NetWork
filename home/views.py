@@ -26,11 +26,10 @@ from userprofiles.models import Userprofile
 from userprofiles.forms import ProfileForm, RegisterUserForm, TermsForm
 
 
-
-
 # STARTING PAGE
 def index(request):
     return render(request, 'home/index.html')
+
 
 # PASSWORD USAGE
 class PasswordsChangeView(PasswordChangeView):
@@ -45,39 +44,37 @@ def PasswordSuccess(request):
 class PasswordResetDone(PasswordResetDoneView):
     template_name = 'home/password_reset_done.html'
 
-
+"""
 def password_reset_request(request):
-	if request.method == "POST":
-		password_reset_form = PasswordResetForm(request.POST)
-		if password_reset_form.is_valid():
-			data = password_reset_form.cleaned_data['email']
-			associated_users = User.objects.filter(Q(email=data))
-			if associated_users.exists():
-				for user in associated_users:
-					subject = "Password Reset Requested"
-					email_template_name = "home/password_reset_email.txt"
-					c = {
-					"email":user.email,
-					'domain':'https://biz-net.herokuapp.com',
-					'site_name': 'BizNet',
-					"uid": urlsafe_base64_encode(force_bytes(user.pk)),
-					"user": user,
-					'token': default_token_generator.make_token(user),
-					'protocol': 'http',
-					}
-					email = render_to_string(email_template_name, c)
-					try:
-                        # send_mail(subject, contact_message, from_email, to_email, fail_silently = True)
-						send_mail(subject, email, [user.email], fail_silently=True) #  'AWS_verified_email_address',
-					except BadHeaderError:
-
-						return HttpResponse('Invalid header found.')
-						
-					messages.success(request, 'A message with reset password instructions has been sent to your inbox.')
-					return redirect ("main:homepage")
-			messages.error(request, 'An invalid email has been entered.')
-	password_reset_form = PasswordResetForm()
-	return render(request=request, template_name="home/password_reset.html", context={"password_reset_form":password_reset_form})
+    if request.method == "POST":
+        password_reset_form = PasswordResetForm(request.POST)
+        if password_reset_form.is_valid():
+            data = password_reset_form.cleaned_data['email']
+            associated_users = User.objects.filter(Q(email=data))
+            if associated_users.exists():
+                for user in associated_users:
+                    subject = "Password Reset Requested"
+                    email_template_name = "home/password_reset_email.txt"
+                    c = {
+                        "email": user.email,
+                        'domain': 'https://network-jobs.herokuapp.com',
+                        'site_name': 'NetWork',
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                        "user": user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+                        }
+                    email = render_to_string(email_template_name, c)
+                    try:
+                        send_mail(subject, email, [user.email], fail_silently=True)  # noqa: E501
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    messages.success(request, 'A message with reset password instructions has been sent to your inbox.')  # noqa: E501
+                    return redirect("main:homepage")
+            messages.error(request, 'An invalid email has been entered.'
+    password_reset_form = PasswordResetForm()
+    return render(request, "home/password_reset.html", context)
+"""
 
 
 # REGISTER AN ACCOUNT
@@ -101,7 +98,7 @@ def register(request):
         messages.warning(request, 'Your account cannot be created.')
 
     context = {
-        'form' : form,
+        'form': form,
         'termform': termform
     }
     return render(request, 'home/register.html', context)
@@ -118,23 +115,23 @@ def terms(request):
 
 @login_required
 def Profile(request):
-    # profile_form1 = ProfileForm1()
+    profile_form = ProfileForm()
     if request.method == 'POST':
-        profile = Profile(request.POST, 
-                                request.FILES, 
-                                instance=request.user.profileuser)
+        profile = Userprofile(request.POST,
+                                request.FILES,
+                                instance=request.user.userprofile)
         if profile.is_valid():
             profile.save()
-            # messages.success(request, 'Step 1 of 3 done of creating your profile!')
+            # messages.success(request, 'Step 1 of 3 done of creating your profile!')  # noqa: E501
             return redirect('profie_edit')
         # else:
-            # messages.error(request, 'Update failed. Please check if your inputs are valid.')
+            # messages.error(request, 'Update failed. Please check if your inputs are valid.')  # noqa: E501
     else:
-        profile = Profileuser.objects.create(username=request.user)
-        # profile_form1 = ProfileForm1(instance=request.user.profileuser)
+        profile = Userprofile().objects.create(username=request.user)
+        profile_form = ProfileForm(instance=request.user.userprofile)
         # return redirect('register_1')
     context = {
-        'profile':profile,
+        'profile': profile,
     }
     return render(request, 'home/profile.html', context)
 
@@ -153,7 +150,7 @@ def loginPage(request):
         else:
             messages.info(request, 'Username or Password is incorrect!')
             return redirect('login_page')
-  
+
     template = 'home/login_page.html'
     context = {}
     return render(request, template, context)
@@ -172,7 +169,7 @@ def loginRegisterPage(request):
             return redirect('profile')
         else:
             messages.info(request, 'Username or Password is incorrect!')
-            
+
     template = 'home/login_register_page.html'
     context = {}
     return render(request, template, context)

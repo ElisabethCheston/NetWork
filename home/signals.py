@@ -5,7 +5,7 @@ from django.dispatch import receiver
 
 
 @receiver(post_save, sender=User)
-def create_profileuser(sender, instance, created, **kwargs):
+def create_userprofile(sender, instance, created, **kwargs):
     if created:
         # pylint: disable=maybe-no-member
         Userprofile.objects.create(user=instance)

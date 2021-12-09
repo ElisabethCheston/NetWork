@@ -60,7 +60,7 @@ var industryChoice = {
 
 $.ajax({
   type: 'POST',
-  url: 'profileusers/fixtures/industry.json',
+  url: 'userprofiles/fixtures/industry.json',
   contentType: 'application/json; charset=utf-8',
   data: $.toJSON(industryChoice),
   dataType: 'text',

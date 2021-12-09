@@ -1,48 +1,17 @@
-from .models import Userprofile
-from django import forms
+# from django import forms
 from django.contrib import messages
-from django.core import serializers
-from django.core.mail import EmailMessage, send_mail, BadHeaderError
+# from django.core import serializers
+# from django.core.mail import EmailMessage, send_mail, BadHeaderError
 
 from django.contrib.auth.decorators import login_required
-from django.db.models.query_utils import Q
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, redirect, reverse, get_object_or_404
+# from django.db.models.query_utils import Q
+# vfrom django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+# from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.views.generic import ListView, DetailView
-
-
-
-# REGISTER AN ACCOUNT
-"""
-def Register(request):
-    # pylint: disable=maybe-no-member
-    form = RegisterUserForm()
-    termform = TermsForm()
-    if request.method == 'POST':
-        form = RegisterUserForm(request.POST)
-        termform = TermsForm(request.POST)
-        if form.is_valid() and termform.is_valid():
-            form.save()
-            termform.save(commit=False)
-            user = form.cleaned_data.get('email')
-            messages.success(request, 'Account was created for ' + user)
-            return redirect('login_register_page')
-    else:
-        form = RegisterUserForm()
-        termform = TermsForm()
-        messages.warning(request, 'Your account cannot be created.')
-
-    context = {
-        'form': form,
-        'termform': termform
-    }
-    return render(request, 'userprofiles/register.html', context)
-
-"""
+from .models import Userprofile
 
 
 # USERPROFILES
-
 class ProfilesListView(ListView):
     model = Userprofile
     template_name = 'userprofiles/all_profiles.html'
@@ -56,12 +25,37 @@ class ProfilesListView(ListView):
             username=self.request.user)  # noqa: E501
 
 
+# REGISTRATION FORMS
+
+@login_required
+def Profile(request):
+    # profile_form1 = ProfileForm1()
+    if request.method == 'POST':
+        profile = Profile(request.POST,
+                                request.FILES,
+                                instance=request.user.userprofile)
+        if profile.is_valid():
+            profile.save()
+            # messages.success(request, 'Step 1 of 3 done of creating your profile!')
+            return redirect('profie_edit')
+        # else:
+            # messages.error(request, 'Update failed. Please check if your inputs are valid.')
+    else:
+        profile = Userprofile.objects.create(username=request.user)
+        # profile_form1 = ProfileForm1(instance=request.user.userprofile)
+        # return redirect('register_1')
+    context = {
+        'profile':profile,
+    }
+    return render(request, 'userprofiles/profile.html', context)
+
+
 class NetworkProfileView(DetailView):
     model = Userprofile()
     template_name = 'userprofiles/profile_details.html'
 
     def get_user_profile(self, **kwargs):
-        pk = self. kwargs.get('pk') 
+        pk = self. kwargs.get('pk')
         view_profile = Userprofile().objects.get(pk=pk)
         return view_profile
 
@@ -113,7 +107,7 @@ def profile_edit(request):
 
 
 def profile_delete(request, pk):
-    userprofile = User.objects.get(pk=pk)
+    userprofile = Userprofile.objects.get(pk=pk)
 
     if request.method == "POST" and request.user.username == userprofile:
         userprofile.delete()
