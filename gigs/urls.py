@@ -1,11 +1,11 @@
 from django.urls import path
 from . import views
 from .views import (
-    GigListView, 
-    GigCreateView, 
-    GigDetailView, 
+    GigListView,
+    GigCreateView,
+    GigDetailView,
     NewGigListView,
-    # gig_json,
+    gig_json,
     GigUpdateView,
     GigDeleteView,
 )
@@ -21,5 +21,5 @@ urlpatterns = [
     path('my_gigs/', views.my_gigs, name='my_gigs'),
 
     path('new_gig/', NewGigListView.as_view(), name='new_gig'),
-    # path('gig_json/', gig_json, name='gig_json'), # endpoints
+    path('gig_json/', gig_json, name='gig_json'),  # endpoints
 ]

@@ -1,6 +1,4 @@
-from .models import Gig
-from userprofiles.models import Userprofile  # , Membership
-from .forms import GigForm
+
 
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -11,7 +9,7 @@ from django.http import JsonResponse  # , HttpResponse
 # from django.contrib import messages
 from django.urls import reverse_lazy
 # from django.db.models.functions import Lower
-# from django.core import serializers
+from django.core import serializers
 # from django.views.decorators.http import require_http_methods
 
 from django.views.generic import (
@@ -23,6 +21,9 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
+from userprofiles.models import Userprofile  # , Membership
+from .models import Gig
+from .forms import GigForm
 
 
 # ALL GIGS
@@ -144,7 +145,6 @@ class GigsData(View):
         return JsonResponse({'pf_data': gd_list})
 
 
-"""
 def gig_json(request):
     # pylint: disable=maybe-no-member
     qs = Gig.objects.all()
@@ -153,4 +153,3 @@ def gig_json(request):
         'data': data,
     }
     return JsonResponse(context)
-"""
