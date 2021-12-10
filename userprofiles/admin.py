@@ -22,8 +22,27 @@ class MembershipAdmin(admin.ModelAdmin):
     ordering = ('membership_type',)
 
 
+class UserprofileAdmin(admin.ModelAdmin):
+    """ Membership Information """
+    list_display = (
+        'first_name',
+        'last_name',
+        'username',
+        'created',
+        'title',
+        'company_name',
+        'industry',
+        'country',
+        'city',
+        'employment',
+        'purpose',
+    )
+
+    ordering = ('created',)
+
+
 admin.site.register(Membership, MembershipAdmin)
-admin.site.register(Userprofile)
+admin.site.register(Userprofile, UserprofileAdmin)
 admin.site.register(Industry)
 admin.site.register(Profession)
 admin.site.register(Purpose)

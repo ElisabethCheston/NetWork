@@ -1,3 +1,5 @@
+from userprofiles.models import Userprofile
+
 from django import forms
 from django.urls import reverse_lazy
 
@@ -6,7 +8,7 @@ from django.core.mail import EmailMessage, send_mail, BadHeaderError
 from django.core.paginator import Paginator
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login #, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Permission
 from django.contrib.auth.tokens import default_token_generator
@@ -21,9 +23,8 @@ from django.utils.http import urlsafe_base64_encode
 from django.db.models.functions import Lower
 from django.db.models.query_utils import Q
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-
-from userprofiles.models import Userprofile
 from userprofiles.forms import ProfileForm, RegisterUserForm, TermsForm
+
 
 
 # STARTING PAGE
@@ -43,6 +44,7 @@ def PasswordSuccess(request):
 
 class PasswordResetDone(PasswordResetDoneView):
     template_name = 'home/password_reset_done.html'
+
 
 """
 def password_reset_request(request):
@@ -75,7 +77,6 @@ def password_reset_request(request):
     password_reset_form = PasswordResetForm()
     return render(request, "home/password_reset.html", context)
 """
-
 
 # REGISTER AN ACCOUNT
 
@@ -112,29 +113,28 @@ def terms(request):
 
 
 # REGISTRATION FORMS
-
 @login_required
 def Profile(request):
-    profile_form = ProfileForm()
+    # profile_form1 = ProfileForm1()
     if request.method == 'POST':
-        profile = Userprofile(request.POST,
+        profile = Profile(request.POST,
                                 request.FILES,
                                 instance=request.user.userprofile)
         if profile.is_valid():
             profile.save()
-            # messages.success(request, 'Step 1 of 3 done of creating your profile!')  # noqa: E501
+            # messages.success(request, 'Step 1 of 3 done of creating your profile!')
             return redirect('profie_edit')
         # else:
-            # messages.error(request, 'Update failed. Please check if your inputs are valid.')  # noqa: E501
+            # messages.error(request, 'Update failed. Please check if your inputs are valid.')
     else:
-        profile = Userprofile().objects.create(username=request.user)
-        profile_form = ProfileForm(instance=request.user.userprofile)
+        profile = Userprofile.objects.create(username=request.user)
+        # profile_form1 = ProfileForm1(instance=request.user.profileuser)
         # return redirect('register_1')
     context = {
         'profile': profile,
     }
-    return render(request, 'home/profile.html', context)
-
+    return render(request, 'userprofiles/profile.html', context)
+   
 
 # SINGIN TO ACCOUNT
 def loginPage(request):
@@ -173,6 +173,27 @@ def loginRegisterPage(request):
     template = 'home/login_register_page.html'
     context = {}
     return render(request, template, context)
+
+
+# SINGIN TO ACCOUNT
+def loginPage(request):
+    if request.method == 'POST':
+        # Connected to the name field in the login_page.
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('all_profiles')
+        else:
+            messages.info(request, 'Username or Password is incorrect!')
+            return redirect('login_page')
+
+    template = 'home/login_page.html'
+    context = {}
+    return render(request, template, context)
+
 
 """
 def login(request):

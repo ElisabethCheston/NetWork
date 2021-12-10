@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
-{% load crispy_forms_tags %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'userprofiles/css/profile.css' %}">
@@ -77,10 +76,6 @@
                             <fieldset class="form-group">
                                 <legend class="border-bottom mb-4">Profile Information</legend>
 
-                                <!--<h5 class="card-title">Name: &nbsp;{{regform.first_name}} {{regform.last_name}}</h5>
-                        <h6 class="card-title">Password: &nbsp; {{regform.password1}}</h6>
-                        {{ profileform|crispy }}-->
-
                                 <div class="card-body">
                                     <h4 class="card-title">{{user.first_name}} {{user.last_name}}</h4>
                                     <br>
@@ -103,7 +98,6 @@
 
                                     <br>
                                 </div>
-                                <!--{{ form|crispy }}-->
                             </fieldset>
                             <br>
                             <!--<div class="row justify-content-center">

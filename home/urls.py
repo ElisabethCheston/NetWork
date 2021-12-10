@@ -12,6 +12,7 @@ urlpatterns = [
     # REGISTER
     path('login_register_page/', views.loginRegisterPage, name='login_register_page'),  # noqa: E501
     path('register/', views.register, name='register'),
+    path('profile/', views.Profile, name='profile'),
     path('terms/', views.terms, name='terms'),
     # PASSWORD
     path('password_change/', PasswordsChangeView.as_view(

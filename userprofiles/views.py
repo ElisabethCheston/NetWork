@@ -6,9 +6,10 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 # from django.db.models.query_utils import Q
 # vfrom django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-# from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.shortcuts import render, redirect, reverse  # , get_object_or_404
 from django.views.generic import ListView, DetailView
 from .models import Userprofile
+from .forms import ProfileForm
 
 
 # USERPROFILES
@@ -26,28 +27,6 @@ class ProfilesListView(ListView):
 
 
 # REGISTRATION FORMS
-
-@login_required
-def Profile(request):
-    # profile_form1 = ProfileForm1()
-    if request.method == 'POST':
-        profile = Profile(request.POST,
-                                request.FILES,
-                                instance=request.user.userprofile)
-        if profile.is_valid():
-            profile.save()
-            # messages.success(request, 'Step 1 of 3 done of creating your profile!')
-            return redirect('profie_edit')
-        # else:
-            # messages.error(request, 'Update failed. Please check if your inputs are valid.')
-    else:
-        profile = Userprofile.objects.create(username=request.user)
-        # profile_form1 = ProfileForm1(instance=request.user.userprofile)
-        # return redirect('register_1')
-    context = {
-        'profile':profile,
-    }
-    return render(request, 'userprofiles/profile.html', context)
 
 
 class NetworkProfileView(DetailView):

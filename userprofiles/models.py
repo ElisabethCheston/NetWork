@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-# from django.dispatch import receiver
 from django_countries.fields import CountryField
 
 
@@ -89,6 +88,8 @@ class Status(models.Model):
         return str(self.status_name)
 
 
+# MEMBERSHIPS
+
 MEMBERSHIP_CHOICES = (
     ('Premium', 'pre'),
     ('Free', 'free')
@@ -139,17 +140,17 @@ class Userprofile(models.Model):
 
     # Work Information
     title = models.CharField(
-        max_length=254, blank=True, default=None)
+        max_length=254, blank=True, null=True, default=None)
     company_name = models.CharField(
-        max_length=254, blank=True)
+        max_length=254, null=False, blank=True)
     company_number_vat = models.CharField(
-        max_length=254, blank=True, default=None)
+        max_length=254, null=True, blank=True, default=None)
     industry = models.ForeignKey(
         Industry, on_delete=models.SET_NULL, null=True, blank=True, default=None)  # noqa: E501
     profession = models.ForeignKey(
         Profession, on_delete=models.SET_NULL, blank=True, null=True, default=None)  # noqa: E501
     description = models.TextField(
-        max_length=250, verbose_name="Description")
+        max_length=250, null=True, verbose_name="Description")
     status = models.ForeignKey(
         Status, on_delete=models.SET_NULL, null=True, blank=True, default=None)
     purpose = models.ForeignKey(

@@ -24,14 +24,12 @@ urlpatterns = [
     # path('register_2/', views.ProfileTwo, name='register_2'),
     # path('register_3/', views.ProfileThree, name='register_3'),
 
-    
     # userprofile
     # path('', views.all_profiles, name='profiles'),
     # path('my_profile/', MyProfile.as_view(), name='my_profile'),
     # path('my_profile/', view.MyProfile, name='my_profile'),
     # path('profile_data/', ProfileData.as_view(), name='profile_data'),
     path('profile_delete/<pk>/', views.profile_delete, name='profile_delete'),
-    path('profile/', views.Profile, name='profile'),     
     path('profile_details/', views.profile_details, name='profile_details'),
     path('profile_edit/', views.profile_edit, name='profile_edit'),
 
