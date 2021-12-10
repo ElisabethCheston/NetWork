@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block page_header %}
+<!-- Profile tab links -->
+<div class="tab-container">
+    <ul class="nav nav-tab justify-content-evenly" id="profileTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'profile_details' %}">
+                <input type="submit" value="MY PROFILE" class="nav-link gig-tab active" id="my_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_gigs' %}">
+                <input type="submit" value="MY GIGS" class="nav-link gig-tab" id="my_gig_tab" data-bs-toggle="tab"
+                    data-bs-target="#my_gig" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_contacts' %}">
+                <input type="submit" value="MY CONTACTS" class="nav-link gig-tab" id="my_contacts_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_contacts" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'membership_profile' %}">
+                <input type="submit" value="MEMBERSHIP" class="nav-link gig-tab" id="membership_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#membership_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane show active" id="my_profile" role="tabpanel" aria-labelledby="my_profile_tab"></div>
+        <div class="tab-pane" id="my_gig" role="tabpanel" aria-labelledby="my_gig_tab"></div>
+        <div class="tab-pane" id="my_contacts" role="tabpanel" aria-labelledby="my_contacts_tab"></div>
+        <div class="tab-pane" id="membership_profile" role="tabpanel" aria-labelledby="membership_profile_tab"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <br>
+    <div class="row">
+
+        <!-- Gig Cards -->
+        <div class="col-sm-10 col-sx-12 mx-auto">
+
+            <div class="card">
+
+                <div class="card-body mx-4 my-4">
+                    <!-- Gig Header -->
+                    <div class="row">
+                        <div class="col">
+                            <img class="rounded-circle avatar" src="{{gig.author.picture.url }}">
+                        </div>
+                        <div class="col">
+                            <p class=" card-subtitle mb-2 text-end text-muted small">
+                                Deadline: <br> {{ gig.deadline|date:"F d, Y" }}
+                            </p>
+                            <p class="card-subtitle mb-2 text-end text-muted small"> Industry: <br> {{ gig.industry }}
+                            </p>
+                        </div>
+                    </div>
+                    <br>
+                    <!-- Title -->
+                    <div class="row col-12">
+                        <a class="card-title text-center" href="{% url 'gig' %}">
+                            <strong>{{ gig.title }}</strong>
+                        </a>
+                    </div>
+                    <br>
+
+                    <!-- Gig Information -->
+                    <div class="row">
+                        <div class="col-12 text-left">
+                            <p class="gig-text my-1"><strong>City:</strong> <br>{{ gig.city }}, &nbsp; {{ gig.country }}</p>
+                        </div>
+                        <div class="col-12 text-left">
+                            <p class="gig-text my-1"><strong>Position:</strong> <br>{{ gig.position }}</p>
+                        </div>
+                        <br>
+                        <div class="col-12 text-left">
+                            <p class="gig-text my-1"><strong>Overview:</strong> <br>{{ gig.overview }}</p>
+                        </div>
+                        <br>
+                        <div class="col-12 text-left">
+                            <p class="gig-text my-1"><strong>Requirements:</strong> <br>{{ gig.requirements }}</p>
+                        </div>
+                        <br>
+                        <div class="col-12 text-left">
+                            <p class="gig-text my-1"><strong>Contact Information:</strong> <br>{{ gig.contact }}</p>
+                        </div>
+                    </div>
+                    <br>
+
+                    {% if request.user.is_authenticated and request.user.profileuser == gig.author %}
+
+                    <br>
+                    <!-- Edit Buttons -->
+                    <div class="text-center form-group">
+                        <a class="btn btn-secondary" type="button" href="{% url 'gig_update' gig.id %}">Edit</a>
+                        <a class=" btn btn-danger" type="button" href="{% url 'gig_confirm_delete' gig.id %}">Delete</a>
+                    </div>
+                    <br>
+
+                    {% endif %}
+
+
+                    <!-- Gig Footer -->
+                    <div class="row">
+                        <div class="my-1 col-10">
+                            <h6 class="card-subtitle mb-2 text-muted small">Created: &nbsp; {{ gig.created }} </h6>
+                            <h6 class="card-subtitle mb-2 text-muted small">Updated: &nbsp; {{ gig.updated }}</h6>
+                            <h6 class="card-subtitle mb-2 text-muted small">Author: &nbsp; {{ gig.author }}</h6>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+</div>
+{% endblock %}
+
+{% if user.is_authenticated and user == gigs.author %}
+<!-- Edit Buttons -->
+<div class="text-center form-group">
+    <a class="btn btn-dange" href="{% url 'gig_confirm_delete' gig.id %}" class="card-link">Delete</a>
+    <a class="btn btn-secondary" href="{% url 'gig' %}" class="card-link">Cancel</a>
+</div>
+<br>
+{% else %}
+
+<!-- Action Buttons -->
+<div class="row my-2">
+    <div class="col g-2 justify-content-evenly text-center">
+        <a class="btn-link" href="#" id="addSavedGig" value="Add to SavedGig" class="card-link">Save</a>
+        <a class="btn-link" href="{% url 'gig' %}" value="Add to AppliedGig" class="card-link">Back</a>
+        <a class="btn-link" href="#" id="addHideGig" value="Add to HideGig" class="card-link">Hide</a>
+    </div>
+</div>
+<br>
+{% endif %}
+
+
+
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Post cards -->
+        <div class="col-sm-10 col-sx-12 mx-auto">
+            <div class="card">
+                <div class=" card-body">
+
+                    <!-- Title -->
+                    <div class="row col-12">
+                        <a class=" card-title text-center">
+                            <strong>{{ post.title }}</strong>
+                        </a>
+                    </div>
+                    <br>
+                    <!-- Post Information -->
+                    <div class="col-12 text-left">
+                        <p class="post-text my-1"><strong>Information:</strong> <br>{{ post.information }}</p>
+                    </div>
+                    
+                    {% if post.author.pk == request.user.pk %}
+
+                    <!-- Edit Buttons -->
+                    <div class="text-center form-group">
+                        <a class="button-delete" type="button" href="{% url 'post_confirm_delete' post.id %}">Delete</a>
+                        <a class="button-cancel" type="button" href="{% url 'post' %}">Cancel</a>
+                    </div>
+                    <br>
+
+                    {% else %}
+
+                    <!-- Action Buttons -->
+                    <div class="row my-2">
+                        <div class="col g-2 justify-content-evenly text-center">
+                            <a class="card-link" type="submit" href="#">Save</a>
+                            <a class="card-link" type="submit" href="#">Applied</a>
+                            <a class="card-link" type="submit" href="#">Hide</a>
+                        </div>
+                    </div>
+
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

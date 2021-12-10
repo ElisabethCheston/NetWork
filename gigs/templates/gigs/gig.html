@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block page_header %}
+<!-- Profile tab links -->
+<div class="tab-container">
+    <ul class="nav nav-tab justify-content-evenly" id="profileTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'profile_details' %}">
+                <input type="submit" value="MY PROFILE" class="nav-link gig-tab active" id="my_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_gigs' %}">
+                <input type="submit" value="MY GIGS" class="nav-link gig-tab" id="my_gig_tab" data-bs-toggle="tab"
+                    data-bs-target="#my_gig" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_contacts' %}">
+                <input type="submit" value="MY CONTACTS" class="nav-link gig-tab" id="my_contacts_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_contacts" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'membership_profile' %}">
+                <input type="submit" value="MEMBERSHIP" class="nav-link gig-tab" id="membership_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#membership_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane show active" id="my_profile" role="tabpanel" aria-labelledby="my_profile_tab"></div>
+        <div class="tab-pane" id="my_gig" role="tabpanel" aria-labelledby="my_gig_tab"></div>
+        <div class="tab-pane" id="my_contacts" role="tabpanel" aria-labelledby="my_contacts_tab"></div>
+        <div class="tab-pane" id="membership_profile" role="tabpanel" aria-labelledby="membership_profile_tab"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<style>
+    /*
+    btn-link:hover {
+        color: #557AC4;
+    }
+*/
+    label {
+        display: none;
+    }
+</style>
+
+<div class="container-fluid" id="justify-center">
+    <br>
+    <div class="row">
+
+        <!-- gig cards -->
+        <div class="col-sm-10 col-sx-12 mx-auto">
+            {% for gig in gigs.all %}
+            {% csrf_token %}
+            <div class="card my-3">
+                <div class=" card-body">
+
+                    <div class="row justify-content-between">
+
+                        <!-- colum 1 -->
+
+                        <div class="col-sm-8 col-sx-12">
+                            <div class="row col-12">
+                                <a class="card-title text-center"
+                                    style="font-weight: bolder; font-size: large; text-decoration: none; color: #406daf;"
+                                    href="{{ gig.get_absolute_url }}">
+                                    <strong>{{ gig.title }}</strong>
+                                </a>
+                            </div>
+                            <p class="card-subtitle mb-1 py-1 text-center text-muted small">
+                                Deadline: {{ gig.deadline|date:"F d, Y" }}
+                            </p>
+                            <p class="card-subtitle mb-2 text-center text-muted small">
+                                {{ gig.city }}, {{ gig.country.name }}
+                            </p>
+                        </div>
+
+                        <!-- colum 2 -->
+
+                        <div class="col-sm-4 col-xs-12">
+                            <div class="col text-center mt-1">
+                                <img class="rounded-circle avatar" src="{{ gig.author.picture.url }}">
+                            </div>
+                            <div class="col col-auto py-1 text-center">
+                                <a class="card-title text-center small"
+                                    style="font-weight: bolder; text-decoration: none;"
+                                    href=" {{ profileusers.get_success_url }}">
+                                    <strong>{{gig.author.username.first_name}} {{gig.author.username.last_name}}</strong>
+                                </a>
+                                <p class="small">{{ gig.author.profession }}, {{ gig.author.company_name }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+
+            <br>
+        </div>
+    </div>
+
+    <!-- Paginations-->
+    <div id="justify-center" class="text-center">
+        {% if is_paginated %}
+
+        {% if page_obj.has_previous %}
+        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+        <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{num}}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} <a class="btn btn-outline-info mb-4"
+            href="?page={{ num }}">{{num}}</a>
+            {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+            <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginato.num_pages }}">Last</a>
+            {% endif %}
+
+            {% endif %}
+    </div>
+    <br>
+    <br>
+
+</div>
+
+{% endblock %}

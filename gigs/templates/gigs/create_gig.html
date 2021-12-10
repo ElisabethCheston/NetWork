@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block page_header %}
+<!-- Profile tab links -->
+<div class="tab-container">
+    <ul class="nav nav-tab justify-content-evenly" id="profileTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'profile_details' %}">
+                <input type="submit" value="MY PROFILE" class="nav-link gig-tab active" id="my_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_gigs' %}">
+                <input type="submit" value="MY GIGS" class="nav-link gig-tab" id="my_gig_tab" data-bs-toggle="tab"
+                    data-bs-target="#my_gig" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_contacts' %}">
+                <input type="submit" value="MY CONTACTS" class="nav-link gig-tab" id="my_contacts_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_contacts" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'membership_profile' %}">
+                <input type="submit" value="MEMBERSHIP" class="nav-link gig-tab" id="membership_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#membership_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane show active" id="my_profile" role="tabpanel" aria-labelledby="my_profile_tab"></div>
+        <div class="tab-pane" id="my_gig" role="tabpanel" aria-labelledby="my_gig_tab"></div>
+        <div class="tab-pane" id="my_contacts" role="tabpanel" aria-labelledby="my_contacts_tab"></div>
+        <div class="tab-pane" id="membership_profile" role="tabpanel" aria-labelledby="membership_profile_tab"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <br>
+    <div class="row">
+
+        <!-- Gig Cards -->
+        <div class="col-sm-10 col-sx-12 mx-auto">
+            <div class="card">
+                <div class="card-body mx-4 my-4">
+                    <div class="col-12">
+
+                        <form method="POST" enctype="multipart/form-data">
+
+                            {% csrf_token %}
+                            <fieldset class="form-group">
+                                <legend class="border-bottom mb-4">Create Gig</legend>
+                                {{ form|crispy }}
+                            </fieldset>
+                            <br>
+
+                            <div class="row justify-content-evenly">
+                                <!-- Edit button -->
+                                <div class="text-center form-group">
+                                    <button class="btn btn-success" type="submit">SUBMIT</button>
+                                    <!--<button class="btn btn-danger" href="{{ gig.get_absolute_url }}" type="button">CANCEL</a>-->
+                                </div>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+    </div>
+</div>
+{% endblock %}
+
+{% block postloadjs %}
+{{ block.super }}
+<script type=" text/javascript" src="{% static 'js/gig_script.js' %}"></script>
+{% endblock %}
+
+<script>
+
+    // Query All input fields
+    var form_fields = document.getElementsByTagName('input')
+
+    form_fields[1].placeholder = 'Title..';
+    form_fields[2].placeholder = 'City...';
+    for (var field in form_fields) {
+        form_fields[field].className += 'form-control'
+    }
+
+</script>
