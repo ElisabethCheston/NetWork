@@ -40,6 +40,7 @@ class GigDetailView(DetailView):
     model = Gig
 
 
+"""
 def get(self, request, gig_pk, *args, **kwargs):
     gig_qs = Gig.objects.filter(pk=gig_pk)
     if gig_gs.exists():
@@ -57,7 +58,7 @@ def get(self, request, gig_pk, *args, **kwargs):
         membership_type=usermembership_type).exists():
 
         return render(request, 'create_gigs.html', context)
-
+"""
 
 # userprofile GIGS
 
