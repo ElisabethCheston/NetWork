@@ -28,7 +28,7 @@
     <!-- Cropper for image avatar -->
     <link rel="stylesheet" herf="https://cdnjs.cloudflare.com/ajax/libs/cropper/4.1.0/cropper.css">
 
-    <!-- Bootstrap CSS -->
+        <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
@@ -122,16 +122,10 @@
                     {% endif %}
 
                     <a href="{% url 'profile_details' %}" class="dropdown-item">My Profile</a>
-                    <a href="{% url 'gig' %}" class="dropdown-item">Gigs</a>
                     <a href="{% url 'all_profiles' %}" class="dropdown-item">Network</a>
+                    <a href="#" class="dropdown-item">Gigs</a>
 
-                    <a href="{% url 'select' %}" class="dropdown-item">Upgrade Membership</a>
-
-                    <!--{% if current_membership == 'Premium' %}
-                    <a href="{% url 'membership_profile' %}" class="dropdown-item">PRO Account</a>
-                    {% else %}
-                    <a href="{% url 'select' %}" class="dropdown-item">Upgrade to PRO</a>
-                    {% endif %}-->
+                    <a href="#" class="dropdown-item">Upgrade Membership</a>
 
 
                     <a href="{% url 'password_change' %}" class="dropdown-item">Change Password</a>
@@ -145,26 +139,6 @@
                     {% endif %}
 
                 </div>
-                <!--<a id="subscription" class=" btn-sub justify-content-around mt-2" href="{% url 'view_bag' %}">
-                    <span class="button-sub" style="font-weight: bolder;"><strong>PREMIUM > &nbsp;</strong></span>
-                    <img src="{% static 'images/sublogo.png' %}" width="27" height="27" class="logo img-fluid">
-                </a>-->
-
-                <li class="list-inline-item">
-                    <a class="{% if grand_total %}text-info font-weight-bold{% else %}text-black{% endif %} nav-link" href="{% url 'view_bag' %}">
-                        <div class="text-center">
-                            <div><i class="fas fa-shopping-bag fa-lg"></i></div>
-                            <p class="my-0">
-                                {% if grand_total %}
-                                    ${{ grand_total|floatformat:2 }}
-                                {% else %}
-                                    $0.00
-                                {% endif %}
-                            </p>
-                        </div>
-                    </a>
-                </li>
-
 
             </div>
         </div>

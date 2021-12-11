@@ -1,7 +1,5 @@
-
-
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
+# from django.contrib.auth.models import User
+# from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404  # , redirect, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse  # , HttpResponse
@@ -27,7 +25,6 @@ from .forms import GigForm
 
 
 # ALL GIGS
-
 class GigListView(ListView):
     model = Gig
     template_name = 'gigs/gig.html'
@@ -60,9 +57,8 @@ def get(self, request, gig_pk, *args, **kwargs):
         return render(request, 'create_gigs.html', context)
 """
 
-# userprofile GIGS
 
-@login_required
+# @login_required
 def my_gigs(request):
     # pylint: disable=maybe-no-member
     profile = Userprofile.objects.get(username=request.user)

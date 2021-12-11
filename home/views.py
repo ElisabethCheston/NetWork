@@ -1,21 +1,17 @@
-from userprofiles.models import Userprofile
-
-from django import forms
 from django.urls import reverse_lazy
-
 from django.core import serializers
-from django.core.mail import EmailMessage, send_mail, BadHeaderError
-from django.core.paginator import Paginator
+# from django.core.mail import EmailMessage, send_mail, BadHeaderError
+# from django.core.paginator import Paginator
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate, login #, logout
+from django.contrib.auth import authenticate, login  # , logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User, Permission
-from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.models import User  # , Permission
+# from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import PasswordResetDoneView, PasswordChangeView
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 
-from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.shortcuts import render, redirect  # , reverse, get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
@@ -24,7 +20,7 @@ from django.db.models.functions import Lower
 from django.db.models.query_utils import Q
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from userprofiles.forms import ProfileForm, RegisterUserForm, TermsForm
-
+from userprofiles.models import Userprofile
 
 
 # STARTING PAGE
@@ -78,8 +74,8 @@ def password_reset_request(request):
     return render(request, "home/password_reset.html", context)
 """
 
-# REGISTER AN ACCOUNT
 
+# REGISTER AN ACCOUNT
 def register(request):
     # pylint: disable=maybe-no-member
     form = RegisterUserForm()
@@ -117,24 +113,22 @@ def terms(request):
 def Profile(request):
     # profile_form1 = ProfileForm1()
     if request.method == 'POST':
-        profile = Profile(request.POST,
-                                request.FILES,
-                                instance=request.user.userprofile)
+        profile = Userprofile(request.POST, request.FILES, instance=request.user.userprofile)  # noqa: E501
         if profile.is_valid():
             profile.save()
-            # messages.success(request, 'Step 1 of 3 done of creating your profile!')
+            messages.success(request, 'Step 1 of 3 done of creating your profile!')  # noqa: E501
             return redirect('profie_edit')
-        # else:
-            # messages.error(request, 'Update failed. Please check if your inputs are valid.')
+        else:
+            messages.error(request, 'Update failed. Please check if your inputs are valid.')  # noqa: E501
     else:
         profile = Userprofile.objects.create(username=request.user)
         # profile_form1 = ProfileForm1(instance=request.user.profileuser)
-        # return redirect('register_1')
+        return redirect('home')
     context = {
         'profile': profile,
     }
     return render(request, 'userprofiles/profile.html', context)
-   
+
 
 # SINGIN TO ACCOUNT
 def loginPage(request):
@@ -173,33 +167,3 @@ def loginRegisterPage(request):
     template = 'home/login_register_page.html'
     context = {}
     return render(request, template, context)
-
-
-# SINGIN TO ACCOUNT
-def loginPage(request):
-    if request.method == 'POST':
-        # Connected to the name field in the login_page.
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('all_profiles')
-        else:
-            messages.info(request, 'Username or Password is incorrect!')
-            return redirect('login_page')
-
-    template = 'home/login_page.html'
-    context = {}
-    return render(request, template, context)
-
-
-"""
-def login(request):
-    return render(request, 'home/login.html')
-
-
-def logout(request):
-    return render(request, 'home/logout.html')
-"""

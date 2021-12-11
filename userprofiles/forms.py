@@ -7,12 +7,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.forms.widgets import CheckboxInput
 from .models import (
     Userprofile,
-    Industry,
-    Profession,
-    Employment,
-    Status,
-    Purpose,
-    Business,
     TermUser
   )
 

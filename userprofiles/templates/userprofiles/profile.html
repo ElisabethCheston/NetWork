@@ -116,10 +116,8 @@
         <div class="d-flex" id="justify-center">
             <h2 id="form-title">LET'S CREATE YOUR PROFILE</h2>
 
-
-            <form method="POST" enctype="multipart/form-data" action="{% url 'profile_edit' %}">
+            <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
-
 
                 <!-- User Name -->
                 <div class="input-group mb-2">

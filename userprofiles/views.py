@@ -5,7 +5,7 @@ from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
 # from django.db.models.query_utils import Q
-# vfrom django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect  # , JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, reverse  # , get_object_or_404
 from django.views.generic import ListView, DetailView
 from .models import Userprofile
@@ -21,7 +21,8 @@ class ProfilesListView(ListView):
 
     # override the queryset method
     def get_queryset(self):
-        queryset = Userprofile.objects.order_by('-created')
+        # pylint: disable=maybe-no-member
+        # queryset = Userprofile.objects.order_by('-created')
         return Userprofile.objects.order_by('-created').exclude(
             username=self.request.user)  # noqa: E501
 
@@ -34,11 +35,13 @@ class NetworkProfileView(DetailView):
     template_name = 'userprofiles/profile_details.html'
 
     def get_user_profile(self, **kwargs):
+        # pylint: disable=maybe-no-member
         pk = self. kwargs.get('pk')
         view_profile = Userprofile().objects.get(pk=pk)
         return view_profile
 
     def get_context_data(self, **kwargs):
+        # pylint: disable=maybe-no-member
         context = super().get_context_data(**kwargs)
         view_profile = self.get_object()
         user_profile = Userprofile().objects.get(username=self.request.user)
@@ -67,9 +70,7 @@ def profile_details(request):
 
 def profile_edit(request):
     if request.method == 'POST':
-        profileform = ProfileForm(request.POST,
-                                request.FILES,
-                                instance=request.user.userprofile)
+        profileform = ProfileForm(request.POST, request.FILES, instance=request.user.userprofile)  # noqa: E501
         if profileform.is_valid():
             profileform.save()
             messages.success(request, 'Your Profile has been updated!')
@@ -86,6 +87,7 @@ def profile_edit(request):
 
 
 def profile_delete(request, pk):
+    # pylint: disable=maybe-no-member
     userprofile = Userprofile.objects.get(pk=pk)
 
     if request.method == "POST" and request.user.username == userprofile:
@@ -101,6 +103,7 @@ def profile_delete(request, pk):
 
 @login_required
 def follow_unfollow_profile(request):
+    # pylint: disable=maybe-no-member
     if request.method == 'POST':
         user_profile = Userprofile.objects.get(username=request.user)
         pk = request.POST.get('profile_pk')
