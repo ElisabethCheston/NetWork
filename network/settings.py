@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'userprofiles',
     # 'settings',
     'gigs',
+    'connect',
     # 'membership',
     # 'bag',
     # 'checkout',

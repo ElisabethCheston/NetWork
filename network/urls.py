@@ -26,6 +26,8 @@ urlpatterns = [
     path('userprofiles/', include('userprofiles.urls')),
     # path('network/', include('network.urls')),
     path('gigs/', include('gigs.urls')),
+    path('connect/', include('connect.urls')),
+
     # path('membership/', include('membership.urls')),
     # path('bag/', include('bag.urls')),
     # path('checkout/', include('checkout.urls')),

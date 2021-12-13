@@ -19,6 +19,7 @@ urlpatterns = [
     # REGISTRATION
     path('register/', views.Register, name='register'),
     path('terms/', views.terms, name='terms'),
+    path('profile/', views.Profile, name='profile'),
     # path('signup/', views.RegistrationView, name='signup'),
     # path('register_profile/', views.RegisterPage, name='register_profile'),
 

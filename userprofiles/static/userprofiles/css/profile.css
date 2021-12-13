@@ -1,0 +1,44 @@
+
+  .btn {
+    color: white !important;
+    background-color: #406daf;
+    font-size: medium;
+    border-radius: 1px;
+  }
+
+  #justify-center {
+    margin: auto;
+    width: 90%;
+    padding: 10px;
+    border: none !important;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* LAYOUT */
+
+  h6 {
+    text-align: left;
+    font-family: Verdana, Geneva, Tahoma, sans-serif !important;
+    font-weight: 500;
+    font-size: small;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: medium !important;
+    font-family: Verdana, Geneva, Tahoma, sans-serif !important;
+    font-weight: bold !important;
+  }
+
+  .password-info {
+    margin: auto;
+    padding: 2px;
+  }
+
+  /* Form View for Descriptions */
+
+input#id_description.textinput.textinput.form-control {
+    height: 150px;
+}

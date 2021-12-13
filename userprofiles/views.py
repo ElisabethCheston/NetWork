@@ -22,7 +22,6 @@ from django.urls import reverse_lazy
 from django.views.generic import (
     ListView,
     DetailView,
-    TemplateView,
 )
 
 
@@ -106,30 +105,35 @@ def terms(request):
     return render(request, template)
 
 
-# REGISTRATION FORMS
-"""
+# VERTIFY USER ACCOUNT
+
+def loginRegisterPage(request):
+    if request.method == 'POST':
+        # Connected to the name field in the login_register_page.
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('profile_edit')
+        else:
+            messages.info(request, 'Username or Password is incorrect!')
+
+    template = 'userprofiles/login_register_page.html'
+    context = {}
+    return render(request, template, context)
+
+
 @login_required
 def Profile(request):
-    # profile_form1 = ProfileForm1()
-    # if request.method == 'GET':
-        # profile = Userprofile()(request.POST, request.FILES, instance=request.user.userprofile)  # noqa: E501
-        # if profile.is_valid():
-            # profile.save()
-            # messages.success(
-            # request, 'Step 1 of 3 done of creating your profile!')
-    return redirect('profie_edit')
-        # else:
-            # messages.error(
-            # request, 'Update failed. Please check if your inputs are valid.')
-# else:
-        # profile = Userprofile.objects.create(username=request.user)
-        # profile_form1 = ProfileForm1(instance=request.user.userprofile)
-        # return redirect('register_1')
+    profile = Userprofile(request.POST, request.FILES, instance=request.user)  # noqa: E501
+    return redirect('profile_details')
+
     context = {
         'profile': profile,
     }
     return render(request, 'userprofiles/profile.html', context)
-"""
 
 
 # SINGIN TO ACCOUNT
@@ -152,24 +156,6 @@ def loginPage(request):
     return render(request, template, context)
 
 
-# VERTIFY USER ACCOUNT
-
-def loginRegisterPage(request):
-    if request.method == 'POST':
-        # Connected to the name field in the login_register_page.
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('profile')
-        else:
-            messages.info(request, 'Username or Password is incorrect!')
-
-    template = 'userprofiles/login_register_page.html'
-    context = {}
-    return render(request, template, context)
 
 
 # USERPROFILE
@@ -250,11 +236,12 @@ def profile_edit(request):
         else:
             messages.error(request, 'Update failed. Please check if your inputs are valid.')  # noqa: E501
     else:
-        profileform = ProfileForm(instance=request.user.userprofile)
+        profileform = ProfileForm(instance=request.user)
+    template = 'userprofiles/profile_edit.html'
     context = {
         'profileform': profileform,
     }
-    return render(request, 'userprofiles/profile_edit.html', context)
+    return render(request, template, context)
 
 
 def profile_delete(request, pk):
@@ -321,32 +308,14 @@ def create_gig(request):
         """
 
 
-# CONTACTS
-
-@login_required
-def myContacts(request):
-    # pylint: disable=maybe-no-member
-    # profile = get_object_or_404(Userprofile, user=request.user)
-    profile = Userprofile.objects.get(username=request.user)
-    template = 'userprofile/my_contacts.html'
-
-    context = {
-        'profile': profile,
-        # 'get_following': get_following,
-        # 'get_followers': get_followers,
-    }
-    return render(request, template, context)
-
-
 # SUGGEST BUTTON OF PPL TO FOLLOW
 
 # class for random contacts to add
-
+"""
 class MyProfile(TemplateView):
     template_name = 'userprofiles/profile_details.html'
 
 
-"""
 class ProfileData(View):
     def get(self, *args, **kwargs): # , *args, **kwargs
         # pylint: disable=maybe-no-member
