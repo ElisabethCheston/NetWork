@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'membership/css/membership.css' %}">
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'membership/js/membership.js' %}" defer></script>
+{% endblock scripts %}
+
+{% block page_header %}
+<!-- Profile tab links -->
+<div class="tab-container">
+    <ul class="nav nav-tab justify-content-evenly" id="profileTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'profile_details' %}">
+                <input type="submit" value="MY PROFILE" class="nav-link gig-tab active" id="my_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_gigs' %}">
+                <input type="submit" value="MY GIGS" class="nav-link gig-tab" id="my_gig_tab" data-bs-toggle="tab"
+                    data-bs-target="#my_gig" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_contacts' %}">
+                <input type="submit" value="MY CONTACTS" class="nav-link gig-tab" id="my_contacts_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_contacts" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'membership_profile' %}">
+                <input type="submit" value="MEMBERSHIP" class="nav-link gig-tab" id="membership_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#membership_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane show active" id="my_profile" role="tabpanel" aria-labelledby="my_profile_tab"></div>
+        <div class="tab-pane" id="my_gig" role="tabpanel" aria-labelledby="my_gig_tab"></div>
+        <div class="tab-pane" id="my_contacts" role="tabpanel" aria-labelledby="my_contacts_tab"></div>
+        <div class="tab-pane" id="membership_profile" role="tabpanel" aria-labelledby="membership_profile_tab"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .profile-card {
+        width: 140px;
+        border-radius: 1px;
+    }
+
+    .card-link,
+    .btn {
+        color: white;
+        border-color: rgba(96, 185, 236, 0.2);
+        background-color: rgba(9, 143, 221, 0.9) !important;
+        font-size: medium !important;
+        height: 40px;
+        font-weight: bolder;
+        padding-right: 15px;
+        border-radius: 1px;
+        padding-left: 15px;
+        text-decoration: none;
+        box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .btn:hover,
+    .btn:active,
+    .btn:focus {
+        color: white;
+        border-color: rgba(96, 185, 236, 0.2);
+        background-color: rgba(4, 102, 168, 0.9) !important;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    /*
+    .card-header {
+        background-color: white;
+    }
+
+    .card-title {
+        font-size: large;
+        font-weight: bolder;
+        padding: auto;
+        color: rgba(9, 143, 221, 0.9);
+    }
+
+
+    .gig-text {
+        font-size: medium;
+        color: rgb(5, 5, 5);
+    }
+
+    
+.card-body {
+        padding: 20px;
+    }
+*/
+    label {
+        display: none;
+    }
+</style>
+
+<div class="container-fluid">
+    <br>
+    <div class="row">
+
+        <div class="col-sm-10 col-sx-12 mx-auto">
+            <div class="card">
+                <div class=" card-body">
+                    <br>
+                    <br>
+                    <h3 class="h3 mb-3 text-center">My Subscription</h3>
+
+                    <div class="container mt-5">
+                        <p>You have successfully upgraded to Premium Membership!</p>
+                        <p><a href="{% url 'profile_details' %}">Return to your profile.</a></p>
+                      </div>
+
+                </div>
+                <br>
+                <br>
+            </div>
+            <br>
+            <br>
+        </div>
+    </div>
+</div>
+{% endblock %}

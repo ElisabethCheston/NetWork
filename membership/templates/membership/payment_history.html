@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'membership/css/membership.css' %}">
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'membership/js/membership.js' %}" defer></script>
+{% endblock scripts %}
+
+{% block page_header %}
+<!-- Profile tab links -->
+<div class="tab-container">
+    <ul class="nav nav-tab justify-content-evenly" id="profileTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'profile_details' %}">
+                <input type="submit" value="MY PROFILE" class="nav-link gig-tab active" id="my_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_gigs' %}">
+                <input type="submit" value="MY GIGS" class="nav-link gig-tab" id="my_gig_tab" data-bs-toggle="tab"
+                    data-bs-target="#my_gig" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_contacts' %}">
+                <input type="submit" value="MY CONTACTS" class="nav-link gig-tab" id="my_contacts_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_contacts" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'membership_profile' %}">
+                <input type="submit" value="MEMBERSHIP" class="nav-link gig-tab" id="membership_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#membership_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane show active" id="my_profile" role="tabpanel" aria-labelledby="my_profile_tab"></div>
+        <div class="tab-pane" id="my_gig" role="tabpanel" aria-labelledby="my_gig_tab"></div>
+        <div class="tab-pane" id="my_contacts" role="tabpanel" aria-labelledby="my_contacts_tab"></div>
+        <div class="tab-pane" id="membership_profile" role="tabpanel" aria-labelledby="membership_profile_tab"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+
+
+<div class="container-fluid">
+    <br>
+
+    <!-- Userprofile cards -->
+    <div class="row">
+        <div class="d-flex text-center flex-wrap">
+
+            <br>
+            <br>
+            <br>
+            <h3 class="h3 mb-3 text-center">Payment Histrory</h3>
+
+            <!--<div class="row">
+                <div class="col-md-10 col-xl-8 mx-auto">
+                    <h1 class="text-center">We have a monthly plan for everyone</h1>
+                    <p class="lead text-center mb-4">Whether you're a business or an individual.</p>
+
+                    <div class="row justify-content-center mt-3 mb-2">
+                        <div class="col-auto">
+                        </div>
+                    </div>
+
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="monthly">
+                            <div class="row py-4">
+                                <div class="col-sm-4 mb-3 mb-md-0">
+                                    <div class="card text-center h-100">
+                                        <div class="card-body d-flex flex-column">
+                                            <div class="mb-4">
+                                                <h5>Free plan</h5>
+                                                <span class="display-4">€0</span>
+                                            </div>
+                                            <h6>Includes:</h6>
+                                            <ul class="list-unstyled">
+                                                <li class="mb-2">
+                                                    User profile
+                                                </li>
+                                                <li class="mb-2">
+                                                    View jobs
+                                                </li>
+                                                <li class="mb-2">
+                                                    View other profile
+                                                </li>
+                                            </ul>
+                                            <div class="mt-auto">
+                                                <a href="#" class="btn btn-lg btn-outline-primary" selected>Sign up</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 mb-3 mb-md-0">
+                                    <div class="card text-center h-100">
+                                        <div class="card-body d-flex flex-column">
+                                            <div class="mb-4">
+                                                <h5>Basic plan</h5>
+                                                <span class="display-4">€10</span>
+                                                <span>/mo</span>
+                                            </div>
+                                            <h6>Includes:</h6>
+                                            <ul class="list-unstyled">
+                                                <li class="mb-2">
+                                                    User profile
+                                                </li>
+                                                <li class="mb-2">
+                                                    View jobs
+                                                </li>
+                                                <li class="mb-2">
+                                                    View other profile
+                                                </li>
+                                                <li class="mb-2">
+                                                    Create gigs
+                                                </li>
+                                            </ul>
+                                            <div class="mt-auto">
+                                                <a href="#" class="btn btn-lg btn-outline-primary">Sign up</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 mb-3 mb-md-0">
+                                    <div class="card text-center h-100">
+                                        <div class="card-body d-flex flex-column">
+                                            <div class="mb-4">
+                                                <h5>Pro plan</h5>
+                                                <span class="display-4">€20</span>
+                                                <span>/mo</span>
+                                            </div>
+                                            <h6>Includes:</h6>
+                                            <ul class="list-unstyled">
+                                                <li class="mb-2">
+                                                    User profile
+                                                </li>
+                                                <li class="mb-2">
+                                                    View jobs
+                                                </li>
+                                                <li class="mb-2">
+                                                    View other profile
+                                                </li>
+                                                <li class="mb-2">
+                                                    Create gigs
+                                                </li>
+                                                <li class="mb-2">
+                                                    Create a network
+                                                </li>
+                                            </ul>
+                                            <div class="mt-auto">
+                                                <a href="#" class="btn btn-lg btn-outline-primary">Sign up</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+
+                    <div class="text-center my-4">
+                        <h2>Frequently asked questions</h2>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-md-5 col-sm-6 mt-3 ml-auto">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="h6 card-title">Do I need a credit card to sign up?</h5>
+                                    <p class="mb-0">At the moment, the only payment method we offer
+                                        is with credit cards or with a debit card.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 col-sm-6 mt-3 mr-auto">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="h6 card-title">Do you offer a free trial?</h5>
+                                    <p class="mb-0">No. Since we have the FREE plan that gives you axess to
+                                        everything except the possibility to create your own job posts and
+                                        a personal network.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 col-sm-6 mt-3 ml-auto">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="h6 card-title">What if I decide to cancel my plan?</h5>
+                                    <p class="mb-0">If you wish to cancel your subscription, you just go to your
+                                        membership and choose the free plan.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 col-sm-6 mt-3 mr-auto">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="h6 card-title">Can I cancel at anytime?</h5>
+                                    <p class="mb-0">Yes, you can at anytime cancel you subscription.
+                                        Note though that you will still be charged the full amount for
+                                        the current month.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 col-sm-6 mt-3 ml-auto">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="h6 card-title">What if I like to upgrade my plan?</h5>
+                                    <p class="mb-0">If you wish to downgrade, you just click
+                                        on the new payment plan you wish to have under your membership
+                                        tag in settings. The new payment plan will be applied in a few minutes.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 col-sm-6 mt-3 ml-auto">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="h6 card-title">What if I like to downgrade my plan?</h5>
+                                    <p class="mb-0">If you wish to downgrade, you just click
+                                        on the new payment plan you wish to have under your membership
+                                        tag in settings. The new payment plan will be applied in a few minutes.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <br>-->
+
+        </div>
+        <br>
+        <br>
+    </div>
+    <br>
+    <br>
+</div>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'membership/css/membership.css' %}">
+{% endblock %}
+
+{% block scripts %}
+{% endblock scripts %}
+
+{% block page_header %}
+<!-- Profile tab links -->
+<div class="tab-container">
+    <ul class="nav nav-tab justify-content-evenly" id="profileTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'profile_details' %}">
+                <input type="submit" value="MY PROFILE" class="nav-link gig-tab active" id="my_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_gigs' %}">
+                <input type="submit" value="MY GIGS" class="nav-link gig-tab" id="my_gig_tab" data-bs-toggle="tab"
+                    data-bs-target="#my_gig" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_contacts' %}">
+                <input type="submit" value="MY CONTACTS" class="nav-link gig-tab" id="my_contacts_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_contacts" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'membership_profile' %}">
+                <input type="submit" value="MEMBERSHIP" class="nav-link gig-tab" id="membership_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#membership_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane show active" id="my_profile" role="tabpanel" aria-labelledby="my_profile_tab"></div>
+        <div class="tab-pane" id="my_gig" role="tabpanel" aria-labelledby="my_gig_tab"></div>
+        <div class="tab-pane" id="my_contacts" role="tabpanel" aria-labelledby="my_contacts_tab"></div>
+        <div class="tab-pane" id="membership_profile" role="tabpanel" aria-labelledby="membership_profile_tab"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <br>
+    <br>
+    <div class="row">
+
+        <!-- Membership Cards -->
+        <div class="col-sm-10 col-sx-12 mx-auto">
+            <div class="card">
+                <div class="card-body py-2">
+                    <br>
+
+                    <!-- Upgrade Membership -->
+                    <h3 class="text-center"><strong>PREMIUM PAYMENT:</strong></h3>
+                    <br>
+                    <div class="col-md-12" style="margin: 10px;">
+                        <br>
+                        <h5>Selected membership: </h5>
+
+                        <div class="text-center">
+                            <br>
+                            <h3>{{ selected_membership }}</h3>
+                            <h5><strong>€{{ selected_membership.price }}.00</strong></h5>
+                        </div>
+                    </div>
+                    <br>
+
+                    <form action="." method="POST" id="payment-form">
+                        {% csrf_token %}
+                        <div style="margin: 10px;">
+                            <!--<div class="btn">
+                                <a href="https://buy.stripe.com/6oE7w05KQb37akM6or" 
+                                style="color: white; text-decoration: none;" type="button">Pay</a>
+                                
+                            </div> with Stripe link. <br><hr>-->
+
+                            <h2>Checkout</h2>
+                            <div class="form-row py-2">
+                                <label for="card-element">
+                                    Credit or debit card
+                                </label>
+                                <div id="card-element" class="StripeElement StripeElement--empty">
+                                    <div class="__PrivateStripeElement"
+                                        style="margin: 0px !important; padding: 0px !important; border: none !important; display: block !important; background: transparent !important; position: relative !important; opacity: 1 !important;">
+                                        <iframe frameborder="0" allowtransparency="true" scrolling="no"
+                                            name="__privateStripeFrame3" allowpaymentrequest="true"
+                                            src="https://js.stripe.com/v3/elements-inner-card-8a434729e4eb82355db4882974049278.html#style[base][color]=%2332325d&amp;style[base][lineHeight]=18px&amp;style[base][fontFamily]=%22Helvetica+Neue%22%2C+Helvetica%2C+sans-serif&amp;style[base][fontSmoothing]=antialiased&amp;style[base][fontSize]=16px&amp;style[base][::placeholder][color]=%23aab7c4&amp;style[invalid][color]=%23fa755a&amp;style[invalid][iconColor]=%23fa755a&amp;componentName=card&amp;wait=false&amp;rtl=false&amp;features[noop]=false&amp;origin=https%3A%2F%2Fstripe.com&amp;referrer=https%3A%2F%2Fstripe.com%2Fdocs%2Fstripe-js%2Felements%2Fquickstart&amp;controllerId=__privateStripeController0"
+                                            title="Secure payment input frame"
+                                            style="border: none !important; margin: 0px !important; padding: 0px !important; width: 1px !important; min-width: 100% !important; overflow: hidden !important; display: block !important; height: 18px;"></iframe><input
+                                            class="__PrivateStripeElement-input" aria-hidden="true"
+                                            style="border: none !important; display: block !important; position: absolute !important; height: 1px !important; top: 0px !important; left: 0px !important; padding: 0px !important; margin: 0px !important; width: 100% !important; opacity: 0 !important; background: transparent !important; pointer-events: none !important; font-size: 16px !important;"><input
+                                            class="__PrivateStripeElement-safariInput" aria-hidden="true" tabindex="-1"
+                                            style="border: none !important; display: block !important; position: absolute !important; height: 1px !important; top: 0px !important; left: 0px !important; padding: 0px !important; margin: 0px !important; width: 100% !important; opacity: 0 !important; background: transparent !important; pointer-events: none !important; font-size: 16px !important;">
+                                    </div>
+                                </div>
+
+                                <!-- Used to display form errors. -->
+                                <div id="card-errors" role="alert"></div>
+                            </div>
+                        </div>
+                        <div class="text-center" style="padding-top: 30px;">
+                            <button class="btn text-center">Submit Payment</button>
+                        </div>
+                    </form>
+                </div>
+                <br>
+                <br>
+            </div>
+            <br>
+            <br>
+            <br>
+        </div>
+        <div id="stripe-token-handler" class="is-hidden">Success! Got token: <span class="token"></span>
+        </div>
+    </div>
+    <br>
+</div>
+</div>
+
+
+{% endblock %}

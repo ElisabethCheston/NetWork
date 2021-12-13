@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'membership/css/membership.css' %}">
+{% endblock %}
+
+
+{% block page_header %}
+<!-- Profile tab links -->
+<div class="tab-container">
+    <ul class="nav nav-tab justify-content-evenly" id="profileTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'profile_details' %}">
+                <input type="submit" value="MY PROFILE" class="nav-link gig-tab active" id="my_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_gigs' %}">
+                <input type="submit" value="MY GIGS" class="nav-link gig-tab" id="my_gig_tab" data-bs-toggle="tab"
+                    data-bs-target="#my_gig" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_contacts' %}">
+                <input type="submit" value="MY CONTACTS" class="nav-link gig-tab" id="my_contacts_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_contacts" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'membership_profile' %}">
+                <input type="submit" value="MEMBERSHIP" class="nav-link gig-tab" id="membership_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#membership_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane show active" id="my_profile" role="tabpanel" aria-labelledby="my_profile_tab"></div>
+        <div class="tab-pane" id="my_gig" role="tabpanel" aria-labelledby="my_gig_tab"></div>
+        <div class="tab-pane" id="my_contacts" role="tabpanel" aria-labelledby="my_contacts_tab"></div>
+        <div class="tab-pane" id="membership_profile" role="tabpanel" aria-labelledby="membership_profile_tab"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .product_desc,
+    a {
+        text-decoration: none !important;
+    }
+</style>
+
+<div class="container-fluid">
+    <br>
+    <div class="row">
+
+        <!-- Membership Cards -->
+        <div class="col-sm-10 col-sx-12 mx-auto">
+            <div class="card">
+                <div class="card-body">
+
+                    <!-- Upgrade Membership -->
+
+                    <div class="col-12">
+                        <h3 class="text-center"><strong>UPGRADE YOUR MEMBERSHIP</strong></h3>
+                        <h6 class="text-center">If you like to get more out of your membership
+                            then upgrade to Premium.</h6>
+
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="monthly">
+
+                                <div class="row">
+                                    {% for product in products %}
+                                    <div class="col-12">
+                                        <div class="card h-100 border-0">
+                                            <a href="{% url 'membership_detail' product.id %}">
+
+                                            <br>
+
+                                            <div class="text-center card-body pb-0">
+                                                <h3 class="mb-0 text-uppercase">
+                                                    <strong>{{product.membership_type}}</strong>
+                                                </h3>
+                                            </div>
+                                            <div class="text-center card-body p-4">
+                                                <h5 class="mb-0 product_desc"><strong>{{product.description}}</strong>
+                                                </h5>
+                                                <h5 class="mb-0 product_desc">
+                                                    <strong>{{product.description1}}</strong>
+                                                </h5>
+                                                <h5 class="mb-0 product_desc">
+                                                    <strong>{{product.description2}}</strong>
+                                                </h5>
+                                                <h5 class="mb-0 product_desc">
+                                                    <strong>{{product.description3}}</strong>
+                                                </h5>
+                                                <h5 class="mb-0 product_desc">
+                                                    <strong>{{product.description4}}</strong>
+                                                </h5>
+
+                                            </div>
+                                            <div class="card-footer text-center bg-white pt-0 border-0">
+                                                <div class="row">
+                                                    <div class="text-center">
+                                                        <p class="lead mb-0 text-center font-weight-bold">
+                                                            €{{product.price}}</p>
+
+                                                        {% if request.user.is_superuser %}
+                                                        <small class="ml-3 text-center">
+                                                            <a href="{% url 'edit_membership' product.id %}">Edit</a> |
+                                                            <a class="text-danger"
+                                                                href="{% url 'delete_membership' product.id %}">Delete</a>
+                                                        </small>
+                                                        {% endif %}
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <br>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% if forloop.counter|divisibleby:1 %}
+                                    <div class="col-12 d-sm-none mb-5">
+                                        <hr>
+                                    </div>
+                                    {% endif %}
+                                    {% if forloop.counter|divisibleby:2 %}
+                                    <div class="col-12 d-none d-sm-block d-md-block d-lg-none mb-5">
+                                        <hr>
+                                    </div>
+                                    {% endif %}
+                                    {% if forloop.counter|divisibleby:3 %}
+                                    <div class="col-12 d-none d-lg-block d-xl-none mb-5">
+                                        <hr>
+                                    </div>
+                                    {% endif %}
+                                    {% if forloop.counter|divisibleby:4 %}
+                                    <div class="col-12 d-none d-xl-block mb-5">
+                                        <hr>
+                                    </div>
+                                    {% endif %}
+                                    {% endfor %}
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <!-- Questions -->
+
+                        <div class="text-center my-4">
+                            <h2>Frequently asked questions</h2>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-md-5 col-sm-6 mt-3 ml-auto">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="h6 card-title">Do I need a credit card to sign up?</h5>
+                                        <p class="mb-0">At the moment, the only payment method we offer
+                                            is with credit cards or with a debit card.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5 col-sm-6 mt-3 mr-auto">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="h6 card-title">Do you offer a free trial?</h5>
+                                        <p class="mb-0">No. Since we have the FREE plan that gives you axess to
+                                            everything except the possibility to create your own job posts and
+                                            a personal network.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5 col-sm-6 mt-3 ml-auto">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="h6 card-title">What if I decide to cancel my plan?</h5>
+                                        <p class="mb-0">If you wish to cancel your subscription, you just go to your
+                                            membership and choose the free plan.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5 col-sm-6 mt-3 mr-auto">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="h6 card-title">Can I cancel at anytime?</h5>
+                                        <p class="mb-0">Yes, you can at anytime cancel you subscription.
+                                            Note though that you will still be charged the full amount for
+                                            the current month.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5 col-sm-6 mt-3 ml-auto">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="h6 card-title">What if I like to upgrade my plan?</h5>
+                                        <p class="mb-0">If you wish to downgrade, you just click
+                                            on the new payment plan you wish to have under your membership
+                                            tag in settings. The new payment plan will be applied in a few minutes.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5 col-sm-6 mt-3 ml-auto">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="h6 card-title">What if I like to downgrade my plan?</h5>
+                                        <p class="mb-0">If you wish to downgrade, you just click
+                                            on the new payment plan you wish to have under your membership
+                                            tag in settings. The new payment plan will be applied in a few minutes.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+            </div>
+            <br>
+            <br>
+        </div>
+        <br>
+        <br>
+        <br>
+    </div>
+    {% endblock %}
+
+    {% include 'membership/includes/quantity_input_script.html' %}
+    {% block postloadjs %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $('.btt-link').click(function (e) {
+            window.scrollTo(0, 0)
+        })
+    </script>
+
+    <script type="text/javascript">
+        $('.btt-link').click(function (e) {
+            window.scrollTo(0, 0)
+        })
+    </script>
+
+
+    <!--<script type="text/javascript">
+        $('#sort-selector').change(function () {
+            var selector = $(this);
+            var currentUrl = new URL(window.location);
+
+            var selectedVal = selector.val();
+            if (selectedVal != "reset") {
+                var sort = selectedVal.split("_")[0];
+                var direction = selectedVal.split("_")[1];
+
+                currentUrl.searchParams.set("sort", sort);
+                currentUrl.searchParams.set("direction", direction);
+
+                window.location.replace(currentUrl);
+            } else {
+                currentUrl.searchParams.delete("sort");
+                currentUrl.searchParams.delete("direction");
+
+                window.location.replace(currentUrl);
+            }
+        })
+    </script>-->
+
+    {% endblock %}
