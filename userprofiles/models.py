@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 # from django.db.models.signals import post_save
-# from django.dispatch import receiver
+from django.urls import reverse
 from django_countries.fields import CountryField
 # from itertools import chain
 # import random
@@ -174,14 +174,5 @@ class Userprofile(models.Model):
         # pylint: disable=maybe-no-member
         return str(self.username)
 
-    # MY GIGS
-
-    # All my gigs
-    def my_gigs(self):
-        return self.gig_set.all()
-
-    # Number of my posted gigs
-    @property
-    def num_gigs(self):
-        # pylint: disable=maybe-no-member
-        return self.gig_set.all().count() 
+    def get_absolute_url(self):
+        return reverse('gig_detail', kwargs={'pk': self.pk})

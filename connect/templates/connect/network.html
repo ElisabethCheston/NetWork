@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block page_header %}
+
+<!-- Nav tabs -->
+
+<div class="tab-container">
+    <ul class="nav nav-tab justify-content-evenly" id="profileTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'all_profiles' %}">
+                <input type="submit" value="ALL USERS" class="nav-link gig-tab" id="network_tab" data-bs-toggle="tab"
+                    data-bs-target="#network" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_contacts' %}">
+                <input type="submit" value="MY CONTACTS" class="nav-link gig-tab" id="my_contacts_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_contacts" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_followers' %}">
+                <div class="tab-pane active" id="my_followers" role="tabpanel" aria-labelledby="my_followers_tab"></div>
+                <input type="submit" value="MY FOLLOWERS" class="nav-link gig-tab active" id="my_followers_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_followers" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'following_ppl' %}">
+                <input type="submit" value="FOLLOWING " class="nav-link gig-tab" id="following_ppl_tab"
+                    data-bs-toggle="tab" data-bs-target="#following_ppl" type="tab-button" role="tab" />
+            </form>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane" id="netwoork" role="tabpanel" aria-labelledby="network_tab"></div>
+        <div class="tab-pane" id="my_contacts" role="tabpanel" aria-labelledby="my_contacts_tab"></div>
+        <div class="tab-pane active" id="my_followers" role="tabpanel" aria-labelledby="my_followers_tab"></div>
+        <div class="tab-pane" id="following_ppl" role="tabpanel" aria-labelledby="following_ppl_tab"></div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block content %}
+<style>
+    .btn-link {
+        color: white;
+        border-color: rgba(96, 185, 236, 0.2);
+        background-color: rgba(9, 143, 221, 0.9) !important;
+        font-size: small !important;
+        height: 45px;
+        font-weight: bold;
+        padding-right: 5px;
+        padding-left: 5px;
+        text-decoration: none;
+        box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .btn-link:hover,
+    .btn-link:active,
+    .btn-link:focus {
+        color: white;
+        border-color: rgba(96, 185, 236, 0.2);
+        background-color: rgba(4, 102, 168, 0.9) !important;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .card-header {
+        background-color: white;
+    }
+
+    .card-title {
+        font-size: large;
+        font-weight: bold;
+        padding: auto;
+        color: rgba(9, 143, 221, 0.9);
+    }
+
+
+    .gig-text {
+        font-size: medium;
+        color: rgb(5, 5, 5);
+    }
+
+    /*
+.card-body {
+        padding: 20px;
+    }
+*/
+    label {
+        display: none;
+    }
+</style>
+
+<div class="container-fluid">
+    <br>
+    <div class="row">
+
+
+        <!-- gig cards -->
+        <div class="col-sm-10 col-sx-12 mx-auto">
+            <!--{% for gig in gigs.all %}-->
+            {% csrf_token %}
+            <div class="card">
+                <div class=" card-body">
+
+                    <div class="row justify-content-between">
+
+                        <div class="col-sm-9 col-sx-12">
+
+                            <!-- Title -->
+                            <!--<div class="row col-12">
+                                <a class=" card-title text-center" href="{% url 'gig_detail' gig.id %}">
+                                    <strong>{{ network.title }}</strong>
+                                </a>
+                            </div>-->
+
+                            <p class=" card-subtitle mb-2 text-center text-muted small">
+                                {{ network.city }}, {{ network.country.name }}
+                            </p>
+                        </div>
+
+                        <div class="col-sm-3 col-xs-12">
+                            <div class="col text-center">
+                                <img class="rounded-circle avatar" src="{{profile.picture.url }}">
+                            </div>
+                            <div class="col col-auto py-1 text-center">
+                                <p class="card-subtitle mb-2 text-muted small">
+                                    {{ profile.profession }}, {{ profile.company_name }}
+                                </p>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+            <br>
+            <!--{% endfor %}-->
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+</div>
+<br>
+
+{% endblock %}

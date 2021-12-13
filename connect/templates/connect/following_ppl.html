@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block page_header %}
+<!-- Profile tab links -->
+<div class="tab-container">
+    <ul class="nav nav-tab justify-content-evenly" id="profileTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'profile_details' %}">
+                <input type="submit" value="MY PROFILE" class="nav-link gig-tab active" id="my_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_gigs' %}">
+                <input type="submit" value="MY GIGS" class="nav-link gig-tab" id="my_gig_tab" data-bs-toggle="tab"
+                    data-bs-target="#my_gig" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'my_contacts' %}">
+                <input type="submit" value="MY CONTACTS" class="nav-link gig-tab" id="my_contacts_tab"
+                    data-bs-toggle="tab" data-bs-target="#my_contacts" type="tab-button" role="tab" />
+            </form>
+        </li>
+        <li class="nav-item" role="presentation">
+            <form action="{% url 'membership_profile' %}">
+                <input type="submit" value="MEMBERSHIP" class="nav-link gig-tab" id="membership_profile_tab"
+                    data-bs-toggle="tab" data-bs-target="#membership_profile" type="tab-button" role="tab" />
+            </form>
+        </li>
+
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane show active" id="my_profile" role="tabpanel" aria-labelledby="my_profile_tab"></div>
+        <div class="tab-pane" id="my_gig" role="tabpanel" aria-labelledby="my_gig_tab"></div>
+        <div class="tab-pane" id="my_contacts" role="tabpanel" aria-labelledby="my_contacts_tab"></div>
+        <div class="tab-pane" id="membership_profile" role="tabpanel" aria-labelledby="membership_profile_tab"></div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container-content">
+
+    <h2>
+        People I Follow
+    </h2>
+
+    <!-- Contact suggestions -->
+    <div class="col-10">
+        <p> {{profile.get_proposal_contact}}</p>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#myProfileModal">
+            Contact Suggestions
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="myProfileModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myModalLabel"> Follow: </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
+                        </button>
+                    </div>
+                    <div class="modal-body" id="to-follow-modal">
+                        <div class="text-center" id="spinner-box">
+                            <div class="spinner-border" role="status"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <br>
+    <br>
+
+    <h2> My Contacts </h2>
+
+    <!-- Following -->
+    <div class="card" style="max-width: 840px;">
+        {% csrf_token %}
+        <!-- Edit and Delete button -->
+        <div align="right">
+            <a href="{% url 'profile_edit' %}" class="btn btn-secondary btn-sm" tabindex="-1" role="button"
+                aria-disabled="true">Edit</a>
+            <a href="#" class="btn btn-secondary btn-sm text-align-right" tabindex="-1" role="button"
+                aria-disabled="true">Delete</a>
+        </div>
+        <br>
+        <div class="card-body">
+            <div class="col-12">
+
+                <div class="row g-0">
+                    <div class="col-12">
+
+                        <!-- Followers -->
+                        <div class="col">
+                            <div>
+                                <div class="row justify-content-between">
+                                    <div class="col-9">
+                                        <p><b>Followers:</b><br> {{ profile.get_followers }}</p>
+                                    </div>
+                                    <div class="col-3">
+                                        <p class="text-center"><b>Number of Followers:</b></p>
+                                        <p class="text-center"> {{profile.followers_count}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+</div>
+<br>
+
+
+{% endblock %}
