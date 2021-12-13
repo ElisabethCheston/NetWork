@@ -91,23 +91,18 @@
 <body>
 
     <header class="container-fluid fixed-top">
-        <!--<div id="topnav" class="row justify-content-between align-items-center navbar-light bg-dark">-->
         <div id="topnav" class="row justify-content-between align-items-center">
 
             <!-- BizNet Logo -->
             <div class="col-4 col-lg-4 text-lg-left">
-                <!-- my-auto py-1 py-lg-0 -->
-                <!--<a href="{% url 'home' %}" class="nav-link main-logo-link">-->
                 <img src="{% static 'images/biznetlight.png' %}" alt="" width="210" height="50" class="logo img-fluid">
-                <!--<img src="https://static.wixstatic.com/media/e64c63_b290d859fd03448bad1976ef606f894e~mv2.png/v1/fill/w_378,h_88,al_c,lg_1,q_85/Ska%CC%88rmavbild%202021-05-23%20kl_%2020_40_47.webp"
-                    alt="" width="210" height="50" class="logo img-fluid">
-                </a>-->
             </div>
-            <!-- Top navbar links  -->
+
+            <!-- Top navbar links-->
             <div class="col-8 col-lg-4 wrapper box-right d-flex justify-content-end">
 
                 <!-- Dropdown button-->
-                <a class="nav-link text-right" href="#" id="settings" data-toggle="dropdown" aria-haspopup="true"
+                <a class="nav-link text-right" id="settings" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
                     <span class="profile" id="profile"><small>{{request.user.first_name}}
                             {{request.user.last_name}}</small></span>
@@ -123,10 +118,8 @@
 
                     <a href="{% url 'profile_details' %}" class="dropdown-item">My Profile</a>
                     <a href="{% url 'all_profiles' %}" class="dropdown-item">Network</a>
-                    <a href="{% url 'select' %}" class="dropdown-item">Gigs</a>
-
-                    <a href="#" class="dropdown-item">Upgrade Membership</a>
-
+                    <a href="{% url 'gig' %}" class="dropdown-item">Gigs</a>
+                    <a href="{% url 'select' %}" class="dropdown-item">Upgrade Membership</a>
 
                     <a href="{% url 'password_change' %}" class="dropdown-item">Change Password</a>
                     <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
@@ -138,24 +131,22 @@
 
                     {% endif %}
 
-
-                    <li class="list-inline-item">
-                        <a class="{% if grand_total %}text-info font-weight-bold{% else %}text-black{% endif %} nav-link" href="{% url 'view_bag' %}">
-                            <div class="text-center">
-                                <div><i class="fas fa-shopping-bag fa-lg"></i></div>
-                                <p class="my-0">
-                                    {% if grand_total %}
-                                        ${{ grand_total|floatformat:2 }}
-                                    {% else %}
-                                        $0.00
-                                    {% endif %}
-                                </p>
-                            </div>
-                        </a>
-                    </li>
-
                 </div>
 
+                <li class="list-inline-item">
+                    <a class="{% if grand_total %}text-info font-weight-bold{% else %}text-black{% endif %} nav-link" href="{% url 'view_bag' %}">
+                        <div class="text-center">
+                            <div><i class="fas fa-shopping-bag fa-lg"></i></div>
+                            <p class="my-0">
+                                {% if grand_total %}
+                                    ${{ grand_total|floatformat:2 }}
+                                {% else %}
+                                    $0.00
+                                {% endif %}
+                            </p>
+                        </div>
+                    </a>
+                </li>
             </div>
         </div>
 
@@ -244,6 +235,7 @@
         $('.toast').toast('show');
     </script>
     {% endblock %}
+
 
 
 </body>

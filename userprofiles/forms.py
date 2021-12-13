@@ -1,14 +1,11 @@
-# import urllib.parse
+import urllib.parse
 from django import forms
 # from django.core.files.images import get_image_dimensions
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 # from django.http import JsonResponse
 from django.forms.widgets import CheckboxInput
-from .models import (
-    Userprofile,
-    TermUser
-  )
+from .models import Userprofile, TermUser
 
 
 # REGISTRATION USER FORM
@@ -62,12 +59,11 @@ class ProfileForm(forms.ModelForm):
             'title',
             'company_name',
             'industry',
-            # 'profession',
             'description',
             'country',
             'city',
             'locations',
             'employment',
             'business',
-            'status',
+            'purpose',
         ]

@@ -215,7 +215,15 @@ class NetworkProfileView(DetailView):
 # @login_required
 def profile_details(request):
     # pylint: disable=maybe-no-member
-    profile = Userprofile.objects.get(username=request.user)
+    if request.method == 'POST':
+        profile = Userprofile.objects.all(username=request.user)
+        if profile.is_valid():
+            profile.save()
+            messages.success(request, 'Your Profile has been updated!')
+            return redirect('profile_details')
+    else:
+        profile = Userprofile.objects.all()
+        # profile = Userprofile.objects.get(username=request.user)
     template = 'userprofiles/profile_details.html'
     context = {
         'profile': profile,
@@ -226,7 +234,7 @@ def profile_details(request):
 @login_required
 def profile_edit(request):
     if request.method == 'POST':
-        profileform = ProfileForm(request.POST, request.FILES, instance=request.user.userprofile)  # noqa: E501
+        profileform = ProfileForm(request.POST, request.FILES, instance=request.user)  # noqa: E501
         if profileform.is_valid():
             profileform.save()
             messages.success(request, 'Your Profile has been updated!')
