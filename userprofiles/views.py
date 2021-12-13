@@ -1,33 +1,28 @@
 from .models import Userprofile
-from gigs.models import Gig
-# from gigs.forms import Gig
-from django import forms
-
-from .forms import ProfileForm, RegisterUserForm, TermsForm # , ProfileForm1, ProfileForm2, ProfileForm3
-from django.core import serializers
-from django.core.mail import EmailMessage, send_mail, BadHeaderError
-from django.core.paginator import Paginator
-from django.conf import settings
+from .forms import ProfileForm, RegisterUserForm, TermsForm
+# from django.core import serializers
+from django.core.mail import send_mail, BadHeaderError  # EmailMessage
+# from django.core.paginator import Paginator
+# from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import PasswordResetDoneView, PasswordChangeView
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
-from django.db.models.functions import Lower
+# from django.db.models.functions import Lower
 from django.db.models.query_utils import Q
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect, reverse
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.urls import reverse_lazy
 from django.views.generic import (
-    TemplateView, 
-    View, 
     ListView,
     DetailView,
+    TemplateView,
 )
 
 
@@ -35,9 +30,7 @@ from django.views.generic import (
 
 class PasswordsChangeView(PasswordChangeView):
     form_class = PasswordChangeForm
-    #template_name = 'userprofiles/password_change.html'
     success_url = reverse_lazy('password_success')
-    #success_url = reverse_lazy('profile_details')
 
 
 def PasswordSuccess(request):
@@ -49,37 +42,34 @@ class PasswordResetDone(PasswordResetDoneView):
 
 
 def password_reset_request(request):
-	if request.method == "POST":
-		password_reset_form = PasswordResetForm(request.POST)
-		if password_reset_form.is_valid():
-			data = password_reset_form.cleaned_data['email']
-			associated_users = User.objects.filter(Q(email=data))
-			if associated_users.exists():
-				for user in associated_users:
-					subject = "Password Reset Requested"
-					email_template_name = "userprofiles/password_reset_email.txt"
-					c = {
-					"email":user.email,
-					'domain':'https://biz-net.herokuapp.com',
-					'site_name': 'BizNet',
-					"uid": urlsafe_base64_encode(force_bytes(user.pk)),
-					"user": user,
-					'token': default_token_generator.make_token(user),
-					'protocol': 'http',
-					}
-					email = render_to_string(email_template_name, c)
-					try:
-                        # send_mail(subject, contact_message, from_email, to_email, fail_silently = True)
-						send_mail(subject, email, [user.email], fail_silently=True) #  'AWS_verified_email_address',
-					except BadHeaderError:
-
-						return HttpResponse('Invalid header found.')
-						
-					messages.success(request, 'A message with reset password instructions has been sent to your inbox.')
-					return redirect ("main:homepage")
-			messages.error(request, 'An invalid email has been entered.')
-	password_reset_form = PasswordResetForm()
-	return render(request=request, template_name="userprofiles/password_reset.html", context={"password_reset_form":password_reset_form})
+    if request.method == "POST":
+        password_reset_form = PasswordResetForm(request.POST)
+        if password_reset_form.is_valid():
+            data = password_reset_form.cleaned_data['email']
+            associated_users = User.objects.filter(Q(email=data))
+            if associated_users.exists():
+                for user in associated_users:
+                    subject = "Password Reset Requested"
+                    email_template_name = "userprofiles/password_reset_email.txt"  # noqa: E501
+                    c = {
+                        "email": user.email,
+                        'domain': 'https://network-jobs.herokuapp.com',
+                        'site_name': 'NetWork',
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                        "user": user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+                    }
+                    email = render_to_string(email_template_name, c)
+                    try:
+                        send_mail(subject, email, [user.email], fail_silently=True)  # noqa: E501
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    messages.success(request, 'A message with reset password instructions has been sent to your inbox.')  # noqa: E501
+                    return redirect("main:homepage")
+            messages.error(request, 'An invalid email has been entered.')
+        password_reset_form = PasswordResetForm()
+    return render(request=request, template_name="userprofiles/password_reset.html", context={"password_reset_form": password_reset_form})  # noqa: E501
 
 
 # REGISTER AN ACCOUNT
@@ -103,7 +93,7 @@ def Register(request):
         messages.warning(request, 'Your account cannot be created.')
 
     context = {
-        'form' : form,
+        'form': form,
         'termform': termform
     }
     return render(request, 'userprofiles/register.html', context)
@@ -117,89 +107,30 @@ def terms(request):
 
 
 # REGISTRATION FORMS
-
+"""
 @login_required
 def Profile(request):
     # profile_form1 = ProfileForm1()
-    if request.method == 'POST':
-        profile = Profile(request.POST, 
-                                request.FILES, 
-                                instance=request.user.userprofile)
-        if profile.is_valid():
-            profile.save()
-            # messages.success(request, 'Step 1 of 3 done of creating your profile!')
-            return redirect('profie_edit')
+    # if request.method == 'GET':
+        # profile = Userprofile()(request.POST, request.FILES, instance=request.user.userprofile)  # noqa: E501
+        # if profile.is_valid():
+            # profile.save()
+            # messages.success(
+            # request, 'Step 1 of 3 done of creating your profile!')
+    return redirect('profie_edit')
         # else:
-            # messages.error(request, 'Update failed. Please check if your inputs are valid.')
-    else:
-        profile = Userprofile.objects.create(username=request.user)
+            # messages.error(
+            # request, 'Update failed. Please check if your inputs are valid.')
+# else:
+        # profile = Userprofile.objects.create(username=request.user)
         # profile_form1 = ProfileForm1(instance=request.user.userprofile)
         # return redirect('register_1')
     context = {
-        'profile':profile,
+        'profile': profile,
     }
     return render(request, 'userprofiles/profile.html', context)
-    
 """
-def ProfileOne(request):
-    profileform1 = ProfileForm1()
-    if request.method == 'POST':
-        profileform1 = ProfileForm1(request.POST, 
-                                request.FILES, 
-                                instance=request.user.userprofile)
-        if profileform1.is_valid():
-            profileform1.save()
-            messages.success(request, 'Awesome! Lets look at your profile!')
-            # return redirect('register_2')
-        # else:
-            # messages.error(request, 'Update failed. Please check if your inputs are valid.')
-    else:
-        # profileform1 = Userprofile.objects.create(user=request.user)
-        profileform1 = ProfileForm1(instance=request.user.userprofile)
-    context = {
-        'profileform1':profileform1,
-    }
 
-    return render(request, 'userprofiles/register_1.html', context)
-
-
-def ProfileTwo(request):
-    if request.method == 'POST':
-        profile_form2 = ProfileForm2(request.POST, 
-                                request.FILES, 
-                                instance=request.user.userprofile)
-        if profile_form2.is_valid():
-            profile_form2.save()
-            # messages.success(request, 'Step 2 of 3 done of creating your profile!')
-            # return redirect('register_3')
-        #else:
-            # messages.error(request, 'Update failed. Please check if your inputs are valid.')
-    else:
-        profile_form2 = ProfileForm2(instance=request.user.userprofile)
-    context = {
-        'profile_form2':profile_form2,
-    }
-    return render(request, 'userprofiles/register_2.html', context)
-
-
-def ProfileThree(request):
-    if request.method == 'POST':
-        profile_form3 = ProfileForm3(request.POST, 
-                                request.FILES, 
-                                instance=request.user.userprofile)
-        if profile_form3.is_valid():
-            profile_form3.save()
-            # messages.success(request, 'Step 3 of 3 done of creating your profile!')
-            # return redirect('profile_details')
-        # else:
-            # messages.error(request, 'Update failed. Please check if your inputs are valid.')
-    else:
-        profile_form3 = ProfileForm3(instance=request.user.userprofile)
-    context = {
-        'profile_form3' : profile_form3
-    }
-    return render(request, 'userprofiles/register_3.html', context)
-"""
 
 # SINGIN TO ACCOUNT
 def loginPage(request):
@@ -215,7 +146,7 @@ def loginPage(request):
         else:
             messages.info(request, 'Username or Password is incorrect!')
             return redirect('login_page')
-  
+
     template = 'userprofiles/login_page.html'
     context = {}
     return render(request, template, context)
@@ -235,7 +166,7 @@ def loginRegisterPage(request):
             return redirect('profile')
         else:
             messages.info(request, 'Username or Password is incorrect!')
-            
+
     template = 'userprofiles/login_register_page.html'
     context = {}
     return render(request, template, context)
@@ -245,7 +176,7 @@ def loginRegisterPage(request):
 
 
 def follow_unfollow_profile(request):
-    if request.method=='POST':
+    if request.method == 'POST':
         user_profile = Userprofile.objects.get(username=request.user)
         pk = request.POST.get('profile_pk')
         userprofile = Userprofile.objects.get(pk=pk)
@@ -268,7 +199,7 @@ class ProfilesListView(ListView):
     # override the queryset method
     def get_queryset(self):
         queryset = Userprofile.objects.order_by('-created')
-        return Userprofile.objects.order_by('-created').exclude(username=self.request.user)
+        return Userprofile.objects.order_by('-created').exclude(username=self.request.user)  # noqa: E501
 
 
 class NetworkProfileView(DetailView):
@@ -294,7 +225,8 @@ class NetworkProfileView(DetailView):
         return context
 
     def get_success_url(self):
-        return reverse('events:profile_details', kwargs={'pk': self.object.profile_id})
+        return reverse('events:profile_details', kwargs={'pk': self.object.profile_id})  # noqa: E501
+
 
 # @login_required
 def profile_details(request):
@@ -306,25 +238,23 @@ def profile_details(request):
     }
     return render(request, template, context)
 
+
 @login_required
 def profile_edit(request):
     if request.method == 'POST':
-        profileform = ProfileForm(request.POST, 
-                                request.FILES, 
-                                instance=request.user.userprofile)
+        profileform = ProfileForm(request.POST, request.FILES, instance=request.user.userprofile)  # noqa: E501
         if profileform.is_valid():
             profileform.save()
             messages.success(request, 'Your Profile has been updated!')
             return redirect('profile_details')
         else:
-            messages.error(request, 'Update failed. Please check if your inputs are valid.')
+            messages.error(request, 'Update failed. Please check if your inputs are valid.')  # noqa: E501
     else:
         profileform = ProfileForm(instance=request.user.userprofile)
     context = {
-        'profileform':profileform,
+        'profileform': profileform,
     }
     return render(request, 'userprofiles/profile_edit.html', context)
-
 
 
 def profile_delete(request, pk):
@@ -334,12 +264,11 @@ def profile_delete(request, pk):
         userprofile.delete()
         messages.success(request, "Account has been successfully deleted!")
         return HttpResponseRedirect(reverse('home'))
-    
-    context= {
+
+    context = {
         'userprofile': userprofile,
         }
     return render(request, 'userprofiles/user_confirm_delete.html', context)
-
 
 
 """
@@ -386,7 +315,7 @@ def create_gig(request):
         messages.success(request, 'Your Gig has been updated!')
         return redirect('my_gigs')
         # else:
-            # messages.error(request, 'Update failed. Please check if your inputs are valid.')
+            # messages.error(request, 'Update failed. Please check if your inputs are valid.')  # noqa: E501
     # else:
         # gigform = gigform()
         """
@@ -400,7 +329,7 @@ def myContacts(request):
     # profile = get_object_or_404(Userprofile, user=request.user)
     profile = Userprofile.objects.get(username=request.user)
     template = 'userprofile/my_contacts.html'
-   
+
     context = {
         'profile': profile,
         # 'get_following': get_following,

@@ -1,88 +1,17 @@
-from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.shortcuts import render  # , redirect, reverse, get_object_or_404
 from userprofiles.models import Userprofile
-from gigs.models import Gig
-
-from gigs.models import Gig
-from django.contrib.auth import get_user_model
-
-from . import views
+from django.http import JsonResponse
 from django.views.generic import (
-    TemplateView,
     View,
-    ListView,
-    DetailView,
 )
 
 
-# Create your views here.
-
 # ALL USERS
-"""
-class ProfilesListView(ListView):
-    model = Userprofile
-    template_name = 'connect/all_profiles.html'
-    context_object_name = 'userprofiles'
-
-    # override the queryset method
-    def get_queryset(self):
-        queryset = Useprofile.objects.order_by('last_name')
-        return Useprofile.objects.order_by('last_name').exclude(username=self.request.user)
-
-
-class NetworkProfileView(DetailView):
-    model = Useprofile
-    template_name = 'userprofiles/profile_details.html'
-    context_object_name = 'userprofiles'
-
-    def get_user_profile(self, **kwargs):
-        pk = self. kwargs.get('pk') 
-        view_profile = Useprofile.objects.get(pk=pk)
-        return view_profile
-
-    def get_context_data(self, **kwargs):
-        context = super(NetworkProfileView, self).get_context_data(**kwargs)
-        context['post_list'] = Useprofile.objects.filter(user__username__iexact=self.kwargs.get('username'))
-        return context
-
-    def get_user_profile(self, username):   
-        return get_object_or_404(User, pk=username)
-     #I know pk=username is not correct. I am not sure what to put pk=?
-
-  # I was able to get the writers other posts using the code below. I did not have to show this code for this question. But just to show you that the pk above has to be username. Or Else the code below won't work(I guess)        
-    def get_context_data(self, **kwargs):
-        context = super(NetworkProfileView, self).get_context_data(**kwargs)
-        context['post_list'] = Post.objects.filter(user__username__iexact=self.kwargs.get('username'))
-        return context
-
-
-# @login_required
-def all_profiles(request):
-    # pylint: disable=maybe-no-member
-    all_profiles = Userprofile.objects.all()
-    print(all_profiles)
-    # print(all_profiles[0]['username'])
-    template = 'connect/network.html'
-    context = {
-        'all_profiles': all_profiles,
-    }
-    return render(request, template, context)
-
-
-class UserDetailView(DetailView):
-    model = Userprofile
-
-"""
 
 def network(request):
     # A view to return the network page 
 
     return render(request, 'connect/network.html')
-
-
-def myContacts(request):
-    # A view to return the My Contacts page 
-
-    return render(request, 'connect/my_contacts.html')
 
 
 # CONTACTS
@@ -110,7 +39,7 @@ def my_followers(request):
 
 # @login_required
 def following_ppl(request):
-    # A view to return the My Contacts page 
+    # A view to return the My Contacts page
     # pylint: disable=maybe-no-member
     follow_ppl = Userprofile.objects.get(username=request.user)
     template = 'connect/my_contacts.html'
@@ -122,8 +51,9 @@ def following_ppl(request):
     }
     return render(request, template, context)
 
+
 class ProfileData(View):
-    def get(self, *args, **kwargs):  # , *args, **kwargs
+    def get(self, *args, **kwargs):
         # pylint: disable=maybe-no-member
         profile = Userprofile.objects.get(user=self.request.user)
         qs = profile.get_proposal_contact()
@@ -143,3 +73,69 @@ class ProfileData(View):
             }
             profile_to_follow_list.append(profile_item)
         return JsonResponse({'pf_data': profile_to_follow_list})
+
+
+"""
+class ProfilesListView(ListView):
+    model = Userprofile
+    template_name = 'connect/all_profiles.html'
+    context_object_name = 'userprofiles'
+
+    # override the queryset method
+    def get_queryset(self):
+        queryset = Useprofile.objects.order_by('last_name')
+        return Useprofile.objects.order_by('last_name').exclude(username=self.request.user)
+
+
+class NetworkProfileView(DetailView):
+    model = Useprofile
+    template_name = 'userprofiles/profile_details.html'
+    context_object_name = 'userprofiles'
+
+    def get_user_profile(self, **kwargs):
+        pk = self. kwargs.get('pk') 
+        view_profile = Useprofile.objects.get(pk=pk)
+        return view_profile
+
+    def get_context_data(self, **kwargs):
+        context = super(NetworkProfileView, self).get_context_data(**kwargs)
+        context['post_list'] = Useprofile.objects.filter(user__username__iexact=self.kwargs.get('username'))  # noqa: E501
+        return context
+
+    def get_user_profile(self, username):   
+        return get_object_or_404(User, pk=username)
+     #I know pk=username is not correct. I am not sure what to put pk=?
+
+  # I was able to get the writers other posts using the code below. 
+  # I did not have to show this code for this question. 
+  # But just to show you that the pk above has to be username. 
+  # Or Else the code below won't work(I guess)        
+    def get_context_data(self, **kwargs):
+        context = super(NetworkProfileView, self).get_context_data(**kwargs)
+        context['post_list'] = Post.objects.filter(user__username__iexact=self.kwargs.get('username'))  # noqa: E501
+        return context
+
+
+# @login_required
+def all_profiles(request):
+    # pylint: disable=maybe-no-member
+    all_profiles = Userprofile.objects.all()
+    print(all_profiles)
+    # print(all_profiles[0]['username'])
+    template = 'connect/network.html'
+    context = {
+        'all_profiles': all_profiles,
+    }
+    return render(request, template, context)
+
+
+class UserDetailView(DetailView):
+    model = Userprofile
+
+
+def myContacts(request):
+    # A view to return the My Contacts page
+
+    return render(request, 'connect/my_contacts.html')
+
+"""

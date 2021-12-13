@@ -1,6 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+# from django.contrib.auth.models import User
+# from django.db.models.signals import post_save
 from django.urls import reverse
 from django_countries.fields import CountryField
 from userprofiles.models import Userprofile, Industry, Profession, Membership  # noqa: E501

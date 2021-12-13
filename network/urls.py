@@ -22,7 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('', include('home.urls')),
-    #path('', include('settings.urls')),
+    # path('', include('settings.urls')),
     path('userprofiles/', include('userprofiles.urls')),
     # path('network/', include('network.urls')),
     path('gigs/', include('gigs.urls')),
@@ -32,4 +32,3 @@ urlpatterns = [
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-

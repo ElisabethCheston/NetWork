@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 # from django.db.models.signals import post_save
-from django.urls import reverse
 from django_countries.fields import CountryField
 # from itertools import chain
 # import random
@@ -173,6 +172,3 @@ class Userprofile(models.Model):
     def __str__(self):
         # pylint: disable=maybe-no-member
         return str(self.username)
-
-    def get_absolute_url(self):
-        return reverse('gig_detail', kwargs={'pk': self.pk})
