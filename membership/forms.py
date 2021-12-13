@@ -1,7 +1,5 @@
-
-from django.contrib.auth.models import User
 from django import forms
-from profileusers.models import Profileuser, Membership
+from userprofiles.models import Userprofile, Membership
 
 
 class MembershipForm(forms.ModelForm):
@@ -22,7 +20,7 @@ class MembershipForm(forms.ModelForm):
 class UserMembershipForm(forms.ModelForm):
 
     class Meta:
-        model = Profileuser
+        model = Userprofile
         fields = [
             'username',
             'stripe_customer_id',
@@ -31,4 +29,3 @@ class UserMembershipForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-

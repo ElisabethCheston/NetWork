@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'gigs',
     'connect',
     'membership',
-    # 'bag',
+    'bag',
     # 'checkout',
 ]
 

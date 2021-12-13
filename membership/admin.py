@@ -1,5 +1,6 @@
+"""
 from django.contrib import admin
-from profileusers.models import Membership
+from userprofiles.models import Membership
 
 
 class MembershipAdmin(admin.ModelAdmin):
@@ -11,4 +12,6 @@ class MembershipAdmin(admin.ModelAdmin):
 
     ordering = ('membership_type',)
 
+
 admin.site.register(Membership, MembershipAdmin)
+"""
