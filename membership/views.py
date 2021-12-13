@@ -17,20 +17,16 @@ from gigs.models import Gig
 from bag.contexts import bag_contents
 from userprofiles.forms import ProfileForm
 
-from checkout.models import Subscription
-from checkout.forms import SubscriptionForm
+# from checkout.models import Subscription
+# from checkout.forms import SubscriptionForm
+
+# import stripe
+# import json
+# stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
-import stripe
-import json
-
-
-stripe.api_key = settings.STRIPE_SECRET_KEY
-
-
-
-# --  Reference  -- #
 """
+Reference:
 https://github.com/sunilale0/django-stripe-subscription
 https://stripe.com/docs/billing/integration-builder
 """
@@ -45,6 +41,7 @@ def stripe_config(request):
 """
 
 # -- MEMBERSHIP -- #
+
 
 def all_membership(request):
     # A view to show all products
@@ -74,7 +71,7 @@ def get_usermembership(request):
     return None
 
 
-def get_user_subscription(request): 
+def get_user_subscription(request):
     user_subscription = Subscription.objects.filter(
         usermembership = get_usermembership(request))
     if user_subscription.exists():
@@ -84,7 +81,7 @@ def get_user_subscription(request):
 
 
 def get_selected_membership(request):
-    membership_type = request.session['selected_membership']   
+    membership_type = request.session['selected_membership']
     selected_membership_qs = Membership.objects.filter(
         membership_type=membership_type)
     if selected_membership_qs.exists():
@@ -107,9 +104,9 @@ class MembershipSelectView(LoginRequiredMixin, ListView):
     def post(self, request, **kwargs):
         selected_membership = request.POST.get('membership_type')
         usermembership = get_usermembership(request)
-        # user_subscription = get_user_subscription(request) 
+        # user_subscription = get_user_subscription(request)
         selected_membership_qs = Membership.objects.filter(
-            membership_type = selected_membership) 
+            membership_type = selected_membership)
         if selected_membership_qs.exists():
             selected_membership = selected_membership_qs.first()
 
@@ -141,7 +138,7 @@ def add_product(request):
             messages.error(request, 'Failed to add product. Please ensure the form is valid.')
     else:
         form = MembershipForm()
-        
+
     template = 'membership/add_product.html'
     context = {
         'form': form,
@@ -208,7 +205,7 @@ def updateTransactionRecords(request):
         del request.session['selected_membership']
     except:
         pass
-        
+
     messages.info(request, 'Successfully created {} membership'.format(
         selected_membership))
     return redirect(reverse('select'))
@@ -222,7 +219,7 @@ def updateTransactionRecords(request):
 def membership_profile(request):
     """ Display the user's profile. """
 
-    profile = get_object_or_404(Profileuser, username=request.user)
+    profile = get_object_or_404(Useprofile, username=request.user)
     stripe.api_key = settings.STRIPE_SECRET_KEY
 
     """
@@ -232,7 +229,7 @@ def membership_profile(request):
             form.save()
             messages.success(request, 'Profile updated successfully')
         else:
-            messages.error(request, 'Update failed. Please ensure the form is valid.')
+            messages.error(request, 'Update failed. Please ensure the form is valid.')  # noqa: E501
     else:
         form = UserMembershipForm(instance=profile)
     """
@@ -246,6 +243,7 @@ def membership_profile(request):
         # 'membership_type': membership_type,
     }
     return render(request, template, context)
+
 
 """
 @login_required
@@ -285,11 +283,12 @@ def payment_history(request):
     return render(request, template, context)
 
 """
-###
 # -- SUBSCRIPTION RESPONCES -- #
+
 
 class SuccessView(TemplateView):
     template_name = "success.html"
+
 
 class CancelView(TemplateView):
     template_name = "cancel.html"
@@ -310,10 +309,10 @@ def add_membership(request):
             messages.success(request, 'Successfully added membership!')
             return redirect(reverse('membership_detail', args=[membership.id]))
         else:
-            messages.error(request, 'Failed to add membership. Please ensure the form is valid.')
+            messages.error(request, 'Failed to add membership. Please ensure the form is valid.')  # noqa: E501
     else:
         form = MembershipForm()
-        
+
     template = 'membership/add_membership.html'
     context = {
         'form': form,
@@ -337,7 +336,7 @@ def edit_membership(request, membership_id):
             messages.success(request, 'Successfully updated membership!')
             return redirect(reverse('membership_detail', args=[membership.id]))
         else:
-            messages.error(request, 'Failed to update membership. Please ensure the form is valid.')
+            messages.error(request, 'Failed to update membership. Please ensure the form is valid.')  # noqa: E501
     else:
         form = MembershipForm(instance=membership)
         messages.info(request, f'You are editing {membership.name}')

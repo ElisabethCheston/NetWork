@@ -156,8 +156,6 @@ def loginPage(request):
     return render(request, template, context)
 
 
-
-
 # USERPROFILE
 
 
