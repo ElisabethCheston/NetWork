@@ -1,31 +1,37 @@
-from .models import Userprofile
-from .forms import ProfileForm, RegisterUserForm, TermsForm
-# from django.core import serializers
-from django.core.mail import send_mail, BadHeaderError  # EmailMessage
 # from django.core.paginator import Paginator
 # from django.conf import settings
+import json
 from django.contrib import messages
+from django.template.context_processors import csrf
+from crispy_forms.utils import render_crispy_form
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import PasswordResetDoneView, PasswordChangeView
-from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
+from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm, UserCreationForm  # noqa: E501
 # from django.db.models.functions import Lower
 from django.db.models.query_utils import Q
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, reverse
+from django.contrib.auth.forms import UserCreationForm
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
+# from django.core import serializers
+from django.core.mail import send_mail, BadHeaderError  # EmailMessage
 from django.urls import reverse_lazy
+
 from django.views.generic import (
     ListView,
     DetailView,
 )
+from .models import Userprofile
+from .forms import ProfileForm, UserprofileCreationForm  # TermsForm
 
 
 # PASSWORD USAGE
+
 
 class PasswordsChangeView(PasswordChangeView):
     form_class = PasswordChangeForm
@@ -74,26 +80,18 @@ def password_reset_request(request):
 # REGISTER AN ACCOUNT
 
 def Register(request):
-    # pylint: disable=maybe-no-member
-    form = RegisterUserForm()
-    termform = TermsForm()
     if request.method == 'POST':
-        form = RegisterUserForm(request.POST)
-        termform = TermsForm(request.POST)
-        if form.is_valid() and termform.is_valid():
-            form.save()
-            termform.save(commit=False)
-            user = form.cleaned_data.get('email')
-            messages.success(request, 'Account was created for ' + user)
+        f = UserprofileCreationForm(request.POST)
+        if f.is_valid():
+            f.save()
+            messages.success(request, 'Account created successfully')
             return redirect('login_register_page')
+
     else:
-        form = RegisterUserForm()
-        termform = TermsForm()
-        messages.warning(request, 'Your account cannot be created.')
+        f = UserprofileCreationForm()
 
     context = {
-        'form': form,
-        'termform': termform
+        'form': f,
     }
     return render(request, 'userprofiles/register.html', context)
 
@@ -180,10 +178,13 @@ class ProfilesListView(ListView):
     context_object_name = 'userprofiles'
     paginate_by = 4
 
+
+"""
     # override the queryset method
     def get_queryset(self):
         queryset = Userprofile.objects.order_by('-created')
         return Userprofile.objects.order_by('-created').exclude(username=self.request.user)  # noqa: E501
+"""
 
 
 class NetworkProfileView(DetailView):
@@ -192,7 +193,7 @@ class NetworkProfileView(DetailView):
     # context_object_name = 'userprofile'
 
     def get_user_profile(self, **kwargs):
-        pk = self. kwargs.get('pk') 
+        pk = self. kwargs.get('pk')
         view_profile = Userprofile.objects.get(pk=pk)
         return view_profile
 
@@ -210,6 +211,31 @@ class NetworkProfileView(DetailView):
 
     def get_success_url(self):
         return reverse('events:profile_details', kwargs={'pk': self.object.profile_id})  # noqa: E501
+
+
+# @login_required
+def create_customer(request):
+    # pylint: disable=maybe-no-member
+    if request.method == 'POST' and request.is_ajax():
+        form = ProfileForm(request.POST)  # noqa: E501
+        resp = {}
+        if form.is_valid():
+            form.save()
+            resp['success'] = True
+        else:
+            resp['success'] = False
+            csrf_context = {}
+            csrf_context.updated(csrf(request))
+            profileForm_html = render_crispy_form(form, context=csrf_context)  # noqa: E501
+            resp['html'] = profileForm_html
+        return HttpResponse(json.dumps(resp), content_type='application/json')
+
+    form = ProfileForm()
+    template = 'userprofiles/costumer_form.html'
+    context = {
+        'form': form,
+    }
+    return render(request, template, context)
 
 
 # @login_required
@@ -248,6 +274,21 @@ def profile_edit(request):
         'profileform': profileform,
     }
     return render(request, template, context)
+
+
+def profile_delete(request, pk):
+    userprofile = User.objects.get(pk=pk)
+
+    if request.method == "POST" and request.user.username == userprofile:
+        userprofile.delete()
+        messages.success(request, "Account has been successfully deleted!")
+        return HttpResponseRedirect(reverse('home'))
+
+    context = {
+        'userprofile': userprofile,
+        }
+    return render(request, 'userprofiles/user_confirm_delete.html', context)
+
 
 
 def profile_delete(request, pk):

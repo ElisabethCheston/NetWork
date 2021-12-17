@@ -85,7 +85,8 @@
     background-color: rgba(94, 95, 95, 0.792) !important;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
   }
-/*
+
+  /*
   #link {
     color: deeppink;
   }
@@ -101,25 +102,27 @@
   .container-term {
     width: 100%;
   }
+
   li {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: small;
   }
+
   li::marker {
     color: white;
   }
-#id_agree {
-  width: 100%;
-}
-.container-term {
-  margin-top: 20px;
-}
 
-  ul#id_agree {
-  width: 100%;
+  #id_agree {
+    width: 100%;
   }
 
+  .container-term {
+    margin-top: 20px;
+  }
 
+  ul#id_agree {
+    width: 100%;
+  }
 </style>
 
 <div class="container-fluid" id="justify-center">
@@ -131,8 +134,82 @@
 
     <div class="d-flex justify-content-center form_container" id="justify-center">
 
+      {% if messages %}
+      <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
       <form method="POST" action="{% url 'register' %}">
         {% csrf_token %}
+        <table>
+          {{ form.as_table }}
+           <tr>
+              <td></td>
+              <td><input type="submit" name="submit" value="Register" /></td>
+          </tr>
+       </table>
+
+
+    </form>
+
+    <!-- Already got an account? -->
+    <div class="mt-4">
+      <div class="d-flex link justify-content-center links">
+        Already got an account?
+        <a href="{% url 'login_page' %}" class="ml-2">
+          Sign In
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Query All input fields
+    var form_fields = document.getElementsByTagName('input')
+    form_fields[1].placeholder = 'First name..';
+    form_fields[2].placeholder = 'Last name..';
+
+    form_fields[3].placeholder = 'Email..';
+    form_fields[4].placeholder = 'Repeat Email..';
+    form_fields[5].placeholder = 'Enter password...';
+    form_fields[6].placeholder = 'Re-enter Password...';
+
+    for (var field in form_fields) {
+      form_fields[field].className += 'form-control'
+    }
+  </script>
+
+  <script>
+    /*
+  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  (function() {
+    'use strict';
+    window.addEventListener('load', function() {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.getElementsByClassName('needs-validation');
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function(form) {
+        form.addEventListener('submit', function(event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
+  */
+  </script>
+
+  {% endblock %}
+
+
+
 
         <!-- First Name -->
         <div class="input-group mb-1">
@@ -174,11 +251,15 @@
           {{form.password2}}
         </div>
 
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+        {% endif %}
+
         <!-- Terms and Conditions -->
         <div class="container-term input-group mt-3 justify-content-around">
           <label>
             <input type="checkbox" class="checkbox" value="checked" required>
-            {{form.agree}} <a href="{% url 'terms' %}">Terms & Conditions</a>
+            <a href="{% url 'terms' %}">Terms & Conditions</a>
           </label>
         </div>
     </div>
@@ -187,36 +268,3 @@
     <div class="d-flex justify-content-center mt-1" id="justify-center">
       <input class="btn register-button" id="submitControl" type="submit" value="SUBMIT">
     </div>
-    </form>
-
-    <!-- Already got an account? -->
-    <div class="mt-4">
-      <div class="d-flex link justify-content-center links">
-        Already got an account?
-        <a href="{% url 'login_page' %}" class="ml-2">
-          Sign In
-        </a>
-      </div>
-    </div>
-
-  </div>
-
-  <script>
-
-    // Query All input fields
-    var form_fields = document.getElementsByTagName('input')
-    form_fields[1].placeholder = 'First name..';
-    form_fields[2].placeholder = 'Last name..';
-
-    form_fields[3].placeholder = 'Email..';
-    form_fields[4].placeholder = 'Repeat Email..';
-    form_fields[5].placeholder = 'Enter password...';
-    form_fields[6].placeholder = 'Re-enter Password...';
-
-    for (var field in form_fields) {
-      form_fields[field].className += 'form-control'
-    }
-
-  </script>
-
-  {% endblock %}

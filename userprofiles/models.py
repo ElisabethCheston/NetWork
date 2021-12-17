@@ -6,16 +6,18 @@ from django_countries.fields import CountryField
 # import random
 
 
+"""
 # TERMS & CONDITIONS
 class TermUser(models.Model):
-    """ Checkbox for agreeing with NetWorks Terms """
+    # Checkbox for agreeing with NetWorks Terms
     agree = models.BooleanField()
 
     def __str__(self):
         return str(self.agree)
-
+"""
 
 # DROPDOWN LISTS
+
 
 class Industry(models.Model):
     """ Type of Industry """
@@ -139,6 +141,7 @@ class Userprofile(models.Model):
     phone = models.CharField(max_length=40, blank=True)
     city = models.CharField(max_length=50, blank=False)
     country = CountryField(blank_label='Country', blank=False)
+    agree = models.BooleanField(blank=False, null=False, default='True')  # noqa: E501
 
     # Work Information
     title = models.CharField(

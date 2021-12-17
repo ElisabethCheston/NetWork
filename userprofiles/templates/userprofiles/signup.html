@@ -130,6 +130,13 @@
         <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
         {% endif %}
 
+        <div class="container-term input-group mt-3 justify-content-around">
+          <label>
+            <input type="checkbox" class="checkbox" value="checked" required>
+            <a href="{% url 'terms' %}">Terms & Conditions</a>
+          </label>
+        </div>
+        
         <div class="form-check">
           <button class="primaryAction" type="submit">{% trans "Sign Up" %}</button>
       </form>

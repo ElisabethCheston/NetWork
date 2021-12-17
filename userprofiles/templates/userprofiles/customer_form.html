@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
+<!--{% load crispy_forms_tags %}-->
+
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'userprofiles/css/profile.css' %}">
@@ -70,45 +72,7 @@
                 <div class="card-body">
                     <div class="col-12">
 
-                        <form method="POST" enctype="multipart/form-data" action="{% url 'profile_edit' %}">
-                            {% csrf_token %}
-
-                            <fieldset class="form-group">
-                                <legend class="border-bottom mb-4">Profile Information</legend>
-
-                                <div class="card-body">
-                                    <h4 class="card-title">{{user.first_name}} {{user.last_name}}</h4>
-                                    <br>
-                                    <h6 class="card-title">{{profileform.picture}}</h6>
-                                    <br>
-                                    <h6 class="card-title">Title: &nbsp; {{profileform.title}}</h6>
-                                    <h6 class="card-title">Company: &nbsp; {{profileform.company_name}}</h6>
-                                    <h6 class="card-title">City: &nbsp; {{profileform.city}}</h6>
-                                    <h6 class="card-title">Country: &nbsp; {{profileform.country}}</h6>
-                                    <br>
-                                    <h6 class="card-title">Industry: &nbsp; {{profileform.industry}}</h6>
-                                    <h6 class="card-title">Description: &nbsp; {{profileform.description}}</h6>
-                                    <h6 class="card-title">Employment Status: &nbsp; {{profileform.employment}}</h6>
-                                    <h6 class="card-title">Purpose: &nbsp; {{profileform.purpose}}</h6>
-                                    <br>
-                                    <h5 class="card-title">Matching Preferences</h5>
-                                    <h6 class="card-title">Business: &nbsp; {{profileform.business}}</h6>
-                                    <h6 class="card-title">Location: &nbsp; {{profileform.locations}}</h6>
-
-                                    <br>
-                                </div>
-                            </fieldset>
-                            <br>
-
-                            <div class="text-center form-group">
-                                <!--<button class="btn" type="submit">UPDATE</button>-->
-                                <button type="submit" class="btn"
-                                    style="font-weight: bold; border-radius: 1px; background-color: #1f53fc; color: rgb(246,246,247); font-family: Verdana; font-size: medium">SAVE</button>
-                                <a href="{% url 'profile_delete' pk=user.pk %}" style="font-weight: bold;"
-                                    class="btn btn-danger">DELETE</a>
-                            </div>
-
-                        </form>
+                        {% crispy form %}
 
                     </div>
                 </div>
@@ -123,5 +87,43 @@
 </div>
 
 {% endif %}
+
+{% endblock %}
+
+{% block javascript %}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('ajaxt_save').click(function (event) {
+            // alert('Save Profile Clicked');
+
+            event.preventDefault();
+            var form_id = $("#id-profileForm");
+
+            $.ajax({
+                url: '{% url "create_customer" %}',
+                type: 'POST',
+                data: form_id.serialize(),
+                dataType: 'json',
+                header: {'X-CSRFTolken': '{% csrf_tolken %}'},
+                success: function (response) {
+                    var success = response['success']
+                    if (success){
+                        alert('Form valid and User created successfully.')
+                    } else {
+                        alert('Got form error')
+                        console.log("Response form with errors: " + response['html']);
+                        form_id.replaceWith(response['html']);
+                    }
+                },
+                failure : function (){
+                    alert('Error occure while calling our Django view')
+                }
+                
+            });
+        });
+    });
+</script>
 
 {% endblock %}

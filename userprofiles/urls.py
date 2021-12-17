@@ -18,9 +18,9 @@ from .views import (
 urlpatterns = [
     # REGISTRATION
     path('register/', views.Register, name='register'),
+    # path('signup/', views.Register, name='register'),
     path('terms/', views.terms, name='terms'),
     path('profile/', views.Profile, name='profile'),
-    # path('signup/', views.RegistrationView, name='signup'),
     # path('register_profile/', views.RegisterPage, name='register_profile'),
 
 
@@ -49,6 +49,8 @@ urlpatterns = [
     path('profile_delete/<pk>/', views.profile_delete, name='profile_delete'),
     path('profile_details/', views.profile_details, name='profile_details'),
     path('profile_edit/', views.profile_edit, name='profile_edit'),
+    path('create_customer/', views.create_customer, name='create_customer'),
+
 
     path('', ProfilesListView.as_view(), name='all_profiles'),
     path('switch-follow/', follow_unfollow_profile, name='follow_unfollow_profile'),  # noqa: E501

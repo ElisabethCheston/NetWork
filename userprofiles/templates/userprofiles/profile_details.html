@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
 {% load i18n %}
+{% load crispy_forms_tags %}
+
+
 
 
 {% block scripts %}
@@ -187,7 +190,6 @@
             <div class="card">
                 <div class="card-body mx-2 my-4">
 
-
                     <!-- userprofile information -->
 
                     <!-- Row One -->
@@ -298,24 +300,4 @@
     <br>
 </div>
 
-<script>
-
-    var exampleModal = document.getElementById('follow-btn')
-    exampleModal.addEventListener('show.bs.modal', function (event) {
-        // Button that triggered the modal
-        var button = event.relatedTarget
-        // Extract info from data-bs-* attributes
-        var recipient = button.getAttribute('data-bs-whatever')
-        // If necessary, you could initiate an AJAX request here
-        // and then do the updating in a callback.
-        //
-        // Update the modal's content.
-        var modalTitle = exampleModal.querySelector('.modal-title')
-        var modalBodyInput = exampleModal.querySelector('.modal-body input')
-
-        modalTitle.textContent = 'New message to ' + recipient
-        modalBodyInput.value = recipient
-    })
-
-</script>
 {% endblock %}

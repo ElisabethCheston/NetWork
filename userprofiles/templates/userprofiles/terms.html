@@ -337,8 +337,7 @@
     <!-- Terms & Conditions Buttons -->
     <div class="row">
         <a href="{% url 'register' %}" target="_blank">
-            <input type="button" name="acceptButton" class="btn accept-button" value="BACK" id="terms-box-check"
-                onclick="registerCheck(this.id)">
+            <input type="button" name="acceptButton" class="btn accept-button" value="BACK" id="terms-box-check">
     </div>
 
 
@@ -346,10 +345,11 @@
 </div>
 
 <script>
+    /*
     function registerCheck(clicked_id) {
         localStorage.setItem("chkId", clicked_id);
         window.location.href = "/home/register/";
-    }
+    }*/
 </script>
 
 {% endblock %}
