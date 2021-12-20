@@ -59,6 +59,7 @@ def get(self, request, gig_pk, *args, **kwargs):
 
 
 # @login_required
+# @allowed_membership(allowed_roles=['customer'])
 def my_gigs(request):
     # pylint: disable=maybe-no-member
     profile = Userprofile.objects.get(username=request.user)

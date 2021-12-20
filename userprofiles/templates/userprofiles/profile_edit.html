@@ -70,7 +70,7 @@
                 <div class="card-body">
                     <div class="col-12">
 
-                        <form method="POST" enctype="multipart/form-data" action="{% url 'profile_edit' %}">
+                        <form method="POST" enctype="multipart/form-data" action="{% url 'profile_edit' %}" class="need_validation" novalidate>
                             {% csrf_token %}
 
                             <fieldset class="form-group">

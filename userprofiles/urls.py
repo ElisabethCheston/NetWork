@@ -8,6 +8,8 @@ from .views import (
     ProfilesListView,
     NetworkProfileView,
     follow_unfollow_profile,
+    ProfileDeleteView,
+    # UserprofileUpdateView,
     # ProfileData,
     # ProfileDetailView,
     # ProfileDeleteView,
@@ -20,18 +22,15 @@ urlpatterns = [
     path('register/', views.Register, name='register'),
     # path('signup/', views.Register, name='register'),
     path('terms/', views.terms, name='terms'),
-    path('profile/', views.Profile, name='profile'),
+    # path('profile/', views.Profile, name='profile'),
     # path('register_profile/', views.RegisterPage, name='register_profile'),
-
 
     # PASSWORD
     path('password_change/', PasswordsChangeView.as_view(template_name='userprofiles/password_change.html'), name='password_change'),  # noqa: E501
     path('password_success/', views.PasswordSuccess, name='password_success'),
     path('password_change_done/', views.PasswordSuccess, name='password_change_done'),  # noqa: E501
-
     # path('verified_email_required/', auth_views.VerifiedEmailRequiredView.as_view(template_name='verified_email_required.html'), name='verified_email_required'),  # noqa: E501
     # path('verification_sent/', auth_views.VerdificationSentView.as_view(template_name='verification_sent.html'), name='verification_sent'),  # noqa: E501
-
     path('password_reset/', auth_views.PasswordResetView.as_view(template_name='accounts/password_reset.html'), name='password_reset'),  # noqa: E501
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='accounts/password_reset_done.html'), name='password_reset_done'),  # noqa: E501
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='accounts/password_reset_confirm.html'), name='password_reset_confirm'),  # noqa: E501
@@ -46,10 +45,13 @@ urlpatterns = [
     # path('my_profile/', MyProfile.as_view(), name='my_profile'),
     # path('my_profile/', view.MyProfile, name='my_profile'),
     # path('profile_data/', ProfileData.as_view(), name='profile_data'),
-    path('profile_delete/<pk>/', views.profile_delete, name='profile_delete'),
+    # path('profile_delete/<pk>/', views.profile_delete, name='profile_delete'),  # noqa: E501
+    path('profile_delete/<int:pk>/', ProfileDeleteView.as_view(), name='profile_delete'),  # noqa: E501
+
     path('profile_details/', views.profile_details, name='profile_details'),
     path('profile_edit/', views.profile_edit, name='profile_edit'),
-    path('create_customer/', views.create_customer, name='create_customer'),
+    # path('profile_edit/<int:pk>/', UserprofileUpdateView.as_view(), name='profile_edit'),  # noqa: E501
+    # path('create_customer/', views.create_customer, name='create_customer'),
 
 
     path('', ProfilesListView.as_view(), name='all_profiles'),

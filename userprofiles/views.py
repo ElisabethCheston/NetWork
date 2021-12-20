@@ -12,7 +12,7 @@ from django.contrib.auth.views import PasswordResetDoneView, PasswordChangeView
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm, UserCreationForm  # noqa: E501
 # from django.db.models.functions import Lower
 from django.db.models.query_utils import Q
-from django.http import HttpResponse, HttpResponseRedirect
+# from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.forms import UserCreationForm
 from django.template.loader import render_to_string
@@ -21,7 +21,10 @@ from django.utils.http import urlsafe_base64_encode
 # from django.core import serializers
 from django.core.mail import send_mail, BadHeaderError  # EmailMessage
 from django.urls import reverse_lazy
-
+from django.views.generic.edit import (
+    DeleteView,
+    # UpdateView,
+)
 from django.views.generic import (
     ListView,
     DetailView,
@@ -81,17 +84,17 @@ def password_reset_request(request):
 
 def Register(request):
     if request.method == 'POST':
-        f = UserprofileCreationForm(request.POST)
-        if f.is_valid():
-            f.save()
+        form = UserprofileCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
             messages.success(request, 'Account created successfully')
             return redirect('login_register_page')
 
     else:
-        f = UserprofileCreationForm()
+        form = UserprofileCreationForm()
 
     context = {
-        'form': f,
+        'form': form,
     }
     return render(request, 'userprofiles/register.html', context)
 
@@ -122,17 +125,6 @@ def loginRegisterPage(request):
     template = 'userprofiles/login_register_page.html'
     context = {}
     return render(request, template, context)
-
-
-@login_required
-def Profile(request):
-    profile = Userprofile(request.POST, request.FILES, instance=request.user)  # noqa: E501
-    return redirect('profile_details')
-
-    context = {
-        'profile': profile,
-    }
-    return render(request, 'userprofiles/profile.html', context)
 
 
 # SINGIN TO ACCOUNT
@@ -174,46 +166,19 @@ def follow_unfollow_profile(request):
 
 
 class ProfilesListView(ListView):
+    # pylint: disable=maybe-no-member
     model = Userprofile
     template_name = 'userprofiles/all_profiles.html'
     context_object_name = 'userprofiles'
     paginate_by = 4
 
-
-"""
     # override the queryset method
     def get_queryset(self):
         queryset = Userprofile.objects.order_by('-created')
         return Userprofile.objects.order_by('-created').exclude(username=self.request.user)  # noqa: E501
+
+
 """
-
-
-class NetworkProfileView(DetailView):
-    model = Userprofile
-    template_name = 'userprofile/profile_details.html'
-    # context_object_name = 'userprofile'
-
-    def get_user_profile(self, **kwargs):
-        pk = self. kwargs.get('pk')
-        view_profile = Userprofile.objects.get(pk=pk)
-        return view_profile
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        view_profile = self.get_object()
-        user_profile = Userprofile.objects.get(username=self.request.user)
-        if view_profile.username in user_profile.following.all():
-            follow = True
-        else:
-            follow = False
-
-        context['follow'] = follow
-        return context
-
-    def get_success_url(self):
-        return reverse('events:profile_details', kwargs={'pk': self.object.profile_id})  # noqa: E501
-
-
 # @login_required
 def create_customer(request):
     # pylint: disable=maybe-no-member
@@ -238,30 +203,57 @@ def create_customer(request):
     }
     return render(request, template, context)
 
+"""
+
+
+class NetworkProfileView(DetailView):
+    # pylint: disable=maybe-no-member
+    model = Userprofile
+    template_name = 'userprofiles/profile_details.html'
+
+    def get_user_profile(self, **kwargs):
+        pk = self. kwargs.get('pk')
+        view_profile = Userprofile.objects.get(pk=pk)
+        return view_profile
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        view_profile = self.get_object()
+        user_profile = Userprofile.objects.get(username=self.request.user)
+        if view_profile.username in user_profile.following.all():
+            follow = True
+        else:
+            follow = False
+        context['follow'] = follow
+        return context
+
+    def get_success_url(self):
+        return reverse('events:profile_details', kwargs={'pk': self.object.profile_id})
+
 
 # @login_required
 def profile_details(request):
     # pylint: disable=maybe-no-member
-    if request.method == 'POST':
-        profile = Userprofile.objects.all(username=request.user)
-        if profile.is_valid():
-            profile.save()
-            messages.success(request, 'Your Profile has been updated!')
-            return redirect('profile_details')
-    else:
-        profile = Userprofile.objects.all()
-        # profile = Userprofile.objects.get(username=request.user)
     template = 'userprofiles/profile_details.html'
+    profile = Userprofile.objects.get(username=request.user)
+    
     context = {
         'profile': profile,
     }
     return render(request, template, context)
 
 
+"""
+class UserprofileUpdateView(UpdateView):
+    model = Userprofile
+    profileform = ProfileForm
+"""
+
+
 @login_required
 def profile_edit(request):
     if request.method == 'POST':
-        profileform = ProfileForm(request.POST, request.FILES, instance=request.user)  # noqa: E501
+        profileform = ProfileForm(request.POST, request.FILES, instance=request.user.userprofile)  # noqa: E501
         if profileform.is_valid():
             profileform.save()
             messages.success(request, 'Your Profile has been updated!')
@@ -269,7 +261,7 @@ def profile_edit(request):
         else:
             messages.error(request, 'Update failed. Please check if your inputs are valid.')  # noqa: E501
     else:
-        profileform = ProfileForm(instance=request.user)
+        profileform = ProfileForm(instance=request.user.userprofile)
     template = 'userprofiles/profile_edit.html'
     context = {
         'profileform': profileform,
@@ -277,6 +269,12 @@ def profile_edit(request):
     return render(request, template, context)
 
 
+class ProfileDeleteView(DeleteView):
+    model = Userprofile
+    success_url = reverse_lazy('home')
+
+
+"""
 def profile_delete(request, pk):
     userprofile = User.objects.get(pk=pk)
 
@@ -289,21 +287,7 @@ def profile_delete(request, pk):
         'userprofile': userprofile,
         }
     return render(request, 'userprofiles/user_confirm_delete.html', context)
-
-
-
-def profile_delete(request, pk):
-    userprofile = User.objects.get(pk=pk)
-
-    if request.method == "POST" and request.user.username == userprofile:
-        userprofile.delete()
-        messages.success(request, "Account has been successfully deleted!")
-        return HttpResponseRedirect(reverse('home'))
-
-    context = {
-        'userprofile': userprofile,
-        }
-    return render(request, 'userprofiles/user_confirm_delete.html', context)
+"""
 
 
 """
