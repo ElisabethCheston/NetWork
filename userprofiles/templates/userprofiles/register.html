@@ -10,7 +10,6 @@
   #justify-center {
     margin: auto;
     width: 80%;
-    padding: 10px;
     border: none !important;
     justify-content: center;
     align-items: center;
@@ -18,11 +17,25 @@
     font-size: large !important;
   }
 
+  ul.errorlist {
+    justify-content: center;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: -1px;
+    padding-left: -3px;
+    padding-right: 3px;
+  }
+
+  #form-title {
+    padding: 5px;
+  }
+  #id_first_name,
+  #id_last_name,
   #id_email,
   #id_username,
   #id_password1,
   #id_password2 {
-    width: 84%;
+    width: 95%;
     text-align: center;
     font-size: small;
     height: 45px;
@@ -38,32 +51,31 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
   }
 
+  /*
   .form-control {
-    width: 84%;
+    width: 100%;
     height: 45px;
-    margin-top: 2%;
     text-align: center;
     border-color: black;
-    font-size: large !important;
+    font-size: medium !important;
   }
 
-  .form_container {
-    margin-top: 10px;
+.form_container {
+    margin-bottom: 10px;
     width: 100%;
     align-items: center;
   }
 
   .row {
     text-align: center;
-    /*the same margin which is every button have, it is for small screen, and if you have many buttons.*/
     margin-left: -20px;
     margin-right: -20px;
   }
-
+*/
 
   /* BUTTONS */
-
-  .btn {
+  .btn,
+  #submit {
     border-width: 2px;
     color: white;
     border-color: rgba(148, 149, 150, 0.5);
@@ -97,31 +109,49 @@
     padding: 10px;
     margin-top: 10px;
   }
-*/
 
+  form, table, tbody, tr {
+  align-items: center;
+}
   .container-term {
     width: 100%;
   }
-
+*/
   li {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: small;
+    text-align: center;
   }
 
   li::marker {
-    color: white;
+    display: none;
+    color: transparent;
+    font-size: xx-small;
+    padding-left: -3px;
+    padding-right: -3px;
   }
 
   #id_agree {
-    width: 100%;
+    text-align: start;
+    size: 12px;
   }
 
+  /*
+  #id_agree {
+    width: 100%;
+  }
   .container-term {
     margin-top: 20px;
+  }
+*/
+
+  label {
+    display: none;
   }
 
   ul#id_agree {
     width: 100%;
+    align-items: flex-start;
+    text-align: start;
   }
 </style>
 
@@ -132,7 +162,7 @@
       <h2 id="form-title">REGISTER ACCOUNT</h2>
     </div>
 
-    <div class="d-flex justify-content-center form_container" id="justify-center">
+    <div class="d-flex justify-content-center form_container">
 
       {% if messages %}
       <ul>
@@ -144,47 +174,60 @@
 
       <form method="POST" action="{% url 'register' %}">
         {% csrf_token %}
-        <table>
+        <table class="d-flex" id="justify-center">
           {{ form.as_table }}
-           <tr>
-              <td></td>
-              <td><input type="submit" name="submit" value="Register" /></td>
+          <tr>
+            <td></td>
+            <!-- Terms and Conditions -->
+            <td>
+              <input type="checkbox" class="checkbox" value="checked" id="chkId" checked required>
+              <a href="{% url 'terms' %}">Terms & Conditions</a>
+            </td>
+            <td></td>
           </tr>
-       </table>
+        </table>
+        <table>
+          <input id="submit" type="submit" name="submit" value="Register" />
+        </table>
 
 
-    </form>
+      </form>
 
-    <!-- Already got an account? -->
-    <div class="mt-4">
-      <div class="d-flex link justify-content-center links">
-        Already got an account?
-        <a href="{% url 'login_page' %}" class="ml-2">
-          Sign In
-        </a>
+      <!-- Already got an account? -->
+      <div class="mt-4">
+        <div class="d-flex link justify-content-center links">
+          Already got an account?
+          <a href="{% url 'login_page' %}" class="ml-2">
+            Sign In
+          </a>
+        </div>
       </div>
+
     </div>
 
-  </div>
+    <script>
+      // Query All input fields
+      var form_fields = document.getElementsByTagName('input')
+      form_fields[1].placeholder = 'First name..';
+      form_fields[2].placeholder = 'Last name..';
 
-  <script>
-    // Query All input fields
-    var form_fields = document.getElementsByTagName('input')
-    form_fields[1].placeholder = 'First name..';
-    form_fields[2].placeholder = 'Last name..';
+      form_fields[3].placeholder = 'Email..';
+      form_fields[4].placeholder = 'Repeat Email..';
+      form_fields[5].placeholder = 'Enter password...';
+      form_fields[6].placeholder = 'Repeat Password...';
 
-    form_fields[3].placeholder = 'Email..';
-    form_fields[4].placeholder = 'Repeat Email..';
-    form_fields[5].placeholder = 'Enter password...';
-    form_fields[6].placeholder = 'Re-enter Password...';
+      for (var field in form_fields) {
+        form_fields[field].className += 'form-control'
+      }
 
-    for (var field in form_fields) {
-      form_fields[field].className += 'form-control'
+      function registerCheck(clicked_id) {
+        localStorage.setItem("chkId", clicked_id);
+        window.location.href = "/userprofile/register/";
     }
-  </script>
+    </script>
 
-  <script>
-    /*
+    <script>
+      /*
   // Example starter JavaScript for disabling form submissions if there are invalid fields
   (function() {
     'use strict';
@@ -204,67 +247,67 @@
     }, false);
   })();
   */
-  </script>
+    </script>
 
-  {% endblock %}
-
-
+    {% endblock %}
 
 
-        <!-- First Name -->
-        <div class="input-group mb-1">
-          <div class="input-group-append">
-            <span class="input-group-text"></span>
-          </div>
-          {{form.first_name}}
-        </div>
-        <!-- Last Name -->
-        <div class="input-group mb-1">
-          <div class="input-group-append">
-          </div>
-          {{form.last_name}}
-        </div>
-        <!-- Username: Placeholder name Email -->
-        <div class="input-group mb-1">
-          <div class="input-group-append">
-            <span class="input-group-text"></span>
-          </div>
-          {{form.username}}
-        </div>
-        <!-- Email -->
-        <div class="input-group mb-1">
-          <div class="input-group-append">
-          </div>
-          {{form.email}}
-        </div>
-        <!-- Password 1 -->
-        <div class="input-group mb-1">
-          <div class="input-group-append">
-          </div>
-          {{form.password1}}
-        </div>
-        <!-- Password 2 -->
-        <div class="input-group mb-3">
-          <div class="input-group-append">
-            <span class="input-group-text"></span>
-          </div>
-          {{form.password2}}
-        </div>
 
-        {% if redirect_field_value %}
-        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-        {% endif %}
 
-        <!-- Terms and Conditions -->
-        <div class="container-term input-group mt-3 justify-content-around">
-          <label>
-            <input type="checkbox" class="checkbox" value="checked" required>
-            <a href="{% url 'terms' %}">Terms & Conditions</a>
-          </label>
-        </div>
+    <!-- First Name -->
+    <div class="input-group mb-1">
+      <div class="input-group-append">
+        <span class="input-group-text"></span>
+      </div>
+      {{form.first_name}}
+    </div>
+    <!-- Last Name -->
+    <div class="input-group mb-1">
+      <div class="input-group-append">
+      </div>
+      {{form.last_name}}
+    </div>
+    <!-- Username: Placeholder name Email -->
+    <div class="input-group mb-1">
+      <div class="input-group-append">
+        <span class="input-group-text"></span>
+      </div>
+      {{form.username}}
+    </div>
+    <!-- Email -->
+    <div class="input-group mb-1">
+      <div class="input-group-append">
+      </div>
+      {{form.email}}
+    </div>
+    <!-- Password 1 -->
+    <div class="input-group mb-1">
+      <div class="input-group-append">
+      </div>
+      {{form.password1}}
+    </div>
+    <!-- Password 2 -->
+    <div class="input-group mb-3">
+      <div class="input-group-append">
+        <span class="input-group-text"></span>
+      </div>
+      {{form.password2}}
     </div>
 
-    <!-- Submit button -->
-    <div class="d-flex justify-content-center mt-1" id="justify-center">
-      <input class="btn register-button" id="submitControl" type="submit" value="SUBMIT">
+    {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+    {% endif %}
+
+    <!-- Terms and Conditions -->
+    <div class="container-term input-group mt-3 justify-content-around">
+      <label>
+        <input type="checkbox" class="checkbox" value="checked" required>
+        <a href="{% url 'terms' %}">Terms & Conditions</a>
+      </label>
     </div>
+  </div>
+
+  <!-- Submit button -->
+  <div class="d-flex justify-content-center mt-1" id="justify-center">
+    <input class="btn register-button" id="submitControl" type="submit" value="SUBMIT">
+  </div>

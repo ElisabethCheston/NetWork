@@ -98,6 +98,7 @@ def Register(request):
 
 def terms(request):
     # pylint: disable=maybe-no-member
+
     template = 'userprofiles/terms.html'
 
     return render(request, template)

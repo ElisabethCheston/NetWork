@@ -14,10 +14,8 @@
     #justify-center {
         margin: auto;
         width: 80%;
-        padding: 10px;
         border: none !important;
         justify-content: center;
-        align-items: center;
         text-align: center;
         font-size: medium !important;
     }
@@ -30,10 +28,7 @@
         display: none;
     }
 
-    a,
-    p,
-    .link,
-    li {
+    a, p, li {
         text-align: left;
         font-size: small;
         font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -60,40 +55,36 @@
 
     /* BUTTONS */
 
-    .btn,
-    .login-btn {
+    .btn {
+        color: white;
+        background-color: transparent;
+        font-weight: bold;
+        text-decoration: none !important;
+        text-align: center;
+        margin-top: 10px;
+    }
+    .row {
         color: white;
         border-color: rgba(148, 149, 150, 0.2);
-        background-color: rgba(131, 133, 134, 0.8) !important;
-        width: 95%;
-        height: 45px;
-        margin-top: 2%;
-        font-weight: bold;
-        text-align: center;
-        font-size: medium !important;
+        background-color: rgba(115, 118, 119, 0.8) !important;
+        width: 38%  !important;
+        height: 35px  !important;
+        font-size: small !important;
+        padding-top: 10px;
         box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 
-    .btn:hover,
-    .btn:active,
-    .btn:focus {
-        background-color: rgba(94, 95, 95, 0.792) !important;
+    .row:hover,
+    .row:active,
+    .row:focus {
+        background-color: rgba(76, 78, 78, 0.792) !important;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
     }
 
 
-    /* RESET PASSWORD */
-
-    #link {
-        color: deeppink;
-    }
-
-    .password_reset {
-        border: none;
-    }
-
+/*
     input {
         width: 84%;
         text-align: center;
@@ -111,6 +102,7 @@
         background-color: rgba(94, 95, 95, 0.192) !important;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
     }
+    */
 </style>
 
 <br>
@@ -335,9 +327,9 @@
     </div>
 
     <!-- Terms & Conditions Buttons -->
-    <div class="row">
-        <a href="{% url 'register' %}" target="_blank">
-            <input type="button" name="acceptButton" class="btn accept-button" value="BACK" id="terms-box-check">
+    <div class="row" id="justify-center">
+        <a type="button" role="button" class="btn" id="justify-center" href="{% url 'register' %}">BACK</a>
+            <!--<input type="button" name="acceptButton" class="btn accept-button" value="BACK" id="chkId">-->
     </div>
 
 
@@ -345,11 +337,10 @@
 </div>
 
 <script>
-    /*
     function registerCheck(clicked_id) {
         localStorage.setItem("chkId", clicked_id);
-        window.location.href = "/home/register/";
-    }*/
+        window.location.href = "/userprofile/register/";
+    }
 </script>
 
 {% endblock %}

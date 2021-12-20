@@ -19,7 +19,7 @@ class UserprofileCreationForm(forms.Form):
     email = forms.EmailField(label='Confirm email')
     password1 = forms.CharField(label='Enter password', widget=forms.PasswordInput)  # noqa: E501
     password2 = forms.CharField(label='Confirm password', widget=forms.PasswordInput)  # noqa: E501
-    terms = forms.BooleanField(label="Terms & Conditions", required=True)  # noqa: E501
+    # terms = forms.BooleanField(label="Terms & Conditions", required=True)  # noqa: E501
 
     class Meta:
         model = User
@@ -54,15 +54,6 @@ class UserprofileCreationForm(forms.Form):
             raise ValidationError("Password don't match")
         return password2
 
-    """
-    def clean_terms(self):
-        terms = self.cleaned_data['terms'].lower()
-        r = User.objects.filter(terms=terms)
-        if r.count():
-            raise ValidationError("You must accept the terms and conditions")
-        return
-    """
-
     def save(self, commit=True):
         user = User.objects.create_user(
             self.cleaned_data['username'],
@@ -77,6 +68,14 @@ class UserprofileCreationForm(forms.Form):
 
 
 """
+def clean_terms(self):
+        terms = self.cleaned_data['terms'].lower()
+        r = User.objects.filter(terms=terms)
+        if r.count():
+            raise ValidationError("You must accept the terms and conditions")
+        return
+
+
     first_name = forms.CharField(label='First Name', min_length=2, max_length=50)  # noqa: E501
     last_name = forms.CharField(label='Last Name', min_length=2, max_length=50)  # noqa: E501)
     username = forms.CharField(label='Enter email', min_length=4, max_length=150)  # noqa: E501
