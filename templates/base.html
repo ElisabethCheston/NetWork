@@ -108,13 +108,16 @@
                             {{request.user.last_name}}</small></span>
                     <i class="fas fa-caret-down"></i>
                 </a>
+                {% if request.user.is_authenticated %}
                 <div class="dropdown-menu border-0" aria-labelledby="user-options">
-                    {% if request.user.is_authenticated %}
+                    
 
                     {% if request.user.is_superuser %}
                     <a href="" class="dropdown-item">Admin</a>
                     <a href="" class="dropdown-item">Membership List</a>
+
                     {% endif %}
+                    {% else %}
 
                     <a href="{% url 'profile_details' %}" class="dropdown-item">My Profile</a>
                     <a href="{% url 'all_profiles' %}" class="dropdown-item">Network</a>
@@ -124,12 +127,9 @@
                     <a href="{% url 'password_change' %}" class="dropdown-item">Change Password</a>
                     <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
 
-                    {% else %}
+                    <!--<a href="{% url 'account_signup' %}" class="dropdown-item">Register</a>
+                    <a href="{% url 'account_login' %}" class="dropdown-item">Login</a>-->
 
-                    <a href="{% url 'account_signup' %}" class="dropdown-item">Register</a>
-                    <a href="{% url 'account_login' %}" class="dropdown-item">Login</a>
-
-                    {% endif %}
 
                 </div>
 
@@ -147,6 +147,8 @@
                         </div>
                     </a>
                 </li>
+                {% endif %}
+
             </div>
         </div>
 

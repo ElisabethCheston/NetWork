@@ -8,11 +8,10 @@ from .views import (
     ProfilesListView,
     NetworkProfileView,
     follow_unfollow_profile,
-    ProfileDeleteView,
+    # ProfileDeleteView,
     # UserprofileUpdateView,
     # ProfileData,
     # ProfileDetailView,
-    # ProfileDeleteView,
     # RegisterPage,
 )
 
@@ -22,7 +21,7 @@ urlpatterns = [
     path('register/', views.Register, name='register'),
     # path('signup/', views.Register, name='register'),
     path('terms/', views.terms, name='terms'),
-    # path('profile/', views.Profile, name='profile'),
+    path('profile_message/', views.ProfileMessage, name='profile_message'),
     # path('register_profile/', views.RegisterPage, name='register_profile'),
 
     # PASSWORD
@@ -45,16 +44,18 @@ urlpatterns = [
     # path('my_profile/', MyProfile.as_view(), name='my_profile'),
     # path('my_profile/', view.MyProfile, name='my_profile'),
     # path('profile_data/', ProfileData.as_view(), name='profile_data'),
-    # path('profile_delete/<pk>/', views.profile_delete, name='profile_delete'),  # noqa: E501
-    path('profile_delete/<int:pk>/', ProfileDeleteView.as_view(), name='profile_delete'),  # noqa: E501
-
+    
     path('profile_details/', views.profile_details, name='profile_details'),
     path('profile_edit/', views.profile_edit, name='profile_edit'),
     # path('profile_edit/<int:pk>/', UserprofileUpdateView.as_view(), name='profile_edit'),  # noqa: E501
-    # path('create_customer/', views.create_customer, name='create_customer'),
+    # path('profile_delete/', views.profile_delete, name='profile_delete'),  # noqa: E501
+    path('profile_delete/<pk>/', views.profile_delete, name='profile_delete'),  # noqa: E501
 
+    # path('profile_delete/<int:pk>/', ProfileDeleteView.as_view(), name='profile_delete'),  # noqa: E501
+
+    # path('create_customer/', views.create_customer, name='create_customer'),
 
     path('', ProfilesListView.as_view(), name='all_profiles'),
     path('switch-follow/', follow_unfollow_profile, name='follow_unfollow_profile'),  # noqa: E501
-    path('<pk>/', NetworkProfileView.as_view(), name='profile_details'),
+    path('profile_details/<pk>/', NetworkProfileView.as_view(), name='profile_details'),  # noqa: E501
 ]

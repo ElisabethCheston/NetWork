@@ -1,34 +1,35 @@
 # from django.core.paginator import Paginator
 # from django.conf import settings
-import json
+# import json
 from django.contrib import messages
-from django.template.context_processors import csrf
-from crispy_forms.utils import render_crispy_form
+# from django.template.context_processors import csrf
+# from crispy_forms.utils import render_crispy_form
+from django.views.generic import (
+    ListView,
+    DetailView,
+)
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import PasswordResetDoneView, PasswordChangeView
-from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm, UserCreationForm  # noqa: E501
+from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm  # noqa: E501
 # from django.db.models.functions import Lower
 from django.db.models.query_utils import Q
-# from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, reverse
-from django.contrib.auth.forms import UserCreationForm
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 # from django.core import serializers
 from django.core.mail import send_mail, BadHeaderError  # EmailMessage
 from django.urls import reverse_lazy
+"""
 from django.views.generic.edit import (
     DeleteView,
     # UpdateView,
 )
-from django.views.generic import (
-    ListView,
-    DetailView,
-)
+"""
 from .models import Userprofile
 from .forms import ProfileForm, UserprofileCreationForm  # TermsForm
 
@@ -118,7 +119,7 @@ def loginRegisterPage(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('profile_edit')
+            return redirect('profile_message')
         else:
             messages.info(request, 'Username or Password is incorrect!')
 
@@ -151,6 +152,7 @@ def loginPage(request):
 
 
 def follow_unfollow_profile(request):
+    # pylint: disable=maybe-no-member
     if request.method == 'POST':
         user_profile = Userprofile.objects.get(username=request.user)
         pk = request.POST.get('profile_pk')
@@ -202,7 +204,6 @@ def create_customer(request):
         'form': form,
     }
     return render(request, template, context)
-
 """
 
 
@@ -228,7 +229,7 @@ class NetworkProfileView(DetailView):
         return context
 
     def get_success_url(self):
-        return reverse('events:profile_details', kwargs={'pk': self.object.profile_id})
+        return reverse('events:profile_details', kwargs={'pk': self.object.profile_id})  # noqa: E501
 
 
 # @login_required
@@ -236,17 +237,44 @@ def profile_details(request):
     # pylint: disable=maybe-no-member
     template = 'userprofiles/profile_details.html'
     profile = Userprofile.objects.get(username=request.user)
-    
+
     context = {
         'profile': profile,
     }
     return render(request, template, context)
 
 
+@login_required
+def ProfileMessage(request):
+    # pylint: disable=maybe-no-member
+    if request.method == 'POST':
+        profile = Userprofile(request.POST, request.FILES, instance=request.user.userprofile)  # noqa: E501
+        if profile.is_valid():
+            profile.save()
+            return redirect('profie_edit')
+    else:
+        profile = Userprofile.objects.create(username=request.user)
+    context = {
+        'profile': profile,
+    }
+    return render(request, 'userprofiles/profile_message.html', context)
+
+
 """
-class UserprofileUpdateView(UpdateView):
-    model = Userprofile
-    profileform = ProfileForm
+# @login_required
+def profile_details(request):
+    # pylint: disable=maybe-no-member
+    if request.method == 'POST':
+        profile = Userprofile(request.POST, request.FILES, instance=request.user.userprofile)  # noqa: E501
+        if profile.is_valid():
+            profile.save()
+            return redirect('profie_edit')
+    else:
+        profile = Userprofile.objects.get(username=request.user)
+    context = {
+        'profile': profile,
+    }
+    return render(request, 'userprofiles/profile_details.html', context)
 """
 
 
@@ -269,30 +297,49 @@ def profile_edit(request):
     return render(request, template, context)
 
 
-class ProfileDeleteView(DeleteView):
-    model = Userprofile
-    success_url = reverse_lazy('home')
-
-
 """
 def profile_delete(request, pk):
     userprofile = User.objects.get(pk=pk)
-
     if request.method == "POST" and request.user.username == userprofile:
         userprofile.delete()
-        messages.success(request, "Account has been successfully deleted!")
-        return HttpResponseRedirect(reverse('home'))
+        form = UserprofileCreationForm(request.POST)
 
+        if form.is_valid():
+            rem = User.objects.get(username=form.cleaned_data['username'])
+            if rem is not None:
+                rem.delete()
+                return redirect('home')
     context = {
+        'form': form,
         'userprofile': userprofile,
         }
     return render(request, 'userprofiles/user_confirm_delete.html', context)
 """
 
 
+def profile_delete(request, pk):
+    userprofile = User.objects.get(pk=pk)
+
+    if request.method == "POST" and request.user.username == userprofile:
+        userprofile.delete()
+        messages.success(request, "Account has been successfully deleted!")
+        return HttpResponseRedirect(reverse('user_confirm_delete'))
+
+    context = {
+        'userprofile': userprofile,
+        }
+    return render(request, 'userprofiles/user_confirm_delete.html', context)
+
+
 """
+class ProfileDeleteView(DeleteView):
+    model = User
+    success_url = reverse_lazy('home')
+"""
+
 # USERPROFILE GIGS
 
+"""
 @login_required
 def my_gigs(request):
     # pylint: disable=maybe-no-member
@@ -303,7 +350,7 @@ def my_gigs(request):
     }
     return render(request, template, context)
 
-    
+
 @login_required
 def create_gig(request):
     # pylint: disable=maybe-no-member
@@ -317,9 +364,8 @@ def create_gig(request):
         # gigform = GigForm(instance=request.user.gig)
     # context = {'gigform': gigform,}
     return render(request, template)
-"""
 
-"""
+
     #if request.method == 'POST':
     gigform = GigForm(request.POST or None, request.FILES or None)
     g = Gig.objects.get(pk=1)
@@ -337,13 +383,11 @@ def create_gig(request):
             # messages.error(request, 'Update failed. Please check if your inputs are valid.')  # noqa: E501
     # else:
         # gigform = gigform()
-        """
 
 
 # SUGGEST BUTTON OF PPL TO FOLLOW
 
 # class for random contacts to add
-"""
 class MyProfile(TemplateView):
     template_name = 'userprofiles/profile_details.html'
 
